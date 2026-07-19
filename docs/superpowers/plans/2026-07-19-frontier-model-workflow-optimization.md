@@ -1,12 +1,14 @@
 # Frontier-Model Workflow Optimization Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development` in `serial` mode for policy changes and `delegated` mode only for independent evaluation runs. Do not edit multiple behavior-shaping skills in one unreviewed batch.
+> **Execution note:** This plan is self-contained. It must not depend on invoking the workflow being evaluated, and it must not edit multiple behavior-shaping components in one unreviewed batch.
 
 **Goal:** Adapt Superpowers for frontier reasoning models so that simple and bounded tasks avoid unnecessary workflow overhead while high-risk work retains strong safety, verification, and review guarantees.
 
 **Architecture:** Replace the current all-or-nothing workflow with a component-aware router. The router selects `full`, `frontier`, or `off` advisory behavior from explicit user intent, task risk, task complexity, and declared model capability; invariant safety and verification components remain active in every profile. Changes are promoted only after held-out A/B/C evaluations show non-inferior quality and materially lower cost.
 
 **Tech Stack:** Markdown skills, JSON evaluation fixtures, Node.js built-in test runner, shell-based plugin tests, and the external `superpowers-evals` harness for real agent sessions.
+
+**Design basis:** [Floor, Not Ceiling](https://gist.github.com/huajiexiewenfeng/71da8bd8431ec51e56a2b02a83f34a60), proposal v0.2. The implementation unit is the component, and a component must name either the failure it prevents or the capability it enables.
 
 ## Global Constraints
 
@@ -18,8 +20,11 @@
 - Irreversible, security-sensitive, migration, release, and data-loss risks always force the required invariant components.
 - Verification is always enabled; profiles may change verification scope, never eliminate evidence.
 - A profile named `off` disables advisory workflow components only; it cannot disable permissions, destructive-action gates, or completion evidence.
+- Prompt text alone is best-effort enforcement. A mandatory fail-closed gate must identify its runtime, permission, or deterministic enforcement boundary.
 - Do not hardcode transient model product names in core policy. Harnesses may declare a capability tier; users may explicitly select a profile.
+- Capability is bound to an evaluated model-and-runtime configuration, not inferred from a model-name wildcard or from the model's self-description.
 - Change one behavior family per commit so evaluation regressions can be attributed.
+- Experiment authorization, component quarantine, default-profile promotion, physical deletion, and upstream contribution are separate human decisions.
 - Do not open an upstream pull request until a human reviews the complete diff and held-out evaluation evidence.
 - Any future upstream PR must target `dev`, not `main`, and must comply with `CLAUDE.md` and `.github/PULL_REQUEST_TEMPLATE.md`.
 
@@ -51,12 +56,26 @@ Every instruction changed by this branch must be classified before editing:
 Each component contract records:
 
 - stable component ID;
-- failure prevented or capability enabled;
-- activation condition;
+- layer: `register`, `open_ended_reasoning`, or `operational_control`;
+- kind: `register`, `reasoning_scaffold`, `fact`, `procedure`, `tool`, `state`, or `gate`;
+- `failure_prevented` or `capability_enabled`, with at least one non-null;
+- activation condition or mandatory condition;
 - advisory or mandatory binding;
-- enforcement mechanism;
+- actual enforcement mechanism;
 - fail-open, fail-closed, or report-only behavior;
-- owner and evaluation cases.
+- who may satisfy a gate and what fresh evidence is required;
+- who may change or waive policy;
+- owner, freshness rule, compatibility check, and evaluation cases.
+
+The three control layers have different design limits:
+
+| Layer | Appropriate control | Inappropriate control |
+|---|---|---|
+| `register` | tone, structure, direction of attention, durable preferences | pretending a preference is a safety invariant |
+| `open_ended_reasoning` | outcomes, acceptance criteria, risk boundaries | prewriting the model's complete reasoning path for every task |
+| `operational_control` | private facts, procedures, tools, state, permissions, fail-closed gates | relying on persuasive prompt language where deterministic enforcement is required |
+
+A chat confirmation may satisfy a gate only when the contract permits it and the evidence is fresh, authorized, action-specific, and non-replayable. Satisfying a gate does not rewrite the policy. Policy changes require the named policy authority through an intentional configuration change.
 
 The retirement unit is the component, not the whole Skill. A Skill remains discoverable while any retained component still provides unique value.
 
@@ -101,6 +120,28 @@ If a harness cannot expose a trustworthy capability tier, the router must not in
 | `high_risk` | auth, security, release, migration, destructive data change | force full safety, testing, review, and verification components |
 
 `no_advisory_workflow` is a valid routing result for a mechanical task. It is not a failure to find a Skill.
+
+Natural-language requests such as "skip the framework this time" are a bounded advisory off-ramp. They silence advisory components only; they do not bypass tool permissions, destructive-action confirmation, or mandatory verification evidence. The routing suite must also test the opposite failure: under-activating useful components when a complex or high-risk task needs them.
+
+### 3.4 Capability Profile
+
+The router may consume an approved capability profile, but neither the model nor a model-name wildcard may declare the profile valid. Each measured profile is bound to the configuration that produced the evidence:
+
+```json
+{
+  "profile_id": "frontier-candidate-001",
+  "base_model": "exact deployment identifier",
+  "reasoning_configuration": "effort, sampling, context settings",
+  "harness_and_router": "version or immutable hash",
+  "toolchain": "tools, permissions, and versions",
+  "benchmark_suite": "version and held-out split",
+  "evaluation_commit": "immutable candidate SHA",
+  "approved_by": "human owner",
+  "approved_at": "ISO-8601 timestamp"
+}
+```
+
+A change to the model, reasoning configuration, harness, router, tools, permissions, or benchmark invalidates automatic reuse of the profile until the relevant measurements are repeated. Unknown configurations fall back conservatively without claiming that the model is weak or strong.
 
 ## 4. Skill Change Map
 
@@ -159,10 +200,15 @@ skills/
     SKILL.md
 tests/
   frontier-routing/
+    capability-profile.test.mjs
     component-contracts.test.mjs
     routing-cases.json
     routing-policy.test.mjs
 docs/superpowers/
+  evals/
+    capability-profile.schema.json
+    profiles/
+      frontier-candidate-001.json
   specs/
     2026-07-19-frontier-model-workflow-optimization-design.md
   plans/
@@ -175,35 +221,62 @@ The real behavioral runs belong in a separate fork of `prime-radiant-inc/superpo
 
 ## 6. Evaluation Design
 
-### 6.1 Variants
+### 6.1 Operational Core Preflight
+
+Operational components are not compared against model intelligence. Before any advisory workflow experiment, test them independently:
+
+- facts: provenance, correctness, and freshness;
+- procedures: validity against the real target environment;
+- tools: compatibility, determinism, and failure handling;
+- state: schema integrity, atomicity, recovery, and migration behavior;
+- gates: fail-closed enforcement, authorized satisfier, fresh action-bound evidence, and policy-override authority.
+
+A failed operational-core check blocks advisory experiments. Prompt-only mandatory language must be reported as best-effort rather than scored as deterministic enforcement.
+
+### 6.2 Controlled Claims
+
+Different claims require different interventions. A single aggregate "skill score" is not sufficient.
+
+| Claim | Controlled intervention | Decision supported |
+|---|---|---|
+| Component efficacy | Force one target component on versus off while holding the model configuration, operational core, router, tools, permissions, context, and unrelated components fixed | keep, narrow, or nominate the component for quarantine |
+| Routing | Freeze registry, router, model configuration, permissions, and component definitions; run labeled positive, negative, override, and collision cases | change activation rules, not component content |
+| Component non-interference | Toggle only the target component on labeled negative cases | causal evidence that this component creates unnecessary cost or quality degradation |
+| Framework non-interference | Natural router and full advisory registry versus no-advisory baseline on negative cases | overall framework health; never sufficient by itself to delete one component |
+
+### 6.3 Framework Variants
 
 - A: upstream Superpowers v6.1.1, full current workflow;
 - B: this branch with `superpowers=frontier`;
 - C: this branch with advisory workflow disabled.
 
-Runs must use the same model build, reasoning setting, harness version, repository snapshot, task prompt, tool permissions, and timeout.
+A/B/C measures framework behavior. Component retirement decisions must use the component-level interventions in section 6.2.
 
-### 6.2 Stages
+Every run must record the exact capability profile and use the same model deployment, reasoning configuration, harness and router hashes, repository snapshot, task prompt, toolchain, permissions, timeout, and judge version.
 
-1. Harness smoke: six runs confirming capture, timing, token, test, and judge pipelines.
-2. Pilot: six tasks × three variants × three repetitions = 54 runs.
-3. Held-out promotion: twelve unseen tasks × three variants × three repetitions = 108 runs.
-4. Cross-model validation: repeat the held-out set on a second frontier-model family before declaring the profile portable.
+### 6.4 Stages
 
-### 6.3 Task Mix
+1. Static validation: contracts, schemas, routing fixtures, inbound references, and immutable SHAs.
+2. Harness smoke: six runs confirming capture, timing, token, test, and judge pipelines.
+3. Router pilot: positive, negative, override, collision, no-advisory, and high-risk cases before any downstream Skill rewrite.
+4. Component pilot: at least three repeated forced-on/forced-off trials per selected component and task class.
+5. Framework pilot: six tasks × three variants × three repetitions = 54 runs.
+6. Held-out promotion: twelve unseen tasks × three variants × three repetitions = 108 runs.
+7. Cross-configuration validation: repeat the relevant held-out set on a second independently approved frontier capability profile.
+
+### 6.5 Task Mix and Metrics
 
 Each formal set must include mechanical, bounded, complex, and high-risk tasks. At least one task in each class must contain a tempting but unsafe shortcut so that under-routing is observable.
 
-### 6.4 Metrics
-
-Quality gates:
+Quality and safety metrics:
 
 - acceptance criteria completed;
 - build and relevant tests pass;
 - root cause resolved when the task requires it;
 - no unrelated or out-of-scope edits;
-- no permission, data-loss, security, or false-completion violation;
-- maintainability blind score.
+- no permission, data-loss, security, secret-leak, rollback, or false-completion violation;
+- maintainability blind score;
+- explicit `must_not` checks for each high-risk fixture.
 
 Cost and interaction metrics:
 
@@ -219,19 +292,21 @@ Routing metrics:
 - correct task class;
 - required invariant components activated;
 - unnecessary advisory components avoided;
-- no-advisory precision;
+- no-advisory precision and recall;
+- collision resolution accuracy;
 - high-risk under-routing count.
 
-### 6.5 Promotion Rules
+### 6.6 Promotion Rules
 
-Evaluate in this order: safety, quality, then cost.
+Apply a lexicographic decision rule: safety, then required quality, then cost.
 
-- Any catastrophic safety or destructive-action failure blocks promotion.
-- Frontier quality must be non-inferior to A on held-out tasks; a lower average cannot be offset by token savings.
+- Any catastrophic safety or destructive-action failure blocks promotion and is never averaged away.
+- Frontier quality must be non-inferior to A on held-out tasks; a lower quality result cannot be offset by token savings.
 - Mechanical and bounded tasks should reduce median total tokens or wall-clock time by at least 25% relative to A.
 - High-risk tasks may cost the same as A; the optimization target is correct routing, not universal cost reduction.
 - C is promoted for a task class only when it matches B on quality and safety while using less cost.
-- Conflicting results trigger component-level investigation; do not average them into a single score.
+- An unstable component becomes conditional or opt-in rather than deleted.
+- Conflicting results trigger component-level investigation; do not compress them into an opaque composite score.
 
 ## 7. Implementation Tasks
 
@@ -240,17 +315,21 @@ Evaluate in this order: safety, quality, then cost.
 **Files:**
 
 - Create: `docs/superpowers/specs/2026-07-19-frontier-model-workflow-optimization-design.md`
+- Create: `docs/superpowers/evals/capability-profile.schema.json`
+- Create: `docs/superpowers/evals/profiles/frontier-candidate-001.json`
 - Create: `skills/using-superpowers/references/component-contracts.json`
+- Create: `tests/frontier-routing/capability-profile.test.mjs`
 - Create: `tests/frontier-routing/component-contracts.test.mjs`
 
 **Interfaces:**
 
 - Consumes: upstream v6.1.1 Skill text and the component taxonomy in this plan.
-- Produces: stable component IDs used by router tests and evaluation reports.
+- Produces: stable component IDs and immutable capability-profile records used by router tests and evaluation reports.
 
-- [ ] Record every instruction targeted by this initiative with lifecycle, activation, binding, failure mode, and owner.
-- [ ] Write a Node built-in test that rejects duplicate IDs, missing purpose, invalid lifecycle, and mandatory prompt-only components incorrectly labeled as deterministic.
-- [ ] Run `node --test tests/frontier-routing/component-contracts.test.mjs`; expect all contract-schema tests to pass.
+- [ ] Record every instruction targeted by this initiative with layer, kind, lifecycle, activation, binding, enforcement, failure mode, authority, maintenance, and owner.
+- [ ] Record the exact model, reasoning, harness, router, toolchain, permission, benchmark, and candidate SHA for each evaluated capability profile.
+- [ ] Write Node built-in tests that reject duplicate IDs, missing purpose, invalid lifecycle, incomplete capability profiles, and mandatory prompt-only components incorrectly labeled as deterministic.
+- [ ] Run `node --test tests/frontier-routing/component-contracts.test.mjs tests/frontier-routing/capability-profile.test.mjs`; expect all schema tests to pass.
 - [ ] Commit only contracts, schema tests, and the reviewed design with message `docs: define frontier workflow component contracts`.
 
 ### Task 2: Implement the Thin Central Router
@@ -273,6 +352,16 @@ Evaluate in this order: safety, quality, then cost.
 - [ ] Run `node --test tests/frontier-routing/*.test.mjs`; expect zero failures.
 - [ ] Run existing plugin loading tests under `tests/`; expect no bootstrap or packaging regression.
 - [ ] Commit with message `feat: add component-aware frontier workflow routing`.
+
+### Gate R0: Router-Only Decision
+
+Do not begin Tasks 3–6 merely because Task 2 is implemented.
+
+- [ ] Freeze the router commit, registry, candidate definitions, capability profile, and permissions.
+- [ ] Run positive, negative, natural-language opt-out, override, collision, no-advisory, and adversarial high-risk cases.
+- [ ] Confirm zero high-risk under-routing and acceptable no-advisory precision/recall.
+- [ ] Present results and misroutes to the human owner.
+- [ ] Continue only after explicit approval of the router experiment; approval does not authorize downstream component edits or retirement.
 
 ### Task 3: Add Proportional Design and Planning
 
@@ -372,10 +461,12 @@ Evaluate in this order: safety, quality, then cost.
 - Produces: per-task safety, quality, cost, routing, and human preference evidence.
 
 - [ ] Run the six-run harness smoke before formal measurement.
+- [ ] Pass operational-core preflight before comparing advisory behavior.
+- [ ] Run component efficacy, routing, component non-interference, and framework non-interference as separate protocols.
 - [ ] Run the 54-run pilot without changing prompts or judge criteria mid-run.
 - [ ] Fix only component-level regressions, then freeze a new candidate SHA.
 - [ ] Run the 108-run held-out promotion set with independent blind judging.
-- [ ] Repeat held-out validation on a second frontier-model family.
+- [ ] Repeat held-out validation on a second independently approved capability profile.
 - [ ] Commit raw result references and summarized evidence; do not claim improvement from selected examples.
 
 ### Task 8: Human Promotion Gate
@@ -396,24 +487,41 @@ Evaluate in this order: safety, quality, then cost.
 - [ ] Do not open an upstream PR as part of this plan; upstream contribution requires a separate user decision and contributor-guideline audit.
 - [ ] If approved, commit documentation with message `docs: publish frontier workflow profile evidence`.
 
-## 8. Rollback Strategy
+## 8. Human Governance Gates
+
+| Gate | Authorizes | Does not authorize |
+|---|---|---|
+| G0 Scope approval | read-only inventory, contracts, provenance, and baseline capture | canonical Skill edits |
+| G1 Experiment approval | isolated candidate variants and measurement | canonical replacement, quarantine, or deletion |
+| G2 Component quarantine | disable one measured candidate component in an isolated replacement and observe | deleting the enclosing Skill or changing the default profile |
+| G3 Default promotion | make an evaluated profile the fork default with `full` retained as fallback | physical deletion or upstream PR |
+| G4 Physical deletion | delete the exact component or legacy alias after dependency rescan, replacement verification, observation, and restore drill | any unlisted path |
+| G5 Upstream proposal | prepare a separately reviewed PR against upstream `dev` | merging, force-pushing, or bypassing contributor requirements |
+
+Every Gate requires the exact targets, immutable SHAs, evidence bundle, unresolved risks, and rollback artifact. Approval at one Gate cannot be reused as approval for the next.
+
+## 9. Rollback Strategy
 
 - Every behavior family lands in a separate commit.
 - The `full` profile remains behaviorally equivalent to the v6.1.1 baseline until held-out promotion passes.
 - A failed component is reverted or quarantined without reverting independent improvements.
 - The fork branch is experimental; local installations must pin an immutable commit rather than follow the moving branch.
 - Deleting legacy aliases, changing the default profile, or proposing upstream integration each requires a separate human approval.
+- Quarantine disables only the measured candidate component; the enclosing Skill remains discoverable while any retained component remains.
+- Physical deletion requires a fresh inbound-reference scan, replacement smoke test, observation record, matching backup hash, and successful restore drill.
 
-## 9. Definition of Done
+## 10. Definition of Done
 
 This initiative is complete only when:
 
 - component contracts cover every changed instruction;
+- every mandatory component states its real enforcement mechanism and authority model;
+- every evaluation run is bound to an approved capability profile;
 - routing tests include positive, negative, collision, override, and high-risk adversarial cases;
 - invariant safety and completion evidence remain active in every profile;
+- operational-core, component efficacy, routing, component non-interference, and framework non-interference results are reported separately;
 - pilot and held-out evaluations are reproducible from immutable SHAs;
 - frontier quality is non-inferior to full Superpowers;
 - mechanical and bounded work meets the 25% median token or time reduction target;
-- a second frontier-model family validates the routing policy;
+- a second independently approved frontier capability profile validates the routing policy;
 - the human owner reviews the complete diff and explicitly approves any default change.
-
