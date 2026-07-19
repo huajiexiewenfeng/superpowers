@@ -1,6 +1,8 @@
 # Frontier-Model Workflow Optimization Implementation Plan
 
 > **Execution note:** This plan is self-contained. It must not depend on invoking the workflow being evaluated, and it must not edit multiple behavior-shaping components in one unreviewed batch.
+>
+> Chinese translation: [顶级模型工作流优化实施计划](./2026-07-19-frontier-model-workflow-optimization.zh-CN.md)
 
 **Goal:** Adapt Superpowers for frontier reasoning models so that simple and bounded tasks avoid unnecessary workflow overhead while high-risk work retains strong safety, verification, and review guarantees.
 
