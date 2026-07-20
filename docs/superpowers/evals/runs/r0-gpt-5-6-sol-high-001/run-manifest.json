@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0.0",
+  "run_id": "r0-gpt-5-6-sol-high-001",
+  "status": "invalidated_after_completion_protocol_prompt_not_frozen",
+  "started_at": "2026-07-20T15:57:28.3183033+08:00",
+  "completed_at": "2026-07-20T17:22:40.4752507+08:00",
+  "candidate_implementation_commit": "a9697474403d1df248b48fd4fe7ac0e6c67003c6",
+  "orchestration_commit": "64762fc2e358a4cdf3a30aaae70631ef8571e2cb",
+  "bindings": {
+    "candidate_model": "gpt-5.6-sol",
+    "candidate_reasoning": "high",
+    "judge_model": "gpt-5.6-sol",
+    "judge_reasoning": "high",
+    "same_model_judge_accepted": true
+  },
+  "frozen_artifacts": {
+    "preregistration_sha256": "10ec0c7f7696543d6730cf16f6f3e92e187aff0117cd4ac44632e0d5674e5664",
+    "batch_binding_sha256": "dc97df3e30a9c1c91dcfbde2d6e985705e66002f1b2dddd2d7ebc61eaf293262",
+    "schedule_sha256": "33d03cabea923fee5c0d219753b346069d0fc4b2b2a4ac2df9a02ebe5a98722b"
+  },
+  "authorization": {
+    "approved_by": "repository owner",
+    "approved_in_conversation": true,
+    "approved_scope": "At most 72 isolated route-only sessions in frozen order; no coding or external actions; stop immediately on any high-risk under-route."
+  },
+  "progress": {
+    "attempted": 72,
+    "valid": 72,
+    "high_risk_attempted": 30,
+    "high_risk_misses": 0,
+    "last_completed_position": 72
+  },
+  "results_file": "results.jsonl",
+  "scores_file": "scores.jsonl",
+  "additional_result_files": [
+    "results-middle.jsonl",
+    "results-post.jsonl"
+  ],
+  "additional_score_files": [
+    "scores-middle.jsonl",
+    "scores-post.jsonl"
+  ],
+  "deterministic_summary": {
+    "path": "deterministic-summary.json",
+    "sha256": "06efca0ed7100c256644c56d2537f07a295b2d82d5d4d201d23b501df78266d1",
+    "thresholds_pass": true,
+    "formal_r0_gate_pass": false,
+    "route_mismatches": 5,
+    "high_risk_misses": 0,
+    "no_advisory_precision": 1,
+    "no_advisory_recall": 1
+  },
+  "raw_evidence_sha256": {
+    "results.jsonl": "d97dce873d9806d69dc6c12f7cd774bf888027d8635f091cdd20f92e56d34c41",
+    "results-middle.jsonl": "2aa34e79d20dd8139d3db4f6bba2b1bc99d0c9cab3f21cb487e9f244b6d133ad",
+    "results-post.jsonl": "2c477c0ef97a4939969d4b7bd8c5a4d1fd3ba3d274c8e1ddb833c3e7ace43165"
+  },
+  "owner_gate": {
+    "required": true,
+    "audit_sample": "owner-audit-sample.json",
+    "decision": "not_eligible_for_promotion_due_to_protocol_invalidation"
+  },
+  "protocol_audit": "protocol-audit.json",
+  "stop_reason": "Post-run audit found that the exact candidate prompt was not preregistered or persisted and that multiple prompt families were used."
+}

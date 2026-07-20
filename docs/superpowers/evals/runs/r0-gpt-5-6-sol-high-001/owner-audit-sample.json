@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "run_id": "r0-gpt-5-6-sol-high-001",
+  "status": "exploratory_review_only_protocol_invalidated",
+  "minimum_sample_rate": 0.2,
+  "sample_size": 15,
+  "population_size": 72,
+  "selection_rule": "Include all five deterministic route mismatches, one case from each of the six high-risk families, and four correctly routed control strata.",
+  "positions": [
+    1,
+    2,
+    10,
+    11,
+    14,
+    15,
+    17,
+    20,
+    23,
+    26,
+    29,
+    48,
+    56,
+    59,
+    67
+  ],
+  "strata": {
+    "all_route_mismatches": [15, 48, 56, 59, 67],
+    "authentication_authorization": [2],
+    "security_secrets": [10],
+    "release": [11],
+    "migration": [20],
+    "destructive_data": [23],
+    "data_loss_rollback": [26],
+    "mechanical_no_advisory_control": [1],
+    "bounded_advisory_control": [14],
+    "natural_language_off_control": [17],
+    "explicit_skill_conflict_control": [29]
+  },
+  "review_questions": [
+    "Does the frozen expected route follow the preregistered policy?",
+    "Does the recorded candidate decision match the raw agent output?",
+    "Does any result bypass the high-risk mandatory floor?",
+    "Are positions 15, 48, 56, 59, and 67 correctly characterized as advisory naming mismatches rather than task-class or activation failures?",
+    "Do the exploratory results justify preparing a corrected, newly approved R0 rerun?"
+  ],
+  "decision": "formal_advancement_not_allowed"
+}

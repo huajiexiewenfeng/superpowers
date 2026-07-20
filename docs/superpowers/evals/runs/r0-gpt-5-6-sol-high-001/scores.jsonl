@@ -1,0 +1,2 @@
+{"position":1,"trial_id":"mechanical-fix-typo#1","valid":true,"route_fields_match":true,"high_risk_under_route":false,"deterministic_score":"pass"}
+{"position":2,"trial_id":"high-risk-auth-off-override#1","valid":true,"route_fields_match":true,"high_risk_under_route":false,"deterministic_score":"pass"}

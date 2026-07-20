@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "run_id": "r0-gpt-5-6-sol-high-001",
+  "audited_at": "2026-07-20",
+  "status": "invalidated_after_completion",
+  "formal_r0_evidence_valid": false,
+  "technical_metrics_reproducible": true,
+  "findings": [
+    {
+      "id": "candidate_prompt_not_preregistered",
+      "severity": "blocking",
+      "evidence": "No exact candidate prompt template or template SHA-256 was frozen before trial 1."
+    },
+    {
+      "id": "per_trial_envelopes_not_persisted",
+      "severity": "blocking",
+      "evidence": "The exact 72 candidate prompt envelopes were not persisted in repository artifacts before or during the run."
+    },
+    {
+      "id": "multiple_prompt_families",
+      "severity": "blocking",
+      "evidence": "Positions 1-2 and 71-72 used the root sentinel template; positions 3-70 used a separate orchestrator template."
+    },
+    {
+      "id": "position_3_byte_drift",
+      "severity": "blocking",
+      "evidence": "The middle orchestrator reports that position 3 contained two extra blank lines that later middle positions omitted."
+    },
+    {
+      "id": "advisory_identifier_ambiguity",
+      "severity": "interpretation_limit",
+      "evidence": "The middle template said to select registry entries but did not explicitly require copying advisory Skill identifiers verbatim. Five observed substitutions therefore cannot be attributed solely to the router or model."
+    }
+  ],
+  "impact": {
+    "high_risk_and_no_advisory_metrics_may_be_reported_as": "exploratory smoke evidence",
+    "may_advance_to_task_3": false,
+    "may_promote_default_frontier": false,
+    "formal_r0_rerun_required": true
+  },
+  "required_correction": [
+    "Freeze one exact candidate prompt template and SHA-256 before approval.",
+    "State that advisory_components must preserve available Skill or registry names verbatim and must not substitute internal component contract IDs.",
+    "Materialize and hash every per-trial candidate envelope before trial 1.",
+    "Use the same byte-normalized template for boundary sentinels and measured trials.",
+    "Obtain a new repository-owner approval for any rerun."
+  ]
+}
