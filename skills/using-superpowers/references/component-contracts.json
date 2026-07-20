@@ -1,0 +1,628 @@
+{
+  "schema_version": "1.0.0",
+  "captured_at": "2026-07-20T10:00:16.5113627+08:00",
+  "baseline_commit": "e221c35624d9082c6984a92e6c5c7b9db259c5d0",
+  "retirement_unit": "component",
+  "phase1_target_component_ids": [
+    "brainstorming.universal_design_gate",
+    "writing-plans.micro_step_granularity",
+    "test-driven-development.unconditional_tdd"
+  ],
+  "contracts": [
+    {
+      "id": "using-superpowers.subagent_stop",
+      "state": "baseline",
+      "skill": "using-superpowers",
+      "layer": "operational_control",
+      "kind": "gate",
+      "lifecycle": "invariant_core",
+      "binding": "mandatory",
+      "purpose": {
+        "failure_prevented": "A delegated agent recursively applies the full session bootstrap instead of its bounded task instructions.",
+        "capability_enabled": "A parent agent can provide a smaller, explicit instruction surface to subagents."
+      },
+      "activation": {
+        "mandatory_when": "The session context contains the SUBAGENT-STOP sentinel."
+      },
+      "enforcement": {
+        "mechanism": "prompt_text",
+        "claim": "best_effort"
+      },
+      "failure_mode": "fail_open",
+      "authority": {
+        "policy_owner": "Superpowers maintainers",
+        "satisfier": "The active agent interpreting the sentinel"
+      },
+      "maintenance": {
+        "owner": "using-superpowers maintainers",
+        "freshness": "Recheck whenever bootstrap or subagent semantics change.",
+        "compatibility_check": "Exercise a parent and subagent context with and without the sentinel.",
+        "evaluation_cases": ["subagent-sentinel-present", "subagent-sentinel-absent"]
+      },
+      "phase1_action": "retain",
+      "retirement_scope": "component",
+      "whole_skill_deletion_candidate": false,
+      "source": {
+        "path": "skills/using-superpowers/SKILL.md",
+        "sha256": "55379fe7c1c473a02c61961c822996bff30e1320d6921d9062509bc508482c05",
+        "selector": "<SUBAGENT-STOP>"
+      }
+    },
+    {
+      "id": "using-superpowers.universal_one_percent_trigger",
+      "state": "baseline",
+      "skill": "using-superpowers",
+      "layer": "register",
+      "kind": "register",
+      "lifecycle": "compensatory_shell",
+      "binding": "mandatory",
+      "purpose": {
+        "failure_prevented": "A relevant Skill is skipped when a weaker router has low confidence.",
+        "capability_enabled": "Broad recall of installed Skills."
+      },
+      "activation": {
+        "mandatory_when": "The agent assigns any non-trivial probability that a Skill applies."
+      },
+      "enforcement": {
+        "mechanism": "prompt_text",
+        "claim": "best_effort"
+      },
+      "failure_mode": "fail_open",
+      "authority": {
+        "policy_owner": "Superpowers maintainers",
+        "satisfier": "The active agent's Skill-matching judgment"
+      },
+      "maintenance": {
+        "owner": "routing maintainers",
+        "freshness": "Re-evaluate for every approved capability profile and routing-policy change.",
+        "compatibility_check": "Measure recall, false-positive load, and no-advisory outcomes.",
+        "evaluation_cases": ["obvious-match", "weak-match", "no-benefit-match"]
+      },
+      "phase1_action": "replace",
+      "retirement_scope": "component",
+      "whole_skill_deletion_candidate": false,
+      "source": {
+        "path": "skills/using-superpowers/SKILL.md",
+        "sha256": "55379fe7c1c473a02c61961c822996bff30e1320d6921d9062509bc508482c05",
+        "selector": "If you think there is even a 1% chance"
+      }
+    },
+    {
+      "id": "using-superpowers.pre_response_skill_invocation",
+      "state": "baseline",
+      "skill": "using-superpowers",
+      "layer": "register",
+      "kind": "procedure",
+      "lifecycle": "compensatory_shell",
+      "binding": "mandatory",
+      "purpose": {
+        "failure_prevented": "An agent acts before loading relevant local constraints.",
+        "capability_enabled": "Pre-action access to project or workflow knowledge."
+      },
+      "activation": {
+        "mandatory_when": "A relevant or explicitly requested Skill has been identified."
+      },
+      "enforcement": {
+        "mechanism": "prompt_text",
+        "claim": "best_effort"
+      },
+      "failure_mode": "fail_open",
+      "authority": {
+        "policy_owner": "Superpowers maintainers",
+        "satisfier": "The active agent and host Skill loader"
+      },
+      "maintenance": {
+        "owner": "routing maintainers",
+        "freshness": "Recheck when a host changes native Skill discovery or pre-response hooks.",
+        "compatibility_check": "Verify the real entrypoint loads constraints before the first state-changing action.",
+        "evaluation_cases": ["first-response-match", "clarifying-question", "pre-tool-action"]
+      },
+      "phase1_action": "modify",
+      "retirement_scope": "component",
+      "whole_skill_deletion_candidate": false,
+      "source": {
+        "path": "skills/using-superpowers/SKILL.md",
+        "sha256": "55379fe7c1c473a02c61961c822996bff30e1320d6921d9062509bc508482c05",
+        "selector": "Invoke relevant or requested skills BEFORE any response or action"
+      }
+    },
+    {
+      "id": "using-superpowers.process_skill_priority",
+      "state": "baseline",
+      "skill": "using-superpowers",
+      "layer": "register",
+      "kind": "procedure",
+      "lifecycle": "intentional_shaping",
+      "binding": "advisory",
+      "purpose": {
+        "failure_prevented": "Implementation guidance overrides a required diagnostic or planning approach.",
+        "capability_enabled": "Consistent ordering when multiple Skills genuinely apply."
+      },
+      "activation": {
+        "activate_when": "Multiple matched Skills impose different workflow and implementation concerns."
+      },
+      "enforcement": {
+        "mechanism": "prompt_text",
+        "claim": "best_effort"
+      },
+      "failure_mode": "fail_open",
+      "authority": {
+        "policy_owner": "Superpowers maintainers",
+        "satisfier": "The active agent's routing decision"
+      },
+      "maintenance": {
+        "owner": "routing maintainers",
+        "freshness": "Review when Skill categories or precedence rules change.",
+        "compatibility_check": "Run collision cases with process and implementation Skills.",
+        "evaluation_cases": ["debugging-plus-domain", "planning-plus-implementation"]
+      },
+      "phase1_action": "retain",
+      "retirement_scope": "component",
+      "whole_skill_deletion_candidate": false,
+      "source": {
+        "path": "skills/using-superpowers/SKILL.md",
+        "sha256": "55379fe7c1c473a02c61961c822996bff30e1320d6921d9062509bc508482c05",
+        "selector": "process skills come first"
+      }
+    },
+    {
+      "id": "using-superpowers.user_instruction_precedence",
+      "state": "baseline",
+      "skill": "using-superpowers",
+      "layer": "operational_control",
+      "kind": "gate",
+      "lifecycle": "invariant_core",
+      "binding": "mandatory",
+      "purpose": {
+        "failure_prevented": "A generic Skill silently overrides explicit user or repository authority.",
+        "capability_enabled": "Auditable instruction precedence."
+      },
+      "activation": {
+        "mandatory_when": "A direct user or repository instruction conflicts with Skill guidance."
+      },
+      "enforcement": {
+        "mechanism": "prompt_text",
+        "claim": "best_effort"
+      },
+      "failure_mode": "fail_open",
+      "authority": {
+        "policy_owner": "Host policy and repository maintainers",
+        "satisfier": "The active agent resolving instruction precedence"
+      },
+      "maintenance": {
+        "owner": "using-superpowers maintainers",
+        "freshness": "Recheck whenever supported host instruction files change.",
+        "compatibility_check": "Test direct opt-out, repository rule conflict, and non-conflicting Skill use.",
+        "evaluation_cases": ["explicit-skill-opt-out", "repository-rule-conflict", "compatible-instructions"]
+      },
+      "phase1_action": "retain",
+      "retirement_scope": "component",
+      "whole_skill_deletion_candidate": false,
+      "source": {
+        "path": "skills/using-superpowers/SKILL.md",
+        "sha256": "55379fe7c1c473a02c61961c822996bff30e1320d6921d9062509bc508482c05",
+        "selector": "User instructions (CLAUDE.md, AGENTS.md, GEMINI.md, etc, direct requests) take precedence over skills"
+      }
+    },
+    {
+      "id": "using-superpowers.platform_adaptation",
+      "state": "baseline",
+      "skill": "using-superpowers",
+      "layer": "operational_control",
+      "kind": "fact",
+      "lifecycle": "invariant_core",
+      "binding": "advisory",
+      "purpose": {
+        "failure_prevented": "A Skill's host-specific tool name is treated as a missing capability.",
+        "capability_enabled": "Semantic mapping across supported harnesses."
+      },
+      "activation": {
+        "activate_when": "A Skill references a tool name that differs from the active harness."
+      },
+      "enforcement": {
+        "mechanism": "prompt_text",
+        "claim": "best_effort"
+      },
+      "failure_mode": "report_only",
+      "authority": {
+        "policy_owner": "Harness integration maintainers",
+        "satisfier": "The active agent using available equivalent tools"
+      },
+      "maintenance": {
+        "owner": "harness integration maintainers",
+        "freshness": "Review on every supported harness tool-surface release.",
+        "compatibility_check": "Map supported semantic operations without inventing unavailable tools.",
+        "evaluation_cases": ["equivalent-tool-present", "equivalent-tool-absent"]
+      },
+      "phase1_action": "retain",
+      "retirement_scope": "component",
+      "whole_skill_deletion_candidate": false,
+      "source": {
+        "path": "skills/using-superpowers/SKILL.md",
+        "sha256": "55379fe7c1c473a02c61961c822996bff30e1320d6921d9062509bc508482c05",
+        "selector": "## Platform Adaptation"
+      }
+    },
+    {
+      "id": "using-superpowers.mandatory_risk_floor",
+      "state": "proposed",
+      "skill": "using-superpowers",
+      "layer": "operational_control",
+      "kind": "gate",
+      "lifecycle": "invariant_core",
+      "binding": "mandatory",
+      "purpose": {
+        "failure_prevented": "A capable-model profile routes irreversible or high-risk work below required safety controls.",
+        "capability_enabled": "Risk-proportional workflow selection independent of model branding."
+      },
+      "activation": {
+        "mandatory_when": "The task is irreversible, security-sensitive, release-affecting, migratory, or otherwise classified high risk."
+      },
+      "enforcement": {
+        "mechanism": "prompt_text",
+        "claim": "best_effort"
+      },
+      "failure_mode": "fail_open",
+      "authority": {
+        "policy_owner": "Superpowers routing policy maintainers",
+        "satisfier": "The router plus any host-level permission boundary"
+      },
+      "maintenance": {
+        "owner": "routing policy maintainers",
+        "freshness": "Review risk taxonomy before every routing release.",
+        "compatibility_check": "Repeat each high-risk case across stochastic model runs and record the miss-rate bound.",
+        "evaluation_cases": ["database-migration", "credential-change", "production-release", "mechanical-doc-edit"]
+      },
+      "phase1_action": "proposed",
+      "retirement_scope": "component",
+      "whole_skill_deletion_candidate": false,
+      "source": null,
+      "design_reference": "docs/superpowers/specs/2026-07-19-frontier-model-workflow-optimization-design.md#5-proposed-routing-controls"
+    },
+    {
+      "id": "using-superpowers.explicit_profile_override",
+      "state": "proposed",
+      "skill": "using-superpowers",
+      "layer": "register",
+      "kind": "state",
+      "lifecycle": "invariant_core",
+      "binding": "mandatory",
+      "purpose": {
+        "failure_prevented": "The router guesses model identity or silently selects an unevaluated workflow profile.",
+        "capability_enabled": "Reproducible and auditable profile selection."
+      },
+      "activation": {
+        "mandatory_when": "A user or evaluation harness supplies an explicit profile override."
+      },
+      "enforcement": {
+        "mechanism": "prompt_text",
+        "claim": "best_effort"
+      },
+      "failure_mode": "fail_open",
+      "authority": {
+        "policy_owner": "Capability-profile approvers",
+        "satisfier": "The router reading a validated profile selection"
+      },
+      "maintenance": {
+        "owner": "capability-profile maintainers",
+        "freshness": "Invalidate whenever any bound model, router, tool, permission, suite, or commit changes.",
+        "compatibility_check": "Reject unknown, invalidated, or unapproved defaults and preserve explicit user opt-out.",
+        "evaluation_cases": ["approved-explicit-profile", "unknown-profile", "invalidated-profile", "explicit-off"]
+      },
+      "phase1_action": "proposed",
+      "retirement_scope": "component",
+      "whole_skill_deletion_candidate": false,
+      "source": null,
+      "design_reference": "docs/superpowers/specs/2026-07-19-frontier-model-workflow-optimization-design.md#5-proposed-routing-controls"
+    },
+    {
+      "id": "using-superpowers.no_advisory_workflow",
+      "state": "proposed",
+      "skill": "using-superpowers",
+      "layer": "register",
+      "kind": "procedure",
+      "lifecycle": "intentional_shaping",
+      "binding": "advisory",
+      "purpose": {
+        "failure_prevented": "The router loads a costly reasoning workflow with no expected marginal benefit.",
+        "capability_enabled": "A legitimate direct-execution outcome while mandatory controls remain active."
+      },
+      "activation": {
+        "activate_when": "The task is bounded and low risk, no advisory component has positive expected value, and required controls remain satisfied."
+      },
+      "enforcement": {
+        "mechanism": "prompt_text",
+        "claim": "best_effort"
+      },
+      "failure_mode": "report_only",
+      "authority": {
+        "policy_owner": "Superpowers routing policy maintainers",
+        "satisfier": "The router selecting the empty advisory set"
+      },
+      "maintenance": {
+        "owner": "routing policy maintainers",
+        "freshness": "Re-evaluate after model, router, or benchmark changes.",
+        "compatibility_check": "Measure correct empty-set decisions and confirm mandatory invariants still run.",
+        "evaluation_cases": ["bounded-mechanical-task", "ambiguous-task", "high-risk-task"]
+      },
+      "phase1_action": "proposed",
+      "retirement_scope": "component",
+      "whole_skill_deletion_candidate": false,
+      "source": null,
+      "design_reference": "docs/superpowers/specs/2026-07-19-frontier-model-workflow-optimization-design.md#5-proposed-routing-controls"
+    },
+    {
+      "id": "brainstorming.universal_design_gate",
+      "state": "baseline",
+      "skill": "brainstorming",
+      "layer": "open_ended_reasoning",
+      "kind": "gate",
+      "lifecycle": "compensatory_shell",
+      "binding": "mandatory",
+      "purpose": {
+        "failure_prevented": "Implementation begins before ambiguous requirements or architecture are understood.",
+        "capability_enabled": "A design checkpoint before creative implementation."
+      },
+      "activation": {
+        "mandatory_when": "The baseline applies the design gate to every project regardless of scope."
+      },
+      "enforcement": {
+        "mechanism": "prompt_text",
+        "claim": "best_effort"
+      },
+      "failure_mode": "fail_open",
+      "authority": {
+        "policy_owner": "brainstorming maintainers",
+        "satisfier": "The active agent and user approval"
+      },
+      "maintenance": {
+        "owner": "brainstorming maintainers",
+        "freshness": "Re-evaluate against the approved capability profile and task-risk taxonomy.",
+        "compatibility_check": "Compare forced-on and forced-off behavior for bounded and ambiguous tasks.",
+        "evaluation_cases": ["mechanical-edit", "bounded-feature", "ambiguous-cross-module-feature"]
+      },
+      "phase1_action": "modify",
+      "retirement_scope": "component",
+      "whole_skill_deletion_candidate": false,
+      "source": {
+        "path": "skills/brainstorming/SKILL.md",
+        "sha256": "e14914605f640e0841758e45d0ab2a53243b59b921f929e47921c99668f2e61d",
+        "selector": "This applies to EVERY project regardless of perceived simplicity."
+      }
+    },
+    {
+      "id": "brainstorming.ambiguity_discovery",
+      "state": "baseline",
+      "skill": "brainstorming",
+      "layer": "open_ended_reasoning",
+      "kind": "reasoning_scaffold",
+      "lifecycle": "intentional_shaping",
+      "binding": "advisory",
+      "purpose": {
+        "failure_prevented": "A solution is optimized for an unverified interpretation of the request.",
+        "capability_enabled": "Focused discovery of intent, constraints, and success criteria."
+      },
+      "activation": {
+        "activate_when": "Material ambiguity would change architecture, behavior, cost, or user-visible output."
+      },
+      "enforcement": {
+        "mechanism": "prompt_text",
+        "claim": "best_effort"
+      },
+      "failure_mode": "report_only",
+      "authority": {
+        "policy_owner": "brainstorming maintainers",
+        "satisfier": "The active agent with user-provided context"
+      },
+      "maintenance": {
+        "owner": "brainstorming maintainers",
+        "freshness": "Review when clarification or autonomy guidance changes.",
+        "compatibility_check": "Ensure questions are material, bounded, and do not block discoverable facts.",
+        "evaluation_cases": ["material-ambiguity", "discoverable-context", "fully-bounded-request"]
+      },
+      "phase1_action": "retain",
+      "retirement_scope": "component",
+      "whole_skill_deletion_candidate": false,
+      "source": {
+        "path": "skills/brainstorming/SKILL.md",
+        "sha256": "e14914605f640e0841758e45d0ab2a53243b59b921f929e47921c99668f2e61d",
+        "selector": "ask questions one at a time to refine the idea"
+      }
+    },
+    {
+      "id": "writing-plans.micro_step_granularity",
+      "state": "baseline",
+      "skill": "writing-plans",
+      "layer": "open_ended_reasoning",
+      "kind": "reasoning_scaffold",
+      "lifecycle": "compensatory_shell",
+      "binding": "mandatory",
+      "purpose": {
+        "failure_prevented": "An implementation plan leaves too much implicit for a weak executor.",
+        "capability_enabled": "Highly explicit, serial execution instructions."
+      },
+      "activation": {
+        "mandatory_when": "The baseline writing-plans workflow is selected."
+      },
+      "enforcement": {
+        "mechanism": "prompt_text",
+        "claim": "best_effort"
+      },
+      "failure_mode": "fail_open",
+      "authority": {
+        "policy_owner": "writing-plans maintainers",
+        "satisfier": "The plan author"
+      },
+      "maintenance": {
+        "owner": "writing-plans maintainers",
+        "freshness": "Re-evaluate for each capability profile and executor class.",
+        "compatibility_check": "Compare micro-step and outcome-step plans for execution quality and overhead.",
+        "evaluation_cases": ["small-change-plan", "bounded-feature-plan", "high-risk-migration-plan"]
+      },
+      "phase1_action": "modify",
+      "retirement_scope": "component",
+      "whole_skill_deletion_candidate": false,
+      "source": {
+        "path": "skills/writing-plans/SKILL.md",
+        "sha256": "272e1af349f5062c28dc282b3e21b220d58d683a7314a10c455b7432ec91d845",
+        "selector": "Each step is one action (2-5 minutes):"
+      }
+    },
+    {
+      "id": "writing-plans.interface_and_global_constraints",
+      "state": "baseline",
+      "skill": "writing-plans",
+      "layer": "operational_control",
+      "kind": "fact",
+      "lifecycle": "invariant_core",
+      "binding": "mandatory",
+      "purpose": {
+        "failure_prevented": "A plan omits cross-task interface boundaries and repository-wide constraints.",
+        "capability_enabled": "Consistent implementation across task boundaries."
+      },
+      "activation": {
+        "mandatory_when": "A written implementation plan spans interfaces, modules, or global constraints."
+      },
+      "enforcement": {
+        "mechanism": "prompt_text",
+        "claim": "best_effort"
+      },
+      "failure_mode": "fail_open",
+      "authority": {
+        "policy_owner": "Repository and plan maintainers",
+        "satisfier": "The plan author"
+      },
+      "maintenance": {
+        "owner": "writing-plans maintainers",
+        "freshness": "Refresh whenever repository interfaces or constraints change.",
+        "compatibility_check": "Verify every cross-task dependency has an owner and acceptance evidence.",
+        "evaluation_cases": ["cross-module-interface", "repository-global-constraint"]
+      },
+      "phase1_action": "retain",
+      "retirement_scope": "component",
+      "whole_skill_deletion_candidate": false,
+      "source": {
+        "path": "skills/writing-plans/SKILL.md",
+        "sha256": "272e1af349f5062c28dc282b3e21b220d58d683a7314a10c455b7432ec91d845",
+        "selector": "## Global Constraints"
+      }
+    },
+    {
+      "id": "test-driven-development.unconditional_tdd",
+      "state": "baseline",
+      "skill": "test-driven-development",
+      "layer": "open_ended_reasoning",
+      "kind": "procedure",
+      "lifecycle": "compensatory_shell",
+      "binding": "mandatory",
+      "purpose": {
+        "failure_prevented": "Production code is accepted without evidence that a test can detect the missing behavior.",
+        "capability_enabled": "A uniform red-green-refactor discipline."
+      },
+      "activation": {
+        "mandatory_when": "The baseline treats all features, bug fixes, refactors, and behavior changes as TDD work."
+      },
+      "enforcement": {
+        "mechanism": "prompt_text",
+        "claim": "best_effort"
+      },
+      "failure_mode": "fail_open",
+      "authority": {
+        "policy_owner": "test-driven-development maintainers",
+        "satisfier": "The implementer and available test harness"
+      },
+      "maintenance": {
+        "owner": "test-driven-development maintainers",
+        "freshness": "Re-evaluate by change risk, observability, and available test seam.",
+        "compatibility_check": "Compare unconditional and risk-based activation without weakening required evidence.",
+        "evaluation_cases": ["new-behavior", "regression-fix", "mechanical-change", "no-test-seam"]
+      },
+      "phase1_action": "modify",
+      "retirement_scope": "component",
+      "whole_skill_deletion_candidate": false,
+      "source": {
+        "path": "skills/test-driven-development/SKILL.md",
+        "sha256": "b5b4717b8b761cce15a6cfe9022e33fd959e0894c0c39d72c9cb49c23486c10e",
+        "selector": "**Always:**"
+      }
+    },
+    {
+      "id": "test-driven-development.red_green_evidence",
+      "state": "baseline",
+      "skill": "test-driven-development",
+      "layer": "operational_control",
+      "kind": "procedure",
+      "lifecycle": "invariant_core",
+      "binding": "mandatory",
+      "purpose": {
+        "failure_prevented": "A passing test is mistaken for evidence when it never failed against the absent behavior.",
+        "capability_enabled": "Fresh causal evidence that a test detects the intended change."
+      },
+      "activation": {
+        "mandatory_when": "TDD is selected or a regression test is used as proof of a behavior change."
+      },
+      "enforcement": {
+        "mechanism": "prompt_text",
+        "claim": "best_effort"
+      },
+      "failure_mode": "fail_open",
+      "authority": {
+        "policy_owner": "test-driven-development maintainers",
+        "satisfier": "The implementer running the test harness"
+      },
+      "maintenance": {
+        "owner": "test-driven-development maintainers",
+        "freshness": "Review when test tooling or accepted equivalent evidence changes.",
+        "compatibility_check": "Record the expected red reason before implementation and the green result after implementation.",
+        "evaluation_cases": ["expected-red-then-green", "wrong-red-reason", "always-green-test"]
+      },
+      "phase1_action": "retain",
+      "retirement_scope": "component",
+      "whole_skill_deletion_candidate": false,
+      "source": {
+        "path": "skills/test-driven-development/SKILL.md",
+        "sha256": "b5b4717b8b761cce15a6cfe9022e33fd959e0894c0c39d72c9cb49c23486c10e",
+        "selector": "Write the test first. Watch it fail. Write minimal code to pass."
+      }
+    },
+    {
+      "id": "verification-before-completion.completion_evidence",
+      "state": "baseline",
+      "skill": "verification-before-completion",
+      "layer": "operational_control",
+      "kind": "gate",
+      "lifecycle": "invariant_core",
+      "binding": "mandatory",
+      "purpose": {
+        "failure_prevented": "A completion or correctness claim is made from stale, partial, or inferred evidence.",
+        "capability_enabled": "A fresh, inspectable basis for completion claims."
+      },
+      "activation": {
+        "mandatory_when": "The agent is about to claim completion, correctness, passing status, or successful delivery."
+      },
+      "enforcement": {
+        "mechanism": "prompt_text",
+        "claim": "best_effort"
+      },
+      "failure_mode": "fail_open",
+      "authority": {
+        "policy_owner": "verification-before-completion maintainers",
+        "satisfier": "The agent running an appropriate verification command or equivalent check"
+      },
+      "maintenance": {
+        "owner": "verification maintainers",
+        "freshness": "Evidence must be generated after the final relevant change.",
+        "compatibility_check": "Match each user-visible completion claim to current verification output.",
+        "evaluation_cases": ["fresh-full-check", "stale-check", "partial-check", "unverifiable-claim"]
+      },
+      "phase1_action": "retain",
+      "retirement_scope": "component",
+      "whole_skill_deletion_candidate": false,
+      "source": {
+        "path": "skills/verification-before-completion/SKILL.md",
+        "sha256": "ea52d15aabaf72bc6b558efe2c126f161b53961090ddcd712000273bfe8c7b6c",
+        "selector": "NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE"
+      }
+    }
+  ]
+}

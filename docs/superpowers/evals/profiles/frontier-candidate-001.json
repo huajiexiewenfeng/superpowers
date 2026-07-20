@@ -1,0 +1,48 @@
+{
+  "$schema": "../capability-profile.schema.json",
+  "schema_version": "1.0.0",
+  "profile_id": "frontier-candidate-001",
+  "status": "not_evaluated",
+  "intended_profile": "frontier",
+  "bindings": {
+    "base_model": null,
+    "reasoning_configuration": null,
+    "harness_and_router": null,
+    "toolchain": null,
+    "permissions": null,
+    "benchmark_suite": null,
+    "evaluation_commit": null
+  },
+  "missing_bindings": [
+    "base_model",
+    "reasoning_configuration",
+    "harness_and_router",
+    "toolchain",
+    "permissions",
+    "benchmark_suite",
+    "evaluation_commit"
+  ],
+  "baseline": {
+    "upstream_commit": "d884ae04edebef577e82ff7c4e143debd0bbec99",
+    "fork_baseline_commit": "e221c35624d9082c6984a92e6c5c7b9db259c5d0"
+  },
+  "approval": {
+    "state": "pending",
+    "approved_by": null,
+    "approved_at": null
+  },
+  "invalidation_triggers": [
+    "base_model",
+    "reasoning_configuration",
+    "harness_and_router",
+    "toolchain",
+    "permissions",
+    "benchmark_suite",
+    "evaluation_commit"
+  ],
+  "notes": [
+    "This candidate records an intended evaluation class, not a verified model capability.",
+    "The active model identity is not inferred from conversation text or from the profile name.",
+    "The profile cannot advance until all bindings are fixed, evaluated, and independently approved."
+  ]
+}

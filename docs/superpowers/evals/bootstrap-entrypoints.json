@@ -1,0 +1,341 @@
+{
+  "schema_version": "1.0.0",
+  "captured_at": "2026-07-20T10:00:16.5113627+08:00",
+  "captured_from_commit": "e221c35624d9082c6984a92e6c5c7b9db259c5d0",
+  "canonical_bootstrap_source": {
+    "path": "skills/using-superpowers/SKILL.md",
+    "sha256": "55379fe7c1c473a02c61961c822996bff30e1320d6921d9062509bc508482c05"
+  },
+  "evidence_policy": {
+    "promotion_requirement": "A supported harness must have live end-to-end evidence before its entrypoint is selected for component-aware routing promotion.",
+    "static_evidence_limit": "Manifest and implementation inspection proves packaging intent, not the live harness injection result.",
+    "shared_script_limit": "A shared script test proves script behavior, not host registration or event delivery."
+  },
+  "distribution_manifests": [
+    {
+      "path": ".claude-plugin/marketplace.json",
+      "sha256": "ff3f151a5a3adfdaaf9995642ac0433f4b1282f0c7a2882373bb5b7b0c3922e8",
+      "purpose": "Claude marketplace distribution metadata pointing at the plugin root.",
+      "injects_runtime_context": false,
+      "runtime_registration_owner": ".claude-plugin/plugin.json plus implicit root hook discovery"
+    },
+    {
+      "path": ".agents/plugins/marketplace.json",
+      "sha256": "2b94116c190896480e5054222a744e375976f8ae5bdb66ff0ab6b348dfad4182",
+      "purpose": "Agent marketplace installation metadata pointing at the plugin root.",
+      "injects_runtime_context": false,
+      "runtime_registration_owner": "The installed harness-specific plugin manifest or native Skill discovery"
+    },
+    {
+      "path": "package.json",
+      "sha256": "c070d76630332e2c7d358047ba650ad88e0db76a6497f68ce79f87d51839af6f",
+      "purpose": "Package distribution metadata registering OpenCode main and Pi extensions and Skills.",
+      "injects_runtime_context": false,
+      "runtime_registration_owner": ".opencode/plugins/superpowers.js and .pi/extensions/superpowers.ts"
+    }
+  ],
+  "shared_hook_runtime_boundaries": {
+    "windows_without_bash": {
+      "wrapper": "hooks/run-hook.cmd",
+      "behavior": "silent_skip",
+      "failure_mode": "fail_open",
+      "effect": "The plugin remains usable but SessionStart bootstrap context is not injected."
+    },
+    "missing_canonical_skill": {
+      "script": "hooks/session-start",
+      "behavior": "inject_error_string_and_exit_success",
+      "failure_mode": "fail_open"
+    }
+  },
+  "entrypoints": [
+    {
+      "id": "claude-code-session-start",
+      "harness": "Claude Code",
+      "support_status": "supported",
+      "selected_for_promotion": false,
+      "registration_mode": "implicit_root_auto_discovery",
+      "registration_paths": [".claude-plugin/plugin.json", "hooks/hooks.json"],
+      "entrypoint_paths": ["hooks/run-hook.cmd", "hooks/session-start"],
+      "loading_shape": "full_skill_with_frontmatter",
+      "injection_events": ["startup", "clear", "compact"],
+      "cache_behavior": "The shell script reads the canonical Skill file on every hook invocation.",
+      "dedup_behavior": "No repository-level duplicate marker is added by the shell bootstrap.",
+      "missing_source_behavior": "The script emits an error text block and exits successfully.",
+      "enforcement_boundary": "Host hook registration and prompt injection are advisory context delivery, not a tool-permission boundary.",
+      "failure_mode": "fail_open",
+      "test_status": "shared_script_only",
+      "evidence_paths": ["tests/hooks/test-session-start.sh", "hooks/session-start"],
+      "known_gaps": ["No live Claude Code test proves root hook auto-discovery and the final injected context."],
+      "evidence_owner": "Claude integration maintainers",
+      "source_hashes": {
+        ".claude-plugin/plugin.json": "475eecc40b42606656129d43d24c3ad9bedf43faeb3a85a8238988d59982f0da",
+        "hooks/hooks.json": "01616c57b96cc234cc984e77d2fc241dfd0e0bfacda54fe54589cd669a0d998e",
+        "hooks/run-hook.cmd": "d3d9c6199678dab2858e60509dde5e7414f13c2a2b5e48a38b1d368b6e1d6abb",
+        "hooks/session-start": "88a060272ca8047e0d1cd73a016e1cebba8396807a44be1e296d7c02dcbb9934"
+      }
+    },
+    {
+      "id": "cursor-session-start",
+      "harness": "Cursor",
+      "support_status": "supported",
+      "selected_for_promotion": false,
+      "registration_mode": "explicit_manifest_hooks_path",
+      "registration_paths": [".cursor-plugin/plugin.json", "hooks/hooks-cursor.json"],
+      "entrypoint_paths": ["hooks/run-hook.cmd", "hooks/session-start"],
+      "loading_shape": "full_skill_with_frontmatter",
+      "injection_events": ["session_start"],
+      "cache_behavior": "The shared shell script reads the canonical Skill file for each event.",
+      "dedup_behavior": "No repository-level duplicate marker is added by the shared shell bootstrap.",
+      "missing_source_behavior": "The script emits an error text block and exits successfully.",
+      "enforcement_boundary": "Cursor receives injected advisory context; the repository does not enforce tool permissions.",
+      "failure_mode": "fail_open",
+      "test_status": "shared_script_only",
+      "evidence_paths": ["tests/hooks/test-session-start.sh", "hooks/hooks-cursor.json"],
+      "known_gaps": ["No live Cursor test proves manifest wiring and the final context payload."],
+      "evidence_owner": "Cursor integration maintainers",
+      "source_hashes": {
+        ".cursor-plugin/plugin.json": "9fe248cc983544d6e265bca2d512bd07b908ce81f29c841ffcb86a76c29dbf79",
+        "hooks/hooks-cursor.json": "53d8ceb3ff5d8bb1c4f283f238cc868b8c1af22e40a3ac30f6d6e4173effefbd",
+        "hooks/run-hook.cmd": "d3d9c6199678dab2858e60509dde5e7414f13c2a2b5e48a38b1d368b6e1d6abb",
+        "hooks/session-start": "88a060272ca8047e0d1cd73a016e1cebba8396807a44be1e296d7c02dcbb9934"
+      }
+    },
+    {
+      "id": "copilot-cli-session-start",
+      "harness": "GitHub Copilot CLI",
+      "support_status": "documented_shared_path",
+      "selected_for_promotion": false,
+      "registration_mode": "claude_compatible_root_hook_with_environment_switch",
+      "registration_paths": [".claude-plugin/plugin.json", "hooks/hooks.json"],
+      "entrypoint_paths": ["hooks/run-hook.cmd", "hooks/session-start"],
+      "loading_shape": "full_skill_with_frontmatter",
+      "injection_events": ["session_start"],
+      "cache_behavior": "The shared script reads the canonical Skill file per invocation.",
+      "dedup_behavior": "No repository-level duplicate marker is added.",
+      "missing_source_behavior": "The script emits an error text block and exits successfully.",
+      "enforcement_boundary": "The COPILOT_CLI branch changes payload formatting but remains advisory context injection.",
+      "failure_mode": "fail_open",
+      "test_status": "shared_script_only",
+      "evidence_paths": ["hooks/session-start", "tests/hooks/test-session-start.sh"],
+      "known_gaps": ["No live Copilot CLI event-delivery test is present.", "The documented Copilot tool mapping reference is missing."],
+      "evidence_owner": "Copilot CLI integration maintainers",
+      "source_hashes": {
+        ".claude-plugin/plugin.json": "475eecc40b42606656129d43d24c3ad9bedf43faeb3a85a8238988d59982f0da",
+        "hooks/hooks.json": "01616c57b96cc234cc984e77d2fc241dfd0e0bfacda54fe54589cd669a0d998e",
+        "hooks/session-start": "88a060272ca8047e0d1cd73a016e1cebba8396807a44be1e296d7c02dcbb9934"
+      }
+    },
+    {
+      "id": "factory-droid-shared-hook",
+      "harness": "Factory Droid",
+      "support_status": "documented_shared_path",
+      "selected_for_promotion": false,
+      "registration_mode": "documented_claude_plugin_compatibility",
+      "registration_paths": ["README.md", ".claude-plugin/plugin.json"],
+      "entrypoint_paths": ["hooks/hooks.json", "hooks/session-start"],
+      "loading_shape": "full_skill_with_frontmatter",
+      "injection_events": ["session_start"],
+      "cache_behavior": "The shared script reads current Skill bytes on invocation.",
+      "dedup_behavior": "No Factory-specific duplicate guard exists in this repository.",
+      "missing_source_behavior": "The shared script reports missing source as context and exits successfully.",
+      "enforcement_boundary": "Compatibility is documented; no Factory-specific runtime permission boundary is implemented here.",
+      "failure_mode": "fail_open",
+      "test_status": "shared_script_only",
+      "evidence_paths": ["README.md", "tests/hooks/test-session-start.sh"],
+      "known_gaps": ["No Factory-specific manifest or live host test is present."],
+      "evidence_owner": "Shared Claude-compatible integration maintainers",
+      "source_hashes": {
+        "README.md": "993584ac25724e9dcb1639b12850d922ca8c21a4456bc7edbb1c5cc24456540e",
+        ".claude-plugin/plugin.json": "475eecc40b42606656129d43d24c3ad9bedf43faeb3a85a8238988d59982f0da",
+        "hooks/hooks.json": "01616c57b96cc234cc984e77d2fc241dfd0e0bfacda54fe54589cd669a0d998e",
+        "hooks/session-start": "88a060272ca8047e0d1cd73a016e1cebba8396807a44be1e296d7c02dcbb9934"
+      }
+    },
+    {
+      "id": "antigravity-shared-hook",
+      "harness": "Antigravity",
+      "support_status": "documented_shared_path",
+      "selected_for_promotion": false,
+      "registration_mode": "documented_shared_hook_without_installer",
+      "registration_paths": ["README.md", "docs/porting-to-a-new-harness.md"],
+      "entrypoint_paths": ["hooks/hooks.json", "hooks/session-start"],
+      "loading_shape": "full_skill_with_frontmatter",
+      "injection_events": ["session_start"],
+      "cache_behavior": "The documented shared script reads the Skill source at invocation time.",
+      "dedup_behavior": "No Antigravity-specific duplicate guard exists in this repository.",
+      "missing_source_behavior": "The shared script reports missing source as context and exits successfully.",
+      "enforcement_boundary": "Only a documented compatibility path exists; registration behavior is not proven.",
+      "failure_mode": "fail_open",
+      "test_status": "static_only",
+      "evidence_paths": ["README.md", "RELEASE-NOTES.md", "docs/porting-to-a-new-harness.md"],
+      "known_gaps": ["The documented .antigravity-plugin/install.sh path does not exist.", "No Antigravity live or installer regression test is present."],
+      "evidence_owner": "Antigravity integration maintainers",
+      "source_hashes": {
+        "README.md": "993584ac25724e9dcb1639b12850d922ca8c21a4456bc7edbb1c5cc24456540e",
+        "RELEASE-NOTES.md": "2f0f672dc2a1c58660c05e4356939d0ffc782c0421e149d48d1e2353b0489fe0",
+        "docs/porting-to-a-new-harness.md": "066e05d05eac48e6e6dab5bcd19f46d62090d5c4209669769716c441af6bc9fc",
+        "hooks/hooks.json": "01616c57b96cc234cc984e77d2fc241dfd0e0bfacda54fe54589cd669a0d998e",
+        "hooks/session-start": "88a060272ca8047e0d1cd73a016e1cebba8396807a44be1e296d7c02dcbb9934"
+      }
+    },
+    {
+      "id": "opencode-first-user-message",
+      "harness": "OpenCode",
+      "support_status": "supported",
+      "selected_for_promotion": false,
+      "registration_mode": "package_main_plugin_export",
+      "registration_paths": ["package.json"],
+      "entrypoint_paths": [".opencode/plugins/superpowers.js"],
+      "loading_shape": "body_without_frontmatter",
+      "injection_events": ["first_user_message_transform"],
+      "cache_behavior": "The module caches the stripped bootstrap body after its first source read.",
+      "dedup_behavior": "A bootstrap marker prevents a second injection into the transformed message list.",
+      "missing_source_behavior": "The loader caches a null result and returns the original messages unchanged.",
+      "enforcement_boundary": "Message transformation supplies advisory context and does not constrain OpenCode tools.",
+      "failure_mode": "fail_open",
+      "test_status": "shared_script_only",
+      "evidence_paths": [".opencode/plugins/superpowers.js", "tests/opencode/test-plugin-loading.sh"],
+      "known_gaps": [
+        "No live OpenCode host test feeds an already transformed conversation back through the plugin.",
+        "The repository plugin-loading test requires POSIX-compatible symlink behavior and fails in the current Windows/MSYS temporary directory; the separate caching check passes."
+      ],
+      "evidence_owner": "OpenCode integration maintainers",
+      "source_hashes": {
+        "package.json": "c070d76630332e2c7d358047ba650ad88e0db76a6497f68ce79f87d51839af6f",
+        ".opencode/plugins/superpowers.js": "a5c5e1dbb0abfbd6ec3322b724b9a7b3318bbbb3d83f9a661c56ae0ed0a3adb8"
+      }
+    },
+    {
+      "id": "pi-session-context",
+      "harness": "Pi",
+      "support_status": "supported",
+      "selected_for_promotion": false,
+      "registration_mode": "package_pi_extensions",
+      "registration_paths": ["package.json"],
+      "entrypoint_paths": [".pi/extensions/superpowers.ts"],
+      "loading_shape": "body_without_frontmatter",
+      "injection_events": ["session_start", "post_compaction"],
+      "cache_behavior": "The extension caches the stripped bootstrap body after the first read.",
+      "dedup_behavior": "A context marker prevents duplicate injection within the same context reconstruction.",
+      "missing_source_behavior": "The extension skips injection when the source cannot be read.",
+      "enforcement_boundary": "Extension context is advisory; Pi tool permissions remain external.",
+      "failure_mode": "fail_open",
+      "test_status": "shared_script_only",
+      "evidence_paths": [".pi/extensions/superpowers.ts", "tests/pi/test-pi-extension.mjs"],
+      "known_gaps": [
+        "Tests mock the extension API rather than running a live Pi session.",
+        "The current Node 22 run requires experimental TypeScript stripping and passes five lifecycle checks, but the pi-tools mapping assertion fails because the reference does not contain the expected lowercase write mapping."
+      ],
+      "evidence_owner": "Pi integration maintainers",
+      "source_hashes": {
+        "package.json": "c070d76630332e2c7d358047ba650ad88e0db76a6497f68ce79f87d51839af6f",
+        ".pi/extensions/superpowers.ts": "39c27000c047f8a1399a76e032e4cd239d7bdb0be168a121f46a2ac719deaae0"
+      }
+    },
+    {
+      "id": "kimi-native-session-start",
+      "harness": "Kimi CLI",
+      "support_status": "supported",
+      "selected_for_promotion": false,
+      "registration_mode": "native_manifest_session_start_skill",
+      "registration_paths": [".kimi-plugin/plugin.json"],
+      "entrypoint_paths": [".kimi-plugin/plugin.json"],
+      "loading_shape": "native_skill_loading",
+      "injection_events": ["session_start"],
+      "cache_behavior": "Caching is owned by the Kimi native Skill loader and is not specified in this repository.",
+      "dedup_behavior": "Deduplication is owned by the Kimi native Skill loader and is not specified here.",
+      "missing_source_behavior": "Host-native behavior is not proven by repository tests.",
+      "enforcement_boundary": "The manifest selects a native Skill; runtime tool enforcement remains host-owned.",
+      "failure_mode": "report_only",
+      "test_status": "static_only",
+      "evidence_paths": [".kimi-plugin/plugin.json", "tests/kimi/test-plugin-manifest.sh"],
+      "known_gaps": ["No live Kimi session confirms the loaded bytes, caching, or missing-source behavior."],
+      "evidence_owner": "Kimi integration maintainers",
+      "source_hashes": {
+        ".kimi-plugin/plugin.json": "ff6ec089586c6cec64326c01f014227fbe7429064216ce85e7ba04978167e647"
+      }
+    },
+    {
+      "id": "codex-native-discovery",
+      "harness": "Codex",
+      "support_status": "supported",
+      "selected_for_promotion": false,
+      "registration_mode": "explicit_native_discovery_with_empty_hooks_control",
+      "registration_paths": [".codex-plugin/plugin.json"],
+      "entrypoint_paths": [".codex-plugin/plugin.json"],
+      "loading_shape": "native_skill_discovery_no_bootstrap",
+      "injection_events": ["native_skill_match"],
+      "cache_behavior": "Native Codex discovery and caching are host-owned; the repository defines no bootstrap cache.",
+      "dedup_behavior": "The explicit empty hooks object prevents repository bootstrap registration; native deduplication is host-owned.",
+      "missing_source_behavior": "Native discovery omits an unavailable Skill; no fallback Claude hook is declared.",
+      "enforcement_boundary": "Skill discovery is advisory and separate from Codex sandbox and approval enforcement.",
+      "failure_mode": "report_only",
+      "test_status": "static_only",
+      "evidence_paths": [".codex-plugin/plugin.json", "tests/codex/test-marketplace-manifest.sh"],
+      "known_gaps": ["No live Codex test proves discovery, selection, and the empty-hooks negative control together."],
+      "evidence_owner": "Codex integration maintainers",
+      "source_hashes": {
+        ".codex-plugin/plugin.json": "50ce01aeec3a3b13540ea43e196c25fee820739d7dbae7c52f4e7a2168b7a09f"
+      }
+    },
+    {
+      "id": "gemini-context-legacy",
+      "harness": "Gemini CLI",
+      "support_status": "legacy_eol",
+      "selected_for_promotion": false,
+      "registration_mode": "legacy_extension_context_file",
+      "registration_paths": ["gemini-extension.json"],
+      "entrypoint_paths": ["GEMINI.md"],
+      "loading_shape": "legacy_context_include_with_missing_mapping",
+      "injection_events": ["legacy_context_load"],
+      "cache_behavior": "Legacy host behavior is not verified in the repository.",
+      "dedup_behavior": "Legacy host behavior is not verified in the repository.",
+      "missing_source_behavior": "GEMINI.md references a missing tool-mapping file, so the complete legacy context cannot be assembled as documented.",
+      "enforcement_boundary": "Legacy documentation only; no current runtime enforcement claim is made.",
+      "failure_mode": "report_only",
+      "test_status": "legacy_unverified",
+      "evidence_paths": ["gemini-extension.json", "GEMINI.md", "RELEASE-NOTES.md"],
+      "known_gaps": ["skills/using-superpowers/references/gemini-tools.md is missing.", "The integration is end-of-life and has no supported runtime regression."],
+      "evidence_owner": "Legacy integration archive maintainers",
+      "source_hashes": {
+        "gemini-extension.json": "84bdec8d80f73c228b401502cebb9ef467476a56fef93bbe532ad74dd63072e2",
+        "GEMINI.md": "0823da8b7277f8b623746d57c0bee75fda02e4c832fe57843e644d0fe633abbc",
+        "RELEASE-NOTES.md": "2f0f672dc2a1c58660c05e4356939d0ffc782c0421e149d48d1e2353b0489fe0"
+      }
+    }
+  ],
+  "known_missing_paths": [
+    {
+      "path": ".antigravity-plugin/install.sh",
+      "reason": "Documentation names an Antigravity installer that is absent from the captured repository.",
+      "evidenced_by": ["README.md", "docs/porting-to-a-new-harness.md"]
+    },
+    {
+      "path": "skills/using-superpowers/references/claude-code-tools.md",
+      "reason": "Porting documentation references a Claude Code tool mapping that is absent.",
+      "evidenced_by": ["docs/porting-to-a-new-harness.md"]
+    },
+    {
+      "path": "skills/using-superpowers/references/copilot-tools.md",
+      "reason": "Porting documentation references a Copilot tool mapping that is absent.",
+      "evidenced_by": ["docs/porting-to-a-new-harness.md"]
+    },
+    {
+      "path": "skills/using-superpowers/references/gemini-tools.md",
+      "reason": "GEMINI.md and porting documentation reference a Gemini tool mapping that is absent.",
+      "evidenced_by": ["GEMINI.md", "docs/porting-to-a-new-harness.md"]
+    }
+  ],
+  "stale_documentation": [
+    {
+      "path": "docs/porting-to-a-new-harness.md",
+      "claim": "Per-harness tool-mapping references exist under using-superpowers/references.",
+      "observed_gap": "Claude Code, Copilot, and Gemini mapping files named by the document are absent."
+    },
+    {
+      "path": "README.md",
+      "claim": "Antigravity has a repository installer path.",
+      "observed_gap": "The named .antigravity-plugin/install.sh file is absent."
+    }
+  ]
+}

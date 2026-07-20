@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0.0",
+  "captured_at": "2026-07-20T10:00:16.5113627+08:00",
+  "repository": {
+    "upstream_url": "https://github.com/obra/superpowers.git",
+    "upstream_baseline_commit": "d884ae04edebef577e82ff7c4e143debd0bbec99",
+    "fork_url": "https://github.com/huajiexiewenfeng/superpowers.git",
+    "branch": "feat/frontier-model-workflow-optimization",
+    "fork_baseline_commit": "e221c35624d9082c6984a92e6c5c7b9db259c5d0"
+  },
+  "design_basis": {
+    "title": "Floor, Not Ceiling — Building Agent Skill Systems for Stronger Models",
+    "canonical_url": "https://gist.github.com/huajiexiewenfeng/71da8bd8431ec51e56a2b02a83f34a60",
+    "filename": "floor-not-ceiling.md",
+    "status": "Proposal v0.2",
+    "revision": "d283da2e45f04363bc70734f88abed8a69c437eb",
+    "updated_at": "2026-07-16T14:16:50Z",
+    "lf_normalized_sha256": "bd252a9a39d649d672dd4aff60b709a7bac18dbe6be08b3c85bae41b2fbc1dbe",
+    "size_bytes": 20493,
+    "canonicality": "published_gist_is_authoritative"
+  },
+  "known_mirrors": [
+    {
+      "location_alias": "$USERPROFILE/Downloads/floor-not-ceiling.md",
+      "language": "en",
+      "observed_status": "Proposal v0.1",
+      "sha256": "4263deaac47c45c3f10863effac61e4ea9ece796bd8a377cabb7e1aa3760c14a",
+      "disposition": "sync",
+      "sync_state": "pending_external_write_approval",
+      "precondition": "Create a byte-for-byte backup before replacing the mirror with the canonical published revision."
+    },
+    {
+      "location_alias": "$USERPROFILE/Downloads/floor-not-ceiling.zh.md",
+      "language": "zh-CN",
+      "observed_status": "Proposal v0.1",
+      "sha256": "f65637cd5cdf87d82a5a6eea8ffa7985cd6e1c27be53538fef0ab735bfac9b03",
+      "disposition": "sync",
+      "sync_mode": "translation_merge",
+      "sync_state": "pending_external_write_approval",
+      "precondition": "Preserve the existing translation, merge v0.2 changes, and review the Chinese diff before replacement."
+    },
+    {
+      "location_alias": "$WORKSPACE/floor-not-ceiling-final.md",
+      "language": "en",
+      "observed_status": "v0.2 derivative",
+      "sha256": "5c3027a1cfdcf3f7811a4cdcd66e723ab3c1d26be72b0ab14452c973e93b764c",
+      "disposition": "deliberately_unmanaged",
+      "reason": "This is an editorial derivative rather than a canonical mirror; automatic synchronization would overwrite intentional local changes."
+    }
+  ],
+  "task1_policy": {
+    "retirement_unit": "component",
+    "skill_behavior_changes_allowed": false,
+    "profile_activation_allowed": false,
+    "whole_skill_retirement_allowed": false,
+    "private_absolute_paths_in_repository_artifacts": false
+  }
+}
