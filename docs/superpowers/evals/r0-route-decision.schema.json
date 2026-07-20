@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/huajiexiewenfeng/superpowers/schemas/r0-route-decision.schema.json",
+  "title": "R0 route-only decision record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocol_id",
+    "trial_id",
+    "case_id",
+    "candidate_binding_sha256",
+    "sampling_nonce",
+    "decision",
+    "telemetry"
+  ],
+  "properties": {
+    "protocol_id": { "const": "r0-frontier-router-001" },
+    "trial_id": { "type": "string", "pattern": "^.+#[1-5]$" },
+    "case_id": { "type": "string", "minLength": 1 },
+    "candidate_binding_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "sampling_nonce": { "type": "string", "minLength": 1 },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requested_profile",
+        "effective_profile",
+        "task_class",
+        "mandatory_components",
+        "advisory_components",
+        "outcome",
+        "reason"
+      ],
+      "properties": {
+        "requested_profile": { "enum": ["full", "frontier", "off"] },
+        "effective_profile": { "enum": ["full", "frontier", "off"] },
+        "task_class": { "enum": ["mechanical", "bounded", "complex", "high_risk"] },
+        "mandatory_components": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "advisory_components": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "outcome": {
+          "enum": ["full_v6_1_1", "selected_advisory_workflow", "no_advisory_workflow"]
+        },
+        "reason": { "type": "string", "minLength": 1, "maxLength": 1000 }
+      }
+    },
+    "telemetry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fresh_context", "input_tokens", "output_tokens", "wall_clock_ms"],
+      "properties": {
+        "fresh_context": { "const": true },
+        "input_tokens": { "type": ["integer", "null"], "minimum": 0 },
+        "output_tokens": { "type": ["integer", "null"], "minimum": 0, "maximum": 300 },
+        "wall_clock_ms": { "type": ["integer", "null"], "minimum": 0 }
+      }
+    }
+  }
+}

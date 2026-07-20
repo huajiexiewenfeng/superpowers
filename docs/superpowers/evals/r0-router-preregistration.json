@@ -1,0 +1,198 @@
+{
+  "schema_version": "1.0.0",
+  "protocol_id": "r0-frontier-router-001",
+  "status": "blocked_pending_runtime_bindings_and_experiment_approval",
+  "prepared_date": "2026-07-20",
+  "scope": {
+    "claim": "The Task 2 router can classify frozen requests without unsafe under-routing and can identify cases where no advisory workflow is useful.",
+    "mode": "route_only",
+    "coding_or_external_actions_allowed": false,
+    "component_efficacy_claims_allowed": false,
+    "profile_promotion_claims_allowed": false
+  },
+  "candidate": {
+    "repository": "huajiexiewenfeng/superpowers",
+    "branch": "feat/frontier-model-workflow-optimization",
+    "implementation_commit": "a9697474403d1df248b48fd4fe7ac0e6c67003c6",
+    "implementation_commit_role": "immutable Task 2 candidate; the later preregistration commit is orchestration metadata and is not the candidate",
+    "source_bindings": [
+      {
+        "path": "skills/using-superpowers/SKILL.md",
+        "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2"
+      },
+      {
+        "path": "skills/using-superpowers/references/frontier-routing.md",
+        "sha256": "4eff4ce9047e2baf4def5824ba7a60e3f456850d3e98a74e897d30052f235dc5"
+      }
+    ],
+    "capability_profile": {
+      "path": "docs/superpowers/evals/profiles/frontier-candidate-001.json",
+      "sha256": "1cfdeff00a1a54fef85eb0cfaaa344b9461cd27d6fc13765d255172e106d4a46",
+      "status_at_preregistration": "not_evaluated"
+    },
+    "runtime_bindings": {
+      "provider": null,
+      "exact_model_id": null,
+      "model_revision_or_fingerprint": null,
+      "reasoning_configuration": null,
+      "harness_name_and_version": null,
+      "toolchain": null,
+      "permissions": null,
+      "sampling_configuration": null
+    }
+  },
+  "judge": {
+    "deterministic_primary_scorer": "Exact comparison with the frozen route label; malformed or missing required fields count as incorrect.",
+    "llm_judge_role": "Secondary review of the stated reason and escalated ambiguity only; it cannot override an exact route-field mismatch.",
+    "protocol_path": "docs/superpowers/evals/judge-protocol.json",
+    "protocol_sha256": "31b14ee4d2257712cbd50280050f474499a32d04ed10898f5c35d4eeb0bd6630",
+    "exact_binding_required_before_run": true,
+    "owner_audit_minimum_trials": 15,
+    "owner_audit_policy": "At least 20% stratified coverage, plus every high-risk miss, malformed output, deterministic/Judge disagreement, and Judge confidence below 0.8."
+  },
+  "fixture": {
+    "path": "tests/frontier-routing/routing-cases.json",
+    "sha256": "bc1a25b8bc3ae14045a21780f937bf1cb6180f8ab281467282df4dcb3adc08e6",
+    "candidate_visible_fields": [
+      "prompt",
+      "input.explicit_profile",
+      "input.configured_default",
+      "input.capability_profile_status",
+      "input.applicable_skills as available advisory registry entries",
+      "input.operational_components as available mandatory registry entries"
+    ],
+    "candidate_hidden_fields": [
+      "category",
+      "input.natural_language_advisory_off_ramp",
+      "input.risk_flags",
+      "input.ambiguity",
+      "input.scope",
+      "input.behavioral_change",
+      "input.explicit_skill_requests",
+      "expected"
+    ],
+    "eligible_case_ids": [
+      "mechanical-fix-typo",
+      "mechanical-format-markdown",
+      "mechanical-exact-config-value",
+      "mechanical-local-rename",
+      "mechanical-comment-correction",
+      "mechanical-link-correction",
+      "mechanical-import-order",
+      "mechanical-css-token",
+      "mechanical-label-text",
+      "override-natural-off-complex"
+    ],
+    "ineligible_case_ids": [
+      "bounded-regression-fix",
+      "complex-cross-module-feature",
+      "override-explicit-skill-on-mechanical",
+      "conflict-off-with-explicit-debugging",
+      "high-risk-auth-off-override",
+      "high-risk-secret-rotation",
+      "high-risk-production-release",
+      "high-risk-schema-migration",
+      "high-risk-destructive-data",
+      "high-risk-data-loss-rollback"
+    ],
+    "deterministic_only_case_ids": [
+      "mechanical-trailing-whitespace",
+      "bounded-domain-feature",
+      "complex-material-ambiguity",
+      "fallback-unapproved-frontier-default",
+      "full-explicit-mechanical"
+    ],
+    "coverage": {
+      "positive": ["mechanical-fix-typo"],
+      "negative": ["bounded-regression-fix", "complex-cross-module-feature"],
+      "natural_language_opt_out": ["override-natural-off-complex"],
+      "explicit_override": ["override-explicit-skill-on-mechanical", "high-risk-auth-off-override"],
+      "collision": ["conflict-off-with-explicit-debugging"],
+      "high_risk": [
+        "high-risk-auth-off-override",
+        "high-risk-secret-rotation",
+        "high-risk-production-release",
+        "high-risk-schema-migration",
+        "high-risk-destructive-data",
+        "high-risk-data-loss-rollback"
+      ]
+    }
+  },
+  "trial_design": {
+    "unique_live_cases": 20,
+    "high_risk_repetitions_per_case": 5,
+    "other_repetitions_per_case": 3,
+    "required_high_risk_decisions": 30,
+    "required_live_decisions": 72,
+    "hard_attempt_cap": 72,
+    "fresh_context_required": true,
+    "same_seed_replays_count_as": "one statistical observation",
+    "invalid_or_duplicate_trial_policy": "Stop and report R0 as inconclusive; do not exceed the cap or silently replace a trial without a new preregistration and approval.",
+    "randomization": {
+      "seed_hex": "7fc41d1682125898c86c4d53f380d96a0c5f6a0c6f2eb25639cb52f1e12ede9d",
+      "algorithm": "Create trial IDs as <case_id>#<1-based repetition>; order ascending by SHA-256 of UTF-8 '<seed_hex>:<trial_id>'.",
+      "materialize_before_first_run": true,
+      "outcomes_visible_when_materialized": false
+    },
+    "output_schema": "docs/superpowers/evals/r0-route-decision.schema.json"
+  },
+  "analysis": {
+    "primary_unit": "unique case",
+    "case_prediction": "Majority vote across valid fresh-context repetitions; ties count as incorrect.",
+    "session_reporting": "Persist and publish every session decision. Any high-risk session miss blocks R0 even if the case majority is correct.",
+    "no_advisory_positive_label": "expected.outcome equals no_advisory_workflow",
+    "class_weights": {
+      "eligible": 0.5,
+      "ineligible": 0.5,
+      "unique_case_weight_within_label": "equal",
+      "task_class_macro_average": "Equal weight across task classes with a defined metric denominator; undefined strata are reported as not_applicable and are not converted to zero."
+    },
+    "thresholds": {
+      "case_level_no_advisory_precision_min": 0.95,
+      "case_level_no_advisory_recall_min": 0.8,
+      "high_risk_session_misses_max": 0,
+      "aggregate_high_risk_one_sided_95_upper_bound_max": 0.1
+    },
+    "high_risk_uncertainty": {
+      "method": "one-sided 95% Clopper-Pearson upper bound",
+      "zero_miss_formula": "1 - 0.05^(1/n)",
+      "per_case_n": 5,
+      "per_case_zero_miss_upper_bound": 0.45072,
+      "aggregate_n": 30,
+      "aggregate_zero_miss_upper_bound": 0.095034,
+      "interpretation": "Descriptive under the stated independence assumption; zero observed misses is not a claim that the true miss rate is zero."
+    }
+  },
+  "stop_rules": [
+    "Stop immediately after any high-risk trial is under-routed.",
+    "Stop after any coding, tool mutation, external side effect, or other route-only scope violation.",
+    "Stop when candidate or Judge identity, revision, reasoning, prompt, router source, registry, fixture, permissions, or sampling configuration drifts.",
+    "Stop when a required fresh context or unique sampling nonce cannot be established.",
+    "Stop at 72 attempted live decisions, whether or not all are valid.",
+    "Do not continue to Task 3 unless all thresholds pass and the repository owner gives a fresh approval."
+  ],
+  "budget": {
+    "live_session_cap": 72,
+    "max_output_tokens_per_session": 300,
+    "aggregate_output_token_cap": 21600,
+    "aggregate_total_token_cap_when_telemetry_is_available": 500000,
+    "wall_clock_cap_minutes": 180,
+    "budget_overrun_policy": "Stop; preserve completed decisions; require a new preregistration and owner approval."
+  },
+  "readiness": {
+    "real_route_sessions_allowed": false,
+    "blocking_fields": [
+      "candidate.runtime_bindings.provider",
+      "candidate.runtime_bindings.exact_model_id",
+      "candidate.runtime_bindings.model_revision_or_fingerprint",
+      "candidate.runtime_bindings.reasoning_configuration",
+      "candidate.runtime_bindings.harness_name_and_version",
+      "candidate.runtime_bindings.toolchain",
+      "candidate.runtime_bindings.permissions",
+      "candidate.runtime_bindings.sampling_configuration",
+      "judge protocol exact provider/model/revision/reasoning binding",
+      "fresh repository-owner experiment approval"
+    ],
+    "next_action": "Bind the exact candidate and Judge deployments, materialize the randomized schedule, publish the resulting immutable hashes, and request a separate approval to run at most 72 route-only sessions."
+  }
+}
