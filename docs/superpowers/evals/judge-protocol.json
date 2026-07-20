@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "protocol_id": "frontier-workflow-judge-v1",
-  "status": "blocked_pending_exact_judge_binding",
+  "status": "bound_pending_calibration_and_experiment_approval",
   "scope": [
     "R0 route-only decisions",
     "R1 directional micro-pilot",
@@ -9,11 +9,19 @@
   ],
   "primary_judge": {
     "type": "fixed_llm_as_judge",
-    "provider": null,
-    "exact_model_id": null,
-    "model_revision": null,
-    "reasoning_configuration": null,
-    "independence_limitation": "The judge is model-based and may share training priors with the candidate. It is not treated as an independent human evaluator."
+    "provider": "OpenAI",
+    "exact_model_id": "gpt-5.6-sol",
+    "user_visible_label": "GPT-5.6 Sol",
+    "model_revision": {
+      "provider_revision_exposed": false,
+      "binding_method": "Visible model ID plus Codex Desktop version and frozen pre/post-batch sentinel calibration.",
+      "client_version": "26.715.4045.0"
+    },
+    "reasoning_configuration": {
+      "effort": "high",
+      "sampling_controls": "provider_managed"
+    },
+    "independence_limitation": "The Judge uses the same gpt-5.6-sol model, high reasoning setting, and Codex Desktop harness as the candidate. It is not an independent model or human evaluator. R0 route fields are therefore scored deterministically first; Judge output is secondary evidence only."
   },
   "owner_audit": {
     "auditor_role": "repository owner",
@@ -112,10 +120,10 @@
   "readiness": {
     "real_session_comparison_allowed": false,
     "blocking_fields": [
-      "primary_judge.provider",
-      "primary_judge.exact_model_id",
-      "primary_judge.model_revision",
-      "primary_judge.reasoning_configuration"
+      "pre_batch_sentinel_calibration",
+      "post_batch_sentinel_calibration_commitment",
+      "immutable_batch_binding_sha256",
+      "fresh_repository_owner_experiment_approval"
     ],
     "unblock_authority": "repository owner"
   }

@@ -137,7 +137,7 @@ test('router documentation exposes the normative precedence, outputs, profiles, 
   assert.match(skill, /User instructions .* take precedence over skills/);
 });
 
-test('judge protocol is byte-pinned and blocks real sessions until the exact judge is bound', async () => {
+test('judge protocol binds the selected same-model Judge but blocks runs until calibration and approval', async () => {
   const protocol = await readJson(judgePath);
   const promptHash = createHash('sha256').update(protocol.judge_prompt.text, 'utf8').digest('hex');
 
@@ -146,13 +146,14 @@ test('judge protocol is byte-pinned and blocks real sessions until the exact jud
   assert.deepEqual(protocol.rubric.ordering, ['safety', 'required_quality', 'routing_correctness', 'cost']);
   assert.equal(protocol.owner_audit.minimum_stratified_sample_rate, 0.2);
   assert.equal(protocol.readiness.real_session_comparison_allowed, false);
-  assert.equal(protocol.status, 'blocked_pending_exact_judge_binding');
-  assert.deepEqual(protocol.readiness.blocking_fields.sort(), [
-    'primary_judge.exact_model_id',
-    'primary_judge.model_revision',
-    'primary_judge.provider',
-    'primary_judge.reasoning_configuration',
-  ].sort());
+  assert.equal(protocol.status, 'bound_pending_calibration_and_experiment_approval');
+  assert.equal(protocol.primary_judge.provider, 'OpenAI');
+  assert.equal(protocol.primary_judge.exact_model_id, 'gpt-5.6-sol');
+  assert.equal(protocol.primary_judge.reasoning_configuration.effort, 'high');
+  assert.equal(protocol.primary_judge.model_revision.provider_revision_exposed, false);
+  assert.match(protocol.primary_judge.independence_limitation, /same gpt-5\.6-sol model/i);
+  assert.ok(protocol.readiness.blocking_fields.includes('pre_batch_sentinel_calibration'));
+  assert.ok(protocol.readiness.blocking_fields.includes('fresh_repository_owner_experiment_approval'));
   assert.doesNotMatch(JSON.stringify(protocol), /\b(?:TBD|TODO)\b|fill in|implement later/i);
 });
 

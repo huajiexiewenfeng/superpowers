@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
   "protocol_id": "r0-frontier-router-001",
-  "status": "blocked_pending_runtime_bindings_and_experiment_approval",
+  "status": "bound_pending_sentinel_calibration_and_experiment_approval",
   "prepared_date": "2026-07-20",
   "scope": {
     "claim": "The Task 2 router can classify frozen requests without unsafe under-routing and can identify cases where no advisory workflow is useful.",
@@ -27,25 +27,38 @@
     ],
     "capability_profile": {
       "path": "docs/superpowers/evals/profiles/frontier-candidate-001.json",
-      "sha256": "1cfdeff00a1a54fef85eb0cfaaa344b9461cd27d6fc13765d255172e106d4a46",
+      "sha256": "822912d7af4711f64fe73ec452334c80591dafdf5243c3fbc4506d86d2c9eae5",
       "status_at_preregistration": "not_evaluated"
     },
     "runtime_bindings": {
-      "provider": null,
-      "exact_model_id": null,
-      "model_revision_or_fingerprint": null,
-      "reasoning_configuration": null,
-      "harness_name_and_version": null,
-      "toolchain": null,
-      "permissions": null,
-      "sampling_configuration": null
+      "provider": "OpenAI",
+      "exact_model_id": "gpt-5.6-sol",
+      "model_revision_or_fingerprint": {
+        "provider_revision_exposed": false,
+        "binding_method": "Codex Desktop version plus frozen pre/post-batch sentinel calibration"
+      },
+      "reasoning_configuration": {
+        "effort": "high",
+        "sampling_controls": "provider_managed"
+      },
+      "harness_name_and_version": "Codex Desktop 26.715.4045.0",
+      "configured_default": "frontier",
+      "toolchain": "route-only structured decision; mutation and external-action tools disabled",
+      "permissions": "no coding actions or external side effects",
+      "sampling_configuration": "provider-managed sampling with a unique orchestration nonce per fresh context"
     }
+  },
+  "batch_binding": {
+    "path": "docs/superpowers/evals/r0-batch-binding.json",
+    "sha256": "dc97df3e30a9c1c91dcfbde2d6e985705e66002f1b2dddd2d7ebc61eaf293262",
+    "same_model_judge": true,
+    "independent_evaluator": false
   },
   "judge": {
     "deterministic_primary_scorer": "Exact comparison with the frozen route label; malformed or missing required fields count as incorrect.",
     "llm_judge_role": "Secondary review of the stated reason and escalated ambiguity only; it cannot override an exact route-field mismatch.",
     "protocol_path": "docs/superpowers/evals/judge-protocol.json",
-    "protocol_sha256": "31b14ee4d2257712cbd50280050f474499a32d04ed10898f5c35d4eeb0bd6630",
+    "protocol_sha256": "1043726df2b4a377a7d3a88a7f794b516e47a21423eabbd2d69f089a7bb0c188",
     "exact_binding_required_before_run": true,
     "owner_audit_minimum_trials": 15,
     "owner_audit_policy": "At least 20% stratified coverage, plus every high-risk miss, malformed output, deterministic/Judge disagreement, and Judge confidence below 0.8."
@@ -130,9 +143,11 @@
     "invalid_or_duplicate_trial_policy": "Stop and report R0 as inconclusive; do not exceed the cap or silently replace a trial without a new preregistration and approval.",
     "randomization": {
       "seed_hex": "7fc41d1682125898c86c4d53f380d96a0c5f6a0c6f2eb25639cb52f1e12ede9d",
-      "algorithm": "Create trial IDs as <case_id>#<1-based repetition>; order ascending by SHA-256 of UTF-8 '<seed_hex>:<trial_id>'.",
+      "algorithm": "Pin mechanical-fix-typo#1 and high-risk-auth-off-override#1 as positions 1-2; pin mechanical-fix-typo#3 and high-risk-auth-off-override#5 as positions 71-72; order every remaining trial ascending by SHA-256 of UTF-8 '<seed_hex>:<trial_id>'.",
       "materialize_before_first_run": true,
-      "outcomes_visible_when_materialized": false
+      "outcomes_visible_when_materialized": false,
+      "schedule_path": "docs/superpowers/evals/r0-trial-schedule.json",
+      "schedule_sha256": "33d03cabea923fee5c0d219753b346069d0fc4b2b2a4ac2df9a02ebe5a98722b"
     },
     "output_schema": "docs/superpowers/evals/r0-route-decision.schema.json"
   },
@@ -182,17 +197,11 @@
   "readiness": {
     "real_route_sessions_allowed": false,
     "blocking_fields": [
-      "candidate.runtime_bindings.provider",
-      "candidate.runtime_bindings.exact_model_id",
-      "candidate.runtime_bindings.model_revision_or_fingerprint",
-      "candidate.runtime_bindings.reasoning_configuration",
-      "candidate.runtime_bindings.harness_name_and_version",
-      "candidate.runtime_bindings.toolchain",
-      "candidate.runtime_bindings.permissions",
-      "candidate.runtime_bindings.sampling_configuration",
-      "judge protocol exact provider/model/revision/reasoning binding",
+      "pre_batch_sentinel_calibration",
+      "post_batch_sentinel_calibration_commitment",
+      "immutable_batch_binding_sha256 acknowledgement",
       "fresh repository-owner experiment approval"
     ],
-    "next_action": "Bind the exact candidate and Judge deployments, materialize the randomized schedule, publish the resulting immutable hashes, and request a separate approval to run at most 72 route-only sessions."
+    "next_action": "Request a separate repository-owner approval for the frozen model binding, same-model Judge limitation, sentinel rule, and at most 72 route-only sessions."
   }
 }

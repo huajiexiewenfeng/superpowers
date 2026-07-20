@@ -5,23 +5,42 @@
   "status": "not_evaluated",
   "intended_profile": "frontier",
   "bindings": {
-    "base_model": null,
-    "reasoning_configuration": null,
-    "harness_and_router": null,
-    "toolchain": null,
-    "permissions": null,
-    "benchmark_suite": null,
-    "evaluation_commit": null
+    "base_model": {
+      "provider": "OpenAI",
+      "exact_model_id": "gpt-5.6-sol",
+      "user_visible_label": "GPT-5.6 Sol",
+      "provider_revision_exposed": false,
+      "revision_binding": "Codex Desktop version plus frozen pre/post-batch sentinel calibration"
+    },
+    "reasoning_configuration": {
+      "effort": "high",
+      "sampling_controls": "provider_managed"
+    },
+    "harness_and_router": {
+      "harness": "Codex Desktop",
+      "client_version": "26.715.4045.0",
+      "router_commit": "a9697474403d1df248b48fd4fe7ac0e6c67003c6",
+      "configured_default": "frontier"
+    },
+    "toolchain": {
+      "mode": "route_only",
+      "mutation_tools_enabled": false,
+      "external_actions_enabled": false,
+      "output_schema": "docs/superpowers/evals/r0-route-decision.schema.json"
+    },
+    "permissions": {
+      "coding_actions_allowed": false,
+      "external_side_effects_allowed": false,
+      "route_record_only": true
+    },
+    "benchmark_suite": {
+      "protocol_id": "r0-frontier-router-001",
+      "fixture": "tests/frontier-routing/routing-cases.json",
+      "required_live_decisions": 72
+    },
+    "evaluation_commit": "a9697474403d1df248b48fd4fe7ac0e6c67003c6"
   },
-  "missing_bindings": [
-    "base_model",
-    "reasoning_configuration",
-    "harness_and_router",
-    "toolchain",
-    "permissions",
-    "benchmark_suite",
-    "evaluation_commit"
-  ],
+  "missing_bindings": [],
   "baseline": {
     "upstream_commit": "d884ae04edebef577e82ff7c4e143debd0bbec99",
     "fork_baseline_commit": "e221c35624d9082c6984a92e6c5c7b9db259c5d0"
@@ -41,8 +60,10 @@
     "evaluation_commit"
   ],
   "notes": [
-    "This candidate records an intended evaluation class, not a verified model capability.",
-    "The active model identity is not inferred from conversation text or from the profile name.",
-    "The profile cannot advance until all bindings are fixed, evaluated, and independently approved."
+    "The repository owner explicitly selected gpt-5.6-sol with high reasoning for both candidate and Judge on 2026-07-20.",
+    "The provider does not expose a service-side model revision in this harness, so sentinel calibration is required and any evidence remains bounded to the recorded batch.",
+    "The configured default is frontier, but automatic activation remains disabled until evaluation and explicit profile approval.",
+    "The same-model Judge is not independent; deterministic routing labels and repository-owner audit remain authoritative for R0.",
+    "Complete bindings do not imply measured capability or approval."
   ]
 }

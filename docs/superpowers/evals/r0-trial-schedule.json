@@ -1,0 +1,595 @@
+{
+  "schema_version": "1.0.0",
+  "schedule_id": "r0-frontier-router-001-schedule-001",
+  "protocol_id": "r0-frontier-router-001",
+  "candidate_implementation_commit": "a9697474403d1df248b48fd4fe7ac0e6c67003c6",
+  "batch_binding": {
+    "path": "docs/superpowers/evals/r0-batch-binding.json",
+    "sha256": "dc97df3e30a9c1c91dcfbde2d6e985705e66002f1b2dddd2d7ebc61eaf293262"
+  },
+  "randomization": {
+    "seed_hex": "7fc41d1682125898c86c4d53f380d96a0c5f6a0c6f2eb25639cb52f1e12ede9d",
+    "algorithm": "Pin mechanical-fix-typo#1 and high-risk-auth-off-override#1 as positions 1-2; pin mechanical-fix-typo#3 and high-risk-auth-off-override#5 as positions 71-72; order every remaining trial ascending by SHA-256 of UTF-8 '<seed_hex>:<trial_id>'.",
+    "boundary_calibration_trials_are_fixed": true
+  },
+  "trial_count": 72,
+  "high_risk_trial_count": 30,
+  "trials": [
+    {
+      "position": 1,
+      "trial_id": "mechanical-fix-typo#1",
+      "case_id": "mechanical-fix-typo",
+      "repetition": 1,
+      "risk_stratum": "other",
+      "role": "measurement_and_pre_calibration"
+    },
+    {
+      "position": 2,
+      "trial_id": "high-risk-auth-off-override#1",
+      "case_id": "high-risk-auth-off-override",
+      "repetition": 1,
+      "risk_stratum": "high_risk",
+      "role": "measurement_and_pre_calibration"
+    },
+    {
+      "position": 3,
+      "trial_id": "high-risk-production-release#5",
+      "case_id": "high-risk-production-release",
+      "repetition": 5,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 4,
+      "trial_id": "mechanical-css-token#1",
+      "case_id": "mechanical-css-token",
+      "repetition": 1,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 5,
+      "trial_id": "mechanical-import-order#3",
+      "case_id": "mechanical-import-order",
+      "repetition": 3,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 6,
+      "trial_id": "mechanical-css-token#2",
+      "case_id": "mechanical-css-token",
+      "repetition": 2,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 7,
+      "trial_id": "mechanical-label-text#3",
+      "case_id": "mechanical-label-text",
+      "repetition": 3,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 8,
+      "trial_id": "complex-cross-module-feature#1",
+      "case_id": "complex-cross-module-feature",
+      "repetition": 1,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 9,
+      "trial_id": "mechanical-format-markdown#2",
+      "case_id": "mechanical-format-markdown",
+      "repetition": 2,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 10,
+      "trial_id": "high-risk-secret-rotation#5",
+      "case_id": "high-risk-secret-rotation",
+      "repetition": 5,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 11,
+      "trial_id": "high-risk-production-release#3",
+      "case_id": "high-risk-production-release",
+      "repetition": 3,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 12,
+      "trial_id": "high-risk-secret-rotation#1",
+      "case_id": "high-risk-secret-rotation",
+      "repetition": 1,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 13,
+      "trial_id": "high-risk-secret-rotation#2",
+      "case_id": "high-risk-secret-rotation",
+      "repetition": 2,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 14,
+      "trial_id": "bounded-regression-fix#2",
+      "case_id": "bounded-regression-fix",
+      "repetition": 2,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 15,
+      "trial_id": "complex-cross-module-feature#2",
+      "case_id": "complex-cross-module-feature",
+      "repetition": 2,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 16,
+      "trial_id": "high-risk-production-release#2",
+      "case_id": "high-risk-production-release",
+      "repetition": 2,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 17,
+      "trial_id": "override-natural-off-complex#1",
+      "case_id": "override-natural-off-complex",
+      "repetition": 1,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 18,
+      "trial_id": "mechanical-format-markdown#1",
+      "case_id": "mechanical-format-markdown",
+      "repetition": 1,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 19,
+      "trial_id": "mechanical-import-order#2",
+      "case_id": "mechanical-import-order",
+      "repetition": 2,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 20,
+      "trial_id": "high-risk-schema-migration#1",
+      "case_id": "high-risk-schema-migration",
+      "repetition": 1,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 21,
+      "trial_id": "high-risk-auth-off-override#3",
+      "case_id": "high-risk-auth-off-override",
+      "repetition": 3,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 22,
+      "trial_id": "mechanical-comment-correction#1",
+      "case_id": "mechanical-comment-correction",
+      "repetition": 1,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 23,
+      "trial_id": "high-risk-destructive-data#4",
+      "case_id": "high-risk-destructive-data",
+      "repetition": 4,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 24,
+      "trial_id": "mechanical-exact-config-value#3",
+      "case_id": "mechanical-exact-config-value",
+      "repetition": 3,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 25,
+      "trial_id": "high-risk-destructive-data#2",
+      "case_id": "high-risk-destructive-data",
+      "repetition": 2,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 26,
+      "trial_id": "high-risk-data-loss-rollback#3",
+      "case_id": "high-risk-data-loss-rollback",
+      "repetition": 3,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 27,
+      "trial_id": "bounded-regression-fix#3",
+      "case_id": "bounded-regression-fix",
+      "repetition": 3,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 28,
+      "trial_id": "mechanical-local-rename#2",
+      "case_id": "mechanical-local-rename",
+      "repetition": 2,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 29,
+      "trial_id": "conflict-off-with-explicit-debugging#2",
+      "case_id": "conflict-off-with-explicit-debugging",
+      "repetition": 2,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 30,
+      "trial_id": "high-risk-schema-migration#4",
+      "case_id": "high-risk-schema-migration",
+      "repetition": 4,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 31,
+      "trial_id": "high-risk-production-release#1",
+      "case_id": "high-risk-production-release",
+      "repetition": 1,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 32,
+      "trial_id": "mechanical-local-rename#1",
+      "case_id": "mechanical-local-rename",
+      "repetition": 1,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 33,
+      "trial_id": "high-risk-destructive-data#1",
+      "case_id": "high-risk-destructive-data",
+      "repetition": 1,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 34,
+      "trial_id": "high-risk-destructive-data#3",
+      "case_id": "high-risk-destructive-data",
+      "repetition": 3,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 35,
+      "trial_id": "high-risk-data-loss-rollback#1",
+      "case_id": "high-risk-data-loss-rollback",
+      "repetition": 1,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 36,
+      "trial_id": "override-natural-off-complex#2",
+      "case_id": "override-natural-off-complex",
+      "repetition": 2,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 37,
+      "trial_id": "high-risk-data-loss-rollback#4",
+      "case_id": "high-risk-data-loss-rollback",
+      "repetition": 4,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 38,
+      "trial_id": "high-risk-secret-rotation#3",
+      "case_id": "high-risk-secret-rotation",
+      "repetition": 3,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 39,
+      "trial_id": "mechanical-format-markdown#3",
+      "case_id": "mechanical-format-markdown",
+      "repetition": 3,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 40,
+      "trial_id": "high-risk-auth-off-override#4",
+      "case_id": "high-risk-auth-off-override",
+      "repetition": 4,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 41,
+      "trial_id": "mechanical-link-correction#1",
+      "case_id": "mechanical-link-correction",
+      "repetition": 1,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 42,
+      "trial_id": "mechanical-label-text#2",
+      "case_id": "mechanical-label-text",
+      "repetition": 2,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 43,
+      "trial_id": "mechanical-fix-typo#2",
+      "case_id": "mechanical-fix-typo",
+      "repetition": 2,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 44,
+      "trial_id": "conflict-off-with-explicit-debugging#1",
+      "case_id": "conflict-off-with-explicit-debugging",
+      "repetition": 1,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 45,
+      "trial_id": "mechanical-comment-correction#2",
+      "case_id": "mechanical-comment-correction",
+      "repetition": 2,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 46,
+      "trial_id": "mechanical-local-rename#3",
+      "case_id": "mechanical-local-rename",
+      "repetition": 3,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 47,
+      "trial_id": "high-risk-secret-rotation#4",
+      "case_id": "high-risk-secret-rotation",
+      "repetition": 4,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 48,
+      "trial_id": "complex-cross-module-feature#3",
+      "case_id": "complex-cross-module-feature",
+      "repetition": 3,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 49,
+      "trial_id": "conflict-off-with-explicit-debugging#3",
+      "case_id": "conflict-off-with-explicit-debugging",
+      "repetition": 3,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 50,
+      "trial_id": "mechanical-exact-config-value#1",
+      "case_id": "mechanical-exact-config-value",
+      "repetition": 1,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 51,
+      "trial_id": "override-natural-off-complex#3",
+      "case_id": "override-natural-off-complex",
+      "repetition": 3,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 52,
+      "trial_id": "high-risk-destructive-data#5",
+      "case_id": "high-risk-destructive-data",
+      "repetition": 5,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 53,
+      "trial_id": "mechanical-link-correction#3",
+      "case_id": "mechanical-link-correction",
+      "repetition": 3,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 54,
+      "trial_id": "high-risk-schema-migration#2",
+      "case_id": "high-risk-schema-migration",
+      "repetition": 2,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 55,
+      "trial_id": "high-risk-data-loss-rollback#5",
+      "case_id": "high-risk-data-loss-rollback",
+      "repetition": 5,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 56,
+      "trial_id": "override-explicit-skill-on-mechanical#2",
+      "case_id": "override-explicit-skill-on-mechanical",
+      "repetition": 2,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 57,
+      "trial_id": "high-risk-auth-off-override#2",
+      "case_id": "high-risk-auth-off-override",
+      "repetition": 2,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 58,
+      "trial_id": "mechanical-css-token#3",
+      "case_id": "mechanical-css-token",
+      "repetition": 3,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 59,
+      "trial_id": "override-explicit-skill-on-mechanical#1",
+      "case_id": "override-explicit-skill-on-mechanical",
+      "repetition": 1,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 60,
+      "trial_id": "mechanical-comment-correction#3",
+      "case_id": "mechanical-comment-correction",
+      "repetition": 3,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 61,
+      "trial_id": "mechanical-link-correction#2",
+      "case_id": "mechanical-link-correction",
+      "repetition": 2,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 62,
+      "trial_id": "high-risk-production-release#4",
+      "case_id": "high-risk-production-release",
+      "repetition": 4,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 63,
+      "trial_id": "bounded-regression-fix#1",
+      "case_id": "bounded-regression-fix",
+      "repetition": 1,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 64,
+      "trial_id": "high-risk-data-loss-rollback#2",
+      "case_id": "high-risk-data-loss-rollback",
+      "repetition": 2,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 65,
+      "trial_id": "mechanical-exact-config-value#2",
+      "case_id": "mechanical-exact-config-value",
+      "repetition": 2,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 66,
+      "trial_id": "mechanical-label-text#1",
+      "case_id": "mechanical-label-text",
+      "repetition": 1,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 67,
+      "trial_id": "override-explicit-skill-on-mechanical#3",
+      "case_id": "override-explicit-skill-on-mechanical",
+      "repetition": 3,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 68,
+      "trial_id": "high-risk-schema-migration#5",
+      "case_id": "high-risk-schema-migration",
+      "repetition": 5,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 69,
+      "trial_id": "mechanical-import-order#1",
+      "case_id": "mechanical-import-order",
+      "repetition": 1,
+      "risk_stratum": "other",
+      "role": "measurement"
+    },
+    {
+      "position": 70,
+      "trial_id": "high-risk-schema-migration#3",
+      "case_id": "high-risk-schema-migration",
+      "repetition": 3,
+      "risk_stratum": "high_risk",
+      "role": "measurement"
+    },
+    {
+      "position": 71,
+      "trial_id": "mechanical-fix-typo#3",
+      "case_id": "mechanical-fix-typo",
+      "repetition": 3,
+      "risk_stratum": "other",
+      "role": "measurement_and_post_calibration"
+    },
+    {
+      "position": 72,
+      "trial_id": "high-risk-auth-off-override#5",
+      "case_id": "high-risk-auth-off-override",
+      "repetition": 5,
+      "risk_stratum": "high_risk",
+      "role": "measurement_and_post_calibration"
+    }
+  ]
+}

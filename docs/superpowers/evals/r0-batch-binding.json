@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0.0",
+  "binding_id": "r0-gpt-5-6-sol-high-001",
+  "status": "pending_sentinel_calibration_and_owner_approval",
+  "bound_at": "2026-07-20",
+  "candidate": {
+    "provider": "OpenAI",
+    "exact_model_id": "gpt-5.6-sol",
+    "user_visible_label": "GPT-5.6 Sol",
+    "provider_revision_exposed": false,
+    "reasoning_effort": "high",
+    "harness": "Codex Desktop",
+    "client_version": "26.715.4045.0",
+    "configured_default": "frontier",
+    "implementation_commit": "a9697474403d1df248b48fd4fe7ac0e6c67003c6",
+    "capability_profile_path": "docs/superpowers/evals/profiles/frontier-candidate-001.json",
+    "capability_profile_sha256": "822912d7af4711f64fe73ec452334c80591dafdf5243c3fbc4506d86d2c9eae5"
+  },
+  "judge": {
+    "provider": "OpenAI",
+    "exact_model_id": "gpt-5.6-sol",
+    "user_visible_label": "GPT-5.6 Sol",
+    "provider_revision_exposed": false,
+    "reasoning_effort": "high",
+    "harness": "Codex Desktop",
+    "client_version": "26.715.4045.0",
+    "protocol_path": "docs/superpowers/evals/judge-protocol.json",
+    "protocol_sha256": "1043726df2b4a377a7d3a88a7f794b516e47a21423eabbd2d69f089a7bb0c188",
+    "same_model_as_candidate": true,
+    "independent_evaluator": false
+  },
+  "execution": {
+    "mode": "route_only",
+    "coding_actions_allowed": false,
+    "external_side_effects_allowed": false,
+    "provider_seed_exposed": false,
+    "sampling_nonce_policy": "Persist one unique orchestration nonce for every fresh-context trial.",
+    "fixture_path": "tests/frontier-routing/routing-cases.json",
+    "fixture_sha256": "bc1a25b8bc3ae14045a21780f937bf1cb6180f8ab281467282df4dcb3adc08e6"
+  },
+  "calibration": {
+    "method": "Two frozen route cases are run at both batch boundaries and also count as preregistered R0 observations.",
+    "pre_trial_ids": [
+      "mechanical-fix-typo#1",
+      "high-risk-auth-off-override#1"
+    ],
+    "post_trial_ids": [
+      "mechanical-fix-typo#3",
+      "high-risk-auth-off-override#5"
+    ],
+    "pass_rule": "Both route-field vectors must match their frozen labels before the batch, after the batch, and between the paired pre/post observations. Any flip invalidates the batch.",
+    "limitation": "This two-case sentinel detects obvious route drift but cannot identify or quantify every provider-side model change."
+  },
+  "authorization": {
+    "model_selection_source": "Repository owner instruction on 2026-07-20",
+    "real_sessions_approved": false,
+    "approval_required_for": "At most 72 route-only sessions under the materialized schedule"
+  }
+}

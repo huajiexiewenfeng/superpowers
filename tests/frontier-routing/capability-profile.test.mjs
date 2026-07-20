@@ -97,7 +97,7 @@ test('capability profile schema is a zero-dependency JSON Schema contract', asyn
   assert.ok(Array.isArray(schema.allOf), 'schema must encode status-dependent approval rules');
 });
 
-test('frontier candidate is an honest unmeasured profile, not an invented capability claim', async () => {
+test('frontier candidate is completely bound but remains honestly unmeasured', async () => {
   const profile = await readJson(profilePath);
 
   assert.equal(profile.$schema, '../capability-profile.schema.json');
@@ -106,7 +106,11 @@ test('frontier candidate is an honest unmeasured profile, not an invented capabi
   assert.equal(profile.status, 'not_evaluated');
   assert.equal(profile.intended_profile, 'frontier');
   assert.deepEqual(validateProfile(profile), []);
-  assert.deepEqual([...profile.missing_bindings].sort(), [...bindingKeys].sort());
+  assert.deepEqual(profile.missing_bindings, []);
+  assert.equal(profile.bindings.base_model.exact_model_id, 'gpt-5.6-sol');
+  assert.equal(profile.bindings.reasoning_configuration.effort, 'high');
+  assert.equal(profile.bindings.harness_and_router.configured_default, 'frontier');
+  assert.equal(profile.approval.state, 'pending');
   assert.doesNotMatch(JSON.stringify(profile), /\b(?:TBD|TODO)\b|fill in|implement later/i);
 });
 
@@ -115,12 +119,14 @@ test('approval validation rejects unresolved or unauthorised profiles', async ()
   const invalidApproved = structuredClone(profile);
   invalidApproved.status = 'approved';
   invalidApproved.approval.state = 'approved';
+  invalidApproved.bindings.base_model = null;
+  invalidApproved.missing_bindings = ['base_model'];
 
   assert.ok(validateProfile(invalidApproved).includes('approved profile has unresolved bindings'));
   assert.ok(validateProfile(invalidApproved).includes('approved profile lacks approval identity or time'));
 
   const invalidDraft = structuredClone(profile);
-  invalidDraft.missing_bindings = [];
+  invalidDraft.missing_bindings = ['base_model'];
   assert.ok(validateProfile(invalidDraft).includes('missing_bindings does not match null bindings'));
 });
 

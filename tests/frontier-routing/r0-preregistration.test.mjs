@@ -32,6 +32,11 @@ test('R0 preregistration freezes candidate sources, fixture, profile, and Judge 
   );
   assert.equal(await sha256(resolve(repoRoot, protocol.fixture.path)), protocol.fixture.sha256);
   assert.equal(await sha256(resolve(repoRoot, protocol.judge.protocol_path)), protocol.judge.protocol_sha256);
+  assert.equal(await sha256(resolve(repoRoot, protocol.batch_binding.path)), protocol.batch_binding.sha256);
+  assert.equal(
+    await sha256(resolve(repoRoot, protocol.trial_design.randomization.schedule_path)),
+    protocol.trial_design.randomization.schedule_sha256,
+  );
 });
 
 test('R0 live subset contains ten eligible and ten ineligible unique cases with required coverage', async () => {
@@ -100,15 +105,51 @@ test('R0 thresholds, uncertainty, and stop rules cannot hide a high-risk miss', 
   assert.ok(protocol.stop_rules.some((rule) => /any high-risk trial is under-routed/i.test(rule)));
 });
 
-test('R0 remains blocked until exact candidate, Judge, and approval bindings exist', async () => {
+test('R0 binds gpt-5.6-sol high for candidate and Judge but still requires calibration and approval', async () => {
   const protocol = await readJson(protocolPath);
   const runtime = protocol.candidate.runtime_bindings;
 
-  assert.equal(protocol.status, 'blocked_pending_runtime_bindings_and_experiment_approval');
+  assert.equal(protocol.status, 'bound_pending_sentinel_calibration_and_experiment_approval');
   assert.equal(protocol.readiness.real_route_sessions_allowed, false);
-  assert.ok(Object.values(runtime).every((value) => value === null));
-  assert.ok(protocol.readiness.blocking_fields.length >= 10);
+  assert.equal(runtime.provider, 'OpenAI');
+  assert.equal(runtime.exact_model_id, 'gpt-5.6-sol');
+  assert.equal(runtime.reasoning_configuration.effort, 'high');
+  assert.equal(runtime.configured_default, 'frontier');
+  assert.equal(protocol.batch_binding.same_model_judge, true);
+  assert.equal(protocol.batch_binding.independent_evaluator, false);
+  assert.ok(protocol.readiness.blocking_fields.includes('pre_batch_sentinel_calibration'));
+  assert.ok(protocol.readiness.blocking_fields.includes('fresh repository-owner experiment approval'));
   assert.equal(protocol.scope.coding_or_external_actions_allowed, false);
   assert.equal(protocol.scope.component_efficacy_claims_allowed, false);
   assert.equal(protocol.scope.profile_promotion_claims_allowed, false);
+});
+
+test('R0 materialized schedule is complete, deterministic, and pins boundary calibration trials', async () => {
+  const protocol = await readJson(protocolPath);
+  const schedule = await readJson(resolve(repoRoot, protocol.trial_design.randomization.schedule_path));
+  const binding = await readJson(resolve(repoRoot, protocol.batch_binding.path));
+  const trials = schedule.trials;
+
+  assert.equal(schedule.trial_count, 72);
+  assert.equal(schedule.high_risk_trial_count, 30);
+  assert.equal(trials.length, 72);
+  assert.equal(new Set(trials.map(({ trial_id: id }) => id)).size, 72);
+  assert.deepEqual(trials.slice(0, 2).map(({ trial_id: id }) => id), binding.calibration.pre_trial_ids);
+  assert.deepEqual(trials.slice(-2).map(({ trial_id: id }) => id), binding.calibration.post_trial_ids);
+  assert.ok(trials.slice(0, 2).every(({ role }) => role === 'measurement_and_pre_calibration'));
+  assert.ok(trials.slice(-2).every(({ role }) => role === 'measurement_and_post_calibration'));
+  assert.deepEqual(trials.map(({ position }) => position), Array.from({ length: 72 }, (_, index) => index + 1));
+
+  const boundary = new Set([...binding.calibration.pre_trial_ids, ...binding.calibration.post_trial_ids]);
+  const seed = protocol.trial_design.randomization.seed_hex;
+  const middleIds = trials.slice(2, -2).map(({ trial_id: id }) => id);
+  const sortedMiddleIds = [...middleIds].sort((left, right) => {
+    const leftKey = createHash('sha256').update(`${seed}:${left}`, 'utf8').digest('hex');
+    const rightKey = createHash('sha256').update(`${seed}:${right}`, 'utf8').digest('hex');
+    return leftKey.localeCompare(rightKey);
+  });
+
+  assert.deepEqual(middleIds, sortedMiddleIds);
+  assert.ok(middleIds.every((id) => !boundary.has(id)));
+  assert.equal(schedule.batch_binding.sha256, protocol.batch_binding.sha256);
 });
