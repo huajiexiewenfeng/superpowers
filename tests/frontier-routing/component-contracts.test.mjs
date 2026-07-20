@@ -113,7 +113,7 @@ test('baseline components are bound to current source bytes and selectors', asyn
   }
 });
 
-test('each Phase 1 target has retained neighboring capability and proposed router controls are explicit', async () => {
+test('each Phase 1 target has retained neighboring capability and implemented router controls are source-bound', async () => {
   const registry = await readContracts();
   const byId = new Map(registry.contracts.map((component) => [component.id, component]));
 
@@ -134,6 +134,7 @@ test('each Phase 1 target has retained neighboring capability and proposed route
     'using-superpowers.mandatory_risk_floor',
     'using-superpowers.no_advisory_workflow',
   ]) {
-    assert.equal(byId.get(id)?.state, 'proposed', `missing proposed router component: ${id}`);
+    assert.equal(byId.get(id)?.state, 'baseline', `missing implemented router component: ${id}`);
+    assert.ok(byId.get(id)?.source, `implemented router component is not source-bound: ${id}`);
   }
 });

@@ -1,15 +1,38 @@
 {
   "schema_version": "1.0.0",
-  "captured_at": "2026-07-20T10:00:16.5113627+08:00",
-  "captured_from_commit": "e221c35624d9082c6984a92e6c5c7b9db259c5d0",
+  "captured_at": "2026-07-20T10:41:45.7294087+08:00",
+  "captured_from_commit": "62a28b96406d2bf44d0bdc0cc4f896aaef91f09c",
+  "candidate_state": "task2_working_tree_against_captured_commit",
   "canonical_bootstrap_source": {
     "path": "skills/using-superpowers/SKILL.md",
-    "sha256": "55379fe7c1c473a02c61961c822996bff30e1320d6921d9062509bc508482c05"
+    "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2"
   },
   "evidence_policy": {
     "promotion_requirement": "A supported harness must have live end-to-end evidence before its entrypoint is selected for component-aware routing promotion.",
     "static_evidence_limit": "Manifest and implementation inspection proves packaging intent, not the live harness injection result.",
     "shared_script_limit": "A shared script test proves script behavior, not host registration or event delivery."
+  },
+  "task2_local_verification": {
+    "frontier_routing_policy": { "status": "passed", "passed": 25, "failed": 0 },
+    "shared_session_start": { "status": "passed", "passed": 5, "failed": 0 },
+    "opencode_cache_and_missing_source": { "status": "passed" },
+    "opencode_reused_message_dedup": { "status": "passed" },
+    "pi_extension": {
+      "status": "baseline_partial_failure",
+      "passed": 5,
+      "failed": 1,
+      "detail": "Lifecycle, discovery, startup injection, and post-compaction checks pass with Node 22 experimental TypeScript stripping. The unchanged pi-tools reference fails its existing lowercase write mapping assertion."
+    },
+    "kimi_manifest": { "status": "passed" },
+    "codex_manifest": { "status": "passed" },
+    "codex_package_archive": {
+      "status": "local_environment_blocked",
+      "detail": "The available Windows Python cannot resolve the MSYS /d repository path embedded by the shell test. No package result is claimed."
+    },
+    "antigravity_static_mapping": {
+      "status": "baseline_failure",
+      "detail": "The unchanged antigravity-tools reference does not document view_file as required by the existing static test."
+    }
   },
   "distribution_manifests": [
     {
@@ -45,6 +68,58 @@
       "script": "hooks/session-start",
       "behavior": "inject_error_string_and_exit_success",
       "failure_mode": "fail_open"
+    }
+  },
+  "router_source_bindings": {
+    "claude-code-session-start": {
+      "path": "skills/using-superpowers/SKILL.md",
+      "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+      "loading_shape": "full_skill_with_frontmatter"
+    },
+    "cursor-session-start": {
+      "path": "skills/using-superpowers/SKILL.md",
+      "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+      "loading_shape": "full_skill_with_frontmatter"
+    },
+    "copilot-cli-session-start": {
+      "path": "skills/using-superpowers/SKILL.md",
+      "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+      "loading_shape": "full_skill_with_frontmatter"
+    },
+    "factory-droid-shared-hook": {
+      "path": "skills/using-superpowers/SKILL.md",
+      "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+      "loading_shape": "full_skill_with_frontmatter"
+    },
+    "antigravity-shared-hook": {
+      "path": "skills/using-superpowers/SKILL.md",
+      "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+      "loading_shape": "full_skill_with_frontmatter"
+    },
+    "opencode-first-user-message": {
+      "path": "skills/using-superpowers/SKILL.md",
+      "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+      "loading_shape": "body_without_frontmatter"
+    },
+    "pi-session-context": {
+      "path": "skills/using-superpowers/SKILL.md",
+      "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+      "loading_shape": "body_without_frontmatter"
+    },
+    "kimi-native-session-start": {
+      "path": "skills/using-superpowers/SKILL.md",
+      "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+      "loading_shape": "native_skill_loading"
+    },
+    "codex-native-discovery": {
+      "path": "skills/using-superpowers/SKILL.md",
+      "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+      "loading_shape": "native_skill_discovery_no_bootstrap"
+    },
+    "gemini-context-legacy": {
+      "path": "skills/using-superpowers/SKILL.md",
+      "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+      "loading_shape": "legacy_context_include_with_missing_mapping"
     }
   },
   "entrypoints": [
@@ -168,7 +243,11 @@
       "failure_mode": "fail_open",
       "test_status": "static_only",
       "evidence_paths": ["README.md", "RELEASE-NOTES.md", "docs/porting-to-a-new-harness.md"],
-      "known_gaps": ["The documented .antigravity-plugin/install.sh path does not exist.", "No Antigravity live or installer regression test is present."],
+      "known_gaps": [
+        "The documented .antigravity-plugin/install.sh path does not exist.",
+        "No Antigravity live or installer regression test is present.",
+        "The unchanged static mapping test currently fails because antigravity-tools.md does not document view_file as the Skill-read mechanism."
+      ],
       "evidence_owner": "Antigravity integration maintainers",
       "source_hashes": {
         "README.md": "993584ac25724e9dcb1639b12850d922ca8c21a4456bc7edbb1c5cc24456540e",

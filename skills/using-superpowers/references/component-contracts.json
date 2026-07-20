@@ -2,6 +2,8 @@
   "schema_version": "1.0.0",
   "captured_at": "2026-07-20T10:00:16.5113627+08:00",
   "baseline_commit": "e221c35624d9082c6984a92e6c5c7b9db259c5d0",
+  "task2_parent_commit": "62a28b96406d2bf44d0bdc0cc4f896aaef91f09c",
+  "current_router_sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
   "retirement_unit": "component",
   "phase1_target_component_ids": [
     "brainstorming.universal_design_gate",
@@ -44,7 +46,7 @@
       "whole_skill_deletion_candidate": false,
       "source": {
         "path": "skills/using-superpowers/SKILL.md",
-        "sha256": "55379fe7c1c473a02c61961c822996bff30e1320d6921d9062509bc508482c05",
+        "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
         "selector": "<SUBAGENT-STOP>"
       }
     },
@@ -82,7 +84,7 @@
       "retirement_scope": "component",
       "whole_skill_deletion_candidate": false,
       "source": {
-        "path": "skills/using-superpowers/SKILL.md",
+        "path": "tests/frontier-routing/fixtures/using-superpowers-v6.1.1.md",
         "sha256": "55379fe7c1c473a02c61961c822996bff30e1320d6921d9062509bc508482c05",
         "selector": "If you think there is even a 1% chance"
       }
@@ -121,7 +123,7 @@
       "retirement_scope": "component",
       "whole_skill_deletion_candidate": false,
       "source": {
-        "path": "skills/using-superpowers/SKILL.md",
+        "path": "tests/frontier-routing/fixtures/using-superpowers-v6.1.1.md",
         "sha256": "55379fe7c1c473a02c61961c822996bff30e1320d6921d9062509bc508482c05",
         "selector": "Invoke relevant or requested skills BEFORE any response or action"
       }
@@ -160,8 +162,8 @@
       "retirement_scope": "component",
       "whole_skill_deletion_candidate": false,
       "source": {
-        "path": "skills/using-superpowers/SKILL.md",
-        "sha256": "55379fe7c1c473a02c61961c822996bff30e1320d6921d9062509bc508482c05",
+        "path": "skills/using-superpowers/references/frontier-routing.md",
+        "sha256": "4eff4ce9047e2baf4def5824ba7a60e3f456850d3e98a74e897d30052f235dc5",
         "selector": "process skills come first"
       }
     },
@@ -200,8 +202,8 @@
       "whole_skill_deletion_candidate": false,
       "source": {
         "path": "skills/using-superpowers/SKILL.md",
-        "sha256": "55379fe7c1c473a02c61961c822996bff30e1320d6921d9062509bc508482c05",
-        "selector": "User instructions (CLAUDE.md, AGENTS.md, GEMINI.md, etc, direct requests) take precedence over skills"
+        "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+        "selector": "User instructions (CLAUDE.md, AGENTS.md, GEMINI.md, etc, and direct requests) take precedence over skills"
       }
     },
     {
@@ -239,13 +241,13 @@
       "whole_skill_deletion_candidate": false,
       "source": {
         "path": "skills/using-superpowers/SKILL.md",
-        "sha256": "55379fe7c1c473a02c61961c822996bff30e1320d6921d9062509bc508482c05",
+        "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
         "selector": "## Platform Adaptation"
       }
     },
     {
       "id": "using-superpowers.mandatory_risk_floor",
-      "state": "proposed",
+      "state": "baseline",
       "skill": "using-superpowers",
       "layer": "operational_control",
       "kind": "gate",
@@ -262,6 +264,11 @@
         "mechanism": "prompt_text",
         "claim": "best_effort"
       },
+      "external_enforcement": {
+        "mechanism": "host tool permission, runtime policy, action-specific human approval, or deterministic evidence gate",
+        "failure_mode": "fail_closed",
+        "if_unavailable": "Stop before the affected high-risk action and report the blocker."
+      },
       "failure_mode": "fail_open",
       "authority": {
         "policy_owner": "Superpowers routing policy maintainers",
@@ -273,15 +280,19 @@
         "compatibility_check": "Repeat each high-risk case across stochastic model runs and record the miss-rate bound.",
         "evaluation_cases": ["database-migration", "credential-change", "production-release", "mechanical-doc-edit"]
       },
-      "phase1_action": "proposed",
+      "phase1_action": "retain",
       "retirement_scope": "component",
       "whole_skill_deletion_candidate": false,
-      "source": null,
+      "source": {
+        "path": "skills/using-superpowers/SKILL.md",
+        "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+        "selector": "For `high_risk`, or when high-risk classification cannot be ruled out"
+      },
       "design_reference": "docs/superpowers/specs/2026-07-19-frontier-model-workflow-optimization-design.md#5-proposed-routing-controls"
     },
     {
       "id": "using-superpowers.explicit_profile_override",
-      "state": "proposed",
+      "state": "baseline",
       "skill": "using-superpowers",
       "layer": "register",
       "kind": "state",
@@ -309,15 +320,19 @@
         "compatibility_check": "Reject unknown, invalidated, or unapproved defaults and preserve explicit user opt-out.",
         "evaluation_cases": ["approved-explicit-profile", "unknown-profile", "invalidated-profile", "explicit-off"]
       },
-      "phase1_action": "proposed",
+      "phase1_action": "retain",
       "retirement_scope": "component",
       "whole_skill_deletion_candidate": false,
-      "source": null,
+      "source": {
+        "path": "skills/using-superpowers/SKILL.md",
+        "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+        "selector": "Honor an explicit `superpowers=full`, `superpowers=frontier`, or `superpowers=off` directive."
+      },
       "design_reference": "docs/superpowers/specs/2026-07-19-frontier-model-workflow-optimization-design.md#5-proposed-routing-controls"
     },
     {
       "id": "using-superpowers.no_advisory_workflow",
-      "state": "proposed",
+      "state": "baseline",
       "skill": "using-superpowers",
       "layer": "register",
       "kind": "procedure",
@@ -345,11 +360,132 @@
         "compatibility_check": "Measure correct empty-set decisions and confirm mandatory invariants still run.",
         "evaluation_cases": ["bounded-mechanical-task", "ambiguous-task", "high-risk-task"]
       },
-      "phase1_action": "proposed",
+      "phase1_action": "retain",
       "retirement_scope": "component",
       "whole_skill_deletion_candidate": false,
-      "source": null,
+      "source": {
+        "path": "skills/using-superpowers/SKILL.md",
+        "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+        "selector": "`no_advisory_workflow` is a valid result"
+      },
       "design_reference": "docs/superpowers/specs/2026-07-19-frontier-model-workflow-optimization-design.md#5-proposed-routing-controls"
+    },
+    {
+      "id": "using-superpowers.operational_component_floor",
+      "state": "baseline",
+      "skill": "using-superpowers",
+      "layer": "operational_control",
+      "kind": "procedure",
+      "lifecycle": "invariant_core",
+      "binding": "mandatory",
+      "purpose": {
+        "failure_prevented": "An advisory opt-out also suppresses required local facts, procedures, tools, state, or policy gates.",
+        "capability_enabled": "Operational Skills remain active independently of workflow style."
+      },
+      "activation": {
+        "mandatory_when": "An applicable Skill contains required operational knowledge or enforcement for the action."
+      },
+      "enforcement": {
+        "mechanism": "prompt_text",
+        "claim": "best_effort"
+      },
+      "failure_mode": "fail_open",
+      "authority": {
+        "policy_owner": "Repository, organization, and host policy owners",
+        "satisfier": "The active agent plus the named operational tool or gate"
+      },
+      "maintenance": {
+        "owner": "routing policy maintainers",
+        "freshness": "Review whenever operational Skill classification or policy ownership changes.",
+        "compatibility_check": "Verify full, frontier, and off all retain required operational components.",
+        "evaluation_cases": ["off-with-required-policy", "mechanical-with-domain-tool", "frontier-with-operational-state"]
+      },
+      "phase1_action": "retain",
+      "retirement_scope": "component",
+      "whole_skill_deletion_candidate": false,
+      "source": {
+        "path": "skills/using-superpowers/SKILL.md",
+        "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+        "selector": "load applicable operational Skills that contain required facts, procedures, tools, state, or policy gates;"
+      }
+    },
+    {
+      "id": "using-superpowers.conservative_profile_fallback",
+      "state": "baseline",
+      "skill": "using-superpowers",
+      "layer": "register",
+      "kind": "state",
+      "lifecycle": "invariant_core",
+      "binding": "mandatory",
+      "purpose": {
+        "failure_prevented": "An unapproved or unknown capability configuration silently receives the lighter automatic profile.",
+        "capability_enabled": "Unknown automatic configurations fall back without guessing model strength."
+      },
+      "activation": {
+        "mandatory_when": "No explicit profile is supplied and the configured capability profile is absent, incomplete, invalidated, or unapproved."
+      },
+      "enforcement": {
+        "mechanism": "prompt_text",
+        "claim": "best_effort"
+      },
+      "failure_mode": "fail_open",
+      "authority": {
+        "policy_owner": "Capability-profile approvers",
+        "satisfier": "The router reading profile approval state"
+      },
+      "maintenance": {
+        "owner": "capability-profile maintainers",
+        "freshness": "Re-evaluate whenever profile validation or automatic selection changes.",
+        "compatibility_check": "Reject automatic frontier selection for incomplete and invalidated profiles.",
+        "evaluation_cases": ["missing-profile", "unapproved-profile", "invalidated-profile", "approved-profile"]
+      },
+      "phase1_action": "retain",
+      "retirement_scope": "component",
+      "whole_skill_deletion_candidate": false,
+      "source": {
+        "path": "skills/using-superpowers/SKILL.md",
+        "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+        "selector": "Fall back to `full` when configuration or capability evidence is unknown."
+      }
+    },
+    {
+      "id": "using-superpowers.full_profile_compatibility",
+      "state": "baseline",
+      "skill": "using-superpowers",
+      "layer": "register",
+      "kind": "procedure",
+      "lifecycle": "intentional_shaping",
+      "binding": "mandatory",
+      "purpose": {
+        "failure_prevented": "Frontier routing changes silently alter the promised full-profile fallback.",
+        "capability_enabled": "A differential compatibility path against pinned v6.1.1 behavior."
+      },
+      "activation": {
+        "mandatory_when": "The effective profile is full."
+      },
+      "enforcement": {
+        "mechanism": "prompt_text",
+        "claim": "best_effort"
+      },
+      "failure_mode": "fail_open",
+      "authority": {
+        "policy_owner": "Superpowers compatibility maintainers",
+        "satisfier": "The active agent following the pinned compatibility rules"
+      },
+      "maintenance": {
+        "owner": "using-superpowers maintainers",
+        "freshness": "A change requires a separately approved compatibility baseline.",
+        "compatibility_check": "Hash the v6.1.1 fixture and exercise representative build, debug, plan, review, and verification routes.",
+        "evaluation_cases": ["full-build", "full-debug", "full-plan", "full-completion"]
+      },
+      "phase1_action": "retain",
+      "retirement_scope": "component",
+      "whole_skill_deletion_candidate": false,
+      "source": {
+        "path": "skills/using-superpowers/references/frontier-routing.md",
+        "sha256": "4eff4ce9047e2baf4def5824ba7a60e3f456850d3e98a74e897d30052f235dc5",
+        "selector": "`superpowers=full` preserves the pinned v6.1.1 `using-superpowers` behavior."
+      }
     },
     {
       "id": "brainstorming.universal_design_gate",

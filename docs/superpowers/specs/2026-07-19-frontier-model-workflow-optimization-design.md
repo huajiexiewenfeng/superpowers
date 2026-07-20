@@ -1,6 +1,6 @@
 # Frontier-Model Workflow Optimization: Task 1 Design Baseline
 
-> Status: Task 1 governance baseline
+> Status: Task 2 router candidate
 > Captured: 2026-07-20
 > Fork branch: `feat/frontier-model-workflow-optimization`
 > Fork baseline: `e221c35624d9082c6984a92e6c5c7b9db259c5d0`
@@ -68,13 +68,13 @@ Each target has an explicitly retained neighboring capability. No whole Skill is
 
 ## 5. Proposed routing controls
 
-Task 1 records, but does not implement, three proposed router components:
+Task 1 recorded three proposed router components; Task 2 implements them in the candidate branch:
 
 - `using-superpowers.explicit_profile_override` — an explicit, auditable profile selection outranks inferred model identity;
 - `using-superpowers.mandatory_risk_floor` — irreversible or high-risk work cannot be routed below its required controls;
 - `using-superpowers.no_advisory_workflow` — loading no advisory workflow is a legitimate outcome for bounded low-risk work.
 
-These controls will be implemented only after G1 approval. The precedence to test is user instruction, mandatory risk floor, task evidence, evaluated capability profile, then safe default.
+These controls were implemented after G1 approval. The precedence under test is mandatory risk floor, explicit user profile and Skill instructions, task evidence, approved configured capability profile, then conservative `full` fallback. User instructions can raise intensity or disable advisory components, but cannot silently remove host permissions or policy-owned gates.
 
 ## 6. Capability profile lifecycle
 
@@ -108,7 +108,7 @@ The baseline explicitly records missing mapping references for Claude Code, Copi
 
 The existing shared hook tests exercise the session-start script. OpenCode and Pi have implementation-level tests, and Kimi and Codex have manifest tests. These do not yet establish live harness-level behavior for component-aware routing.
 
-On the captured Windows baseline, the shared SessionStart suite passes all five checks, the Kimi and Codex manifest checks pass, and OpenCode's separate caching check passes. The OpenCode plugin-registration check depends on POSIX-compatible symlink behavior and fails in the current Windows/MSYS temporary directory. Pi passes five lifecycle checks when Node 22 experimental TypeScript stripping is enabled, then fails its existing tool-mapping assertion because the reference lacks the expected lowercase `write` mapping. These are disclosed baseline gaps and are not changed in Task 1.
+On the captured Windows baseline, the shared SessionStart suite passes all five checks, the Kimi and Codex manifest checks pass, and OpenCode's separate caching and reused-message deduplication checks pass. The OpenCode plugin-registration check depends on POSIX-compatible symlink behavior and fails in the current Windows/MSYS temporary directory. Pi passes five lifecycle checks when Node 22 experimental TypeScript stripping is enabled, then fails its existing tool-mapping assertion because the unchanged reference lacks the expected lowercase `write` mapping. The unchanged Antigravity static mapping test fails because its reference does not document `view_file`; no live Antigravity test exists. The Codex package-archive test could not be completed because the available Windows Python cannot resolve the MSYS `/d` repository path embedded by that shell test, while the Codex manifest negative control passes. These are disclosed baseline or local-environment gaps and are not attributed to the Task 2 router.
 
 ## 9. Deterministic Task 1 checks
 

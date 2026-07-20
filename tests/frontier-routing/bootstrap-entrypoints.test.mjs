@@ -122,3 +122,18 @@ test('distribution manifests stay distinct from runtime injection and Windows no
   assert.equal(inventory.shared_hook_runtime_boundaries.windows_without_bash.behavior, 'silent_skip');
   assert.equal(inventory.shared_hook_runtime_boundaries.windows_without_bash.failure_mode, 'fail_open');
 });
+
+test('every inventoried entrypoint is bound to the exact Task 2 router bytes and loading shape', async () => {
+  const inventory = await readInventory();
+  const entryIds = inventory.entrypoints.map(({ id }) => id).sort();
+  const bindingIds = Object.keys(inventory.router_source_bindings).sort();
+
+  assert.deepEqual(bindingIds, entryIds);
+  for (const entry of inventory.entrypoints) {
+    const binding = inventory.router_source_bindings[entry.id];
+    assert.equal(binding.path, inventory.canonical_bootstrap_source.path, `${entry.id}: wrong router source`);
+    assert.equal(binding.sha256, inventory.canonical_bootstrap_source.sha256, `${entry.id}: wrong router hash`);
+    assert.equal(binding.loading_shape, entry.loading_shape, `${entry.id}: loading shape drifted`);
+    assert.equal(await sha256(binding.path), binding.sha256, `${entry.id}: bound router bytes drifted`);
+  }
+});
