@@ -11,6 +11,7 @@ const routerPath = resolve(repoRoot, 'skills/using-superpowers/references/fronti
 const skillPath = resolve(repoRoot, 'skills/using-superpowers/SKILL.md');
 const judgePath = resolve(repoRoot, 'docs/superpowers/evals/judge-protocol.json');
 const contractsPath = resolve(repoRoot, 'skills/using-superpowers/references/component-contracts.json');
+const discoverableSkillIdentifier = /^[a-z0-9][a-z0-9:_-]*$/;
 
 async function readJson(path) {
   return JSON.parse(await readFile(path, 'utf8'));
@@ -27,16 +28,21 @@ function classifyTask(input) {
   return 'mechanical';
 }
 
-function selectRequestedProfile(input) {
+function selectRequestedProfile(input, taskClass = classifyTask(input)) {
   if (input.explicit_profile) return input.explicit_profile;
   if (input.natural_language_advisory_off_ramp) return 'off';
+  if (
+    input.trial_mode_status === 'active'
+    && input.configured_default === 'frontier'
+    && input.trial_frontier_eligible_task_classes?.includes(taskClass)
+  ) return 'frontier';
   if (input.capability_profile_status === 'approved') return input.configured_default;
   return 'full';
 }
 
 function resolveRoute(policy, input) {
   const taskClass = classifyTask(input);
-  const requestedProfile = selectRequestedProfile(input);
+  const requestedProfile = selectRequestedProfile(input, taskClass);
   const effectiveProfile = taskClass === 'high_risk' ? 'full' : requestedProfile;
   const mandatory = [...policy.base_mandatory_components];
   if (taskClass === 'high_risk') mandatory.push(...policy.high_risk_mandatory_components);
@@ -49,6 +55,10 @@ function resolveRoute(policy, input) {
     advisory = unique(input.explicit_skill_requests);
   } else {
     advisory = unique([...input.applicable_skills, ...input.explicit_skill_requests]);
+  }
+
+  for (const identifier of advisory) {
+    assert.match(identifier, discoverableSkillIdentifier, `advisory component must be an exact discoverable Skill identifier: ${identifier}`);
   }
 
   return {
@@ -135,6 +145,58 @@ test('router documentation exposes the normative precedence, outputs, profiles, 
   assert.match(skill, /high_risk/);
   assert.match(skill, /no_advisory_workflow/);
   assert.match(skill, /User instructions .* take precedence over skills/);
+  assert.match(router, /use `brainstorming`, not `brainstorming\.universal_design_gate`/);
+  assert.match(skill, /\.superpowers\/frontier-trial\.config\.json/);
+});
+
+test('active local trial selects frontier without claiming profile approval while explicit controls still win', async () => {
+  const policy = await readJson(casesPath);
+  const baseInput = {
+    explicit_profile: null,
+    natural_language_advisory_off_ramp: false,
+    configured_default: 'frontier',
+    capability_profile_status: 'not_evaluated',
+    trial_mode_status: 'active',
+    trial_frontier_eligible_task_classes: ['mechanical', 'bounded', 'complex'],
+    risk_flags: [],
+    ambiguity: 'low',
+    scope: 'single_module',
+    behavioral_change: true,
+    applicable_skills: ['systematic-debugging'],
+    explicit_skill_requests: [],
+    operational_components: [],
+  };
+
+  assert.equal(resolveRoute(policy, baseInput).requested_profile, 'frontier');
+  assert.equal(resolveRoute(policy, { ...baseInput, explicit_profile: 'full' }).requested_profile, 'full');
+  assert.equal(resolveRoute(policy, { ...baseInput, natural_language_advisory_off_ramp: true }).requested_profile, 'off');
+
+  const highRisk = resolveRoute(policy, {
+    ...baseInput,
+    risk_flags: ['release'],
+    scope: 'multi_stage',
+    applicable_skills: ['release-procedure'],
+  });
+  assert.equal(highRisk.task_class, 'high_risk');
+  assert.equal(highRisk.requested_profile, 'full');
+  assert.equal(highRisk.effective_profile, 'full');
+});
+
+test('advisory route fields reject internal component-contract IDs', async () => {
+  const policy = await readJson(casesPath);
+  assert.throws(() => resolveRoute(policy, {
+    explicit_profile: 'frontier',
+    natural_language_advisory_off_ramp: false,
+    configured_default: 'full',
+    capability_profile_status: 'not_evaluated',
+    risk_flags: [],
+    ambiguity: 'material',
+    scope: 'single_module',
+    behavioral_change: true,
+    applicable_skills: ['brainstorming.universal_design_gate'],
+    explicit_skill_requests: [],
+    operational_components: [],
+  }), /exact discoverable Skill identifier/);
 });
 
 test('judge protocol binds the selected same-model Judge but blocks runs until calibration and approval', async () => {

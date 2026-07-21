@@ -1,11 +1,11 @@
 {
   "schema_version": "1.0.0",
-  "captured_at": "2026-07-20T10:41:45.7294087+08:00",
-  "captured_from_commit": "62a28b96406d2bf44d0bdc0cc4f896aaef91f09c",
-  "candidate_state": "task2_working_tree_against_captured_commit",
+  "captured_at": "2026-07-21T19:09:39.8772772+08:00",
+  "captured_from_commit": "660df9af61aed795eb0ebfebe00d0a4ce07f926d",
+  "candidate_state": "local_trial_working_tree_against_captured_commit",
   "canonical_bootstrap_source": {
     "path": "skills/using-superpowers/SKILL.md",
-    "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2"
+    "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926"
   },
   "evidence_policy": {
     "promotion_requirement": "A supported harness must have live end-to-end evidence before its entrypoint is selected for component-aware routing promotion.",
@@ -73,52 +73,52 @@
   "router_source_bindings": {
     "claude-code-session-start": {
       "path": "skills/using-superpowers/SKILL.md",
-      "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+      "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
       "loading_shape": "full_skill_with_frontmatter"
     },
     "cursor-session-start": {
       "path": "skills/using-superpowers/SKILL.md",
-      "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+      "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
       "loading_shape": "full_skill_with_frontmatter"
     },
     "copilot-cli-session-start": {
       "path": "skills/using-superpowers/SKILL.md",
-      "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+      "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
       "loading_shape": "full_skill_with_frontmatter"
     },
     "factory-droid-shared-hook": {
       "path": "skills/using-superpowers/SKILL.md",
-      "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+      "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
       "loading_shape": "full_skill_with_frontmatter"
     },
     "antigravity-shared-hook": {
       "path": "skills/using-superpowers/SKILL.md",
-      "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+      "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
       "loading_shape": "full_skill_with_frontmatter"
     },
     "opencode-first-user-message": {
       "path": "skills/using-superpowers/SKILL.md",
-      "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+      "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
       "loading_shape": "body_without_frontmatter"
     },
     "pi-session-context": {
       "path": "skills/using-superpowers/SKILL.md",
-      "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+      "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
       "loading_shape": "body_without_frontmatter"
     },
     "kimi-native-session-start": {
       "path": "skills/using-superpowers/SKILL.md",
-      "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+      "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
       "loading_shape": "native_skill_loading"
     },
     "codex-native-discovery": {
       "path": "skills/using-superpowers/SKILL.md",
-      "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+      "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
       "loading_shape": "native_skill_discovery_no_bootstrap"
     },
     "gemini-context-legacy": {
       "path": "skills/using-superpowers/SKILL.md",
-      "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2",
+      "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
       "loading_shape": "legacy_context_include_with_missing_mapping"
     }
   },

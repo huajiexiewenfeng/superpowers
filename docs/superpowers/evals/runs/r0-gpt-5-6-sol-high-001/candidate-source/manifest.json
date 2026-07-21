@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0.0",
+  "implementation_commit": "a9697474403d1df248b48fd4fe7ac0e6c67003c6",
+  "purpose": "Self-contained immutable copies of the Task 2 candidate bytes used by the invalidated R0 run",
+  "sources": [
+    {
+      "original_path": "skills/using-superpowers/SKILL.md",
+      "snapshot_path": "docs/superpowers/evals/runs/r0-gpt-5-6-sol-high-001/candidate-source/using-superpowers.SKILL.md",
+      "sha256": "ff0c3c92cc6e9e854209ca33b43f040554eea7e6cbf0b41335d6a30cc69cbce2"
+    },
+    {
+      "original_path": "skills/using-superpowers/references/frontier-routing.md",
+      "snapshot_path": "docs/superpowers/evals/runs/r0-gpt-5-6-sol-high-001/candidate-source/frontier-routing.md",
+      "sha256": "4eff4ce9047e2baf4def5824ba7a60e3f456850d3e98a74e897d30052f235dc5"
+    }
+  ],
+  "evidence_status": "historical_smoke_evidence_only_protocol_invalidated"
+}

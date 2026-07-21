@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0.0",
+  "trial_id": "frontier-dogfood-001",
+  "mode": "trial",
+  "status": "inactive_template",
+  "expires_on": "2026-08-20",
+  "default_profile": "frontier",
+  "model_binding": {
+    "exact_model_id": "gpt-5.6-sol",
+    "reasoning_effort": "high"
+  },
+  "routing": {
+    "frontier_eligible_task_classes": [
+      "mechanical",
+      "bounded",
+      "complex"
+    ],
+    "high_risk_effective_profile": "full",
+    "explicit_profile_override_allowed": true,
+    "fallback_profile": "full"
+  },
+  "sample": {
+    "target_real_tasks": 10,
+    "synthetic_session_requirement": 0
+  },
+  "feedback": {
+    "result_values": [
+      "satisfied",
+      "acceptable",
+      "unsatisfied"
+    ],
+    "process_values": [
+      "heavy",
+      "fit",
+      "light"
+    ],
+    "rework_values": [
+      true,
+      false
+    ]
+  },
+  "stop_rules": {
+    "high_risk_under_routes_max": 0,
+    "consecutive_quality_regressions_max": 1,
+    "fallback_directive": "superpowers=full"
+  },
+  "logging": {
+    "relative_path": ".superpowers/trial/frontier-dogfood-001.jsonl",
+    "content_fields_forbidden": [
+      "prompt",
+      "code",
+      "repository_path",
+      "file_path",
+      "secret",
+      "user_content"
+    ]
+  },
+  "evidence_limits": {
+    "formal_profile_promotion_allowed": false,
+    "intended_use": "directional local dogfood and focused hypothesis generation"
+  }
+}

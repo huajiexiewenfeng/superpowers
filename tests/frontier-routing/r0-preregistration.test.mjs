@@ -7,6 +7,10 @@ import test from 'node:test';
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const protocolPath = resolve(repoRoot, 'docs/superpowers/evals/r0-router-preregistration.json');
+const candidateSnapshotManifestPath = resolve(
+  repoRoot,
+  'docs/superpowers/evals/runs/r0-gpt-5-6-sol-high-001/candidate-source/manifest.json',
+);
 
 async function readJson(path) {
   return JSON.parse(await readFile(path, 'utf8'));
@@ -18,12 +22,18 @@ async function sha256(path) {
 
 test('R0 preregistration freezes candidate sources, fixture, profile, and Judge protocol', async () => {
   const protocol = await readJson(protocolPath);
+  const snapshotManifest = await readJson(candidateSnapshotManifestPath);
+  const snapshots = new Map(snapshotManifest.sources.map((source) => [source.original_path, source]));
 
   assert.match(protocol.candidate.implementation_commit, /^[0-9a-f]{40}$/);
   assert.equal(protocol.candidate.implementation_commit, 'a9697474403d1df248b48fd4fe7ac0e6c67003c6');
+  assert.equal(snapshotManifest.implementation_commit, protocol.candidate.implementation_commit);
 
   for (const binding of protocol.candidate.source_bindings) {
-    assert.equal(await sha256(resolve(repoRoot, binding.path)), binding.sha256, binding.path);
+    const snapshot = snapshots.get(binding.path);
+    assert.ok(snapshot, `missing frozen candidate snapshot: ${binding.path}`);
+    assert.equal(snapshot.sha256, binding.sha256, `${binding.path}: snapshot manifest hash drifted`);
+    assert.equal(await sha256(resolve(repoRoot, snapshot.snapshot_path)), binding.sha256, snapshot.snapshot_path);
   }
 
   assert.equal(

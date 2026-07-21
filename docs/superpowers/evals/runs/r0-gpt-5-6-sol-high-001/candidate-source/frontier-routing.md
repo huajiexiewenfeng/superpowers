@@ -20,11 +20,9 @@ requested_profile: full | frontier | off
 effective_profile: full | frontier | off
 task_class: mechanical | bounded | complex | high_risk
 mandatory_components: component IDs and required operational Skills
-advisory_components: exact discoverable identifiers of selected optional workflow Skills
+advisory_components: selected optional workflow Skills
 outcome: full_v6_1_1 | selected_advisory_workflow | no_advisory_workflow
 ```
-
-`mandatory_components` may use internal component-contract IDs. `advisory_components` must not: each value is copied verbatim from the active Skill registry, including any namespace required by that registry. For example, use `brainstorming`, not `brainstorming.universal_design_gate`. This distinction is part of the route schema, not a presentation preference.
 
 The route record may stay internal for routine work. Record it explicitly in evaluation runs, conflict cases, high-risk work, or when the user asks.
 
@@ -48,13 +46,10 @@ Use the first matching rule:
 
 1. exact `superpowers=full`, `superpowers=frontier`, or `superpowers=off`;
 2. a natural-language advisory off-ramp such as “skip the framework this time” selects `off`;
-3. an explicitly activated local trial default for an eligible non-high-risk task;
-4. an approved and non-invalidated configured default;
-5. conservative `full` fallback.
+3. an approved and non-invalidated configured default;
+4. conservative `full` fallback.
 
-An explicit frontier directive is auditable user control; it does not make an unmeasured capability profile approved. Outside the local dogfood exception below, automatic frontier selection requires an approved profile. Never infer approval from a provider name, model family, or wildcard.
-
-The one exception is an owner-authorized local dogfood configuration at `.superpowers/frontier-trial.config.json`. It is active only when `mode=trial`, `status=active`, and its expiry has not passed. It may automatically select `frontier` for the task classes listed in `routing.frontier_eligible_task_classes`. It never changes the high-risk floor, never marks a capability profile approved, and never supplies formal promotion evidence. Missing, invalid, inactive, or expired trial configuration is ignored.
+An explicit frontier directive is auditable user control; it does not make an unmeasured capability profile approved. Automatic frontier selection requires an approved profile. Never infer approval from a provider name, model family, or wildcard.
 
 ### 3. Classify the task
 
@@ -124,5 +119,3 @@ The pinned source fixture is `tests/frontier-routing/fixtures/using-superpowers-
 ## Evidence Limits
 
 The JSON routing cases and Node tests prove only that this deterministic policy table is self-consistent. They do not prove that a stochastic model will classify natural-language tasks correctly. R0 therefore uses fresh route-only model sessions and reports observed misses plus uncertainty bounds before any downstream Skill experiment.
-
-Local trial records are directional dogfood evidence. They may generate a focused hypothesis or justify a rollback, but they do not replace a preregistered held-out evaluation. The trial logger records route fields and coarse outcome labels only; it must not record prompts, code, repository paths, secrets, or user content.

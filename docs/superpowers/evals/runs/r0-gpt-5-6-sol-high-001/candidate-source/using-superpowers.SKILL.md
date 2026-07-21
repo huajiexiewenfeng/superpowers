@@ -15,7 +15,7 @@ Resolve the workflow route before the first response or action that depends on i
 - `effective_profile`: the profile after applying the mandatory risk floor
 - `task_class`: `mechanical`, `bounded`, `complex`, or `high_risk`
 - `mandatory_components`: non-waivable controls, operational Skills, and evidence requirements
-- `advisory_components`: exact discoverable Skill identifiers for optional workflows whose expected benefit is positive
+- `advisory_components`: optional workflow Skills whose expected benefit is positive
 
 Read `references/frontier-routing.md` when the route is not immediately clear, when directives conflict, or when the task may be high risk. Do not infer a model identity or capability tier from a model name.
 
@@ -37,13 +37,10 @@ Apply these rules after fixing the mandatory floor:
 
 1. Honor an explicit `superpowers=full`, `superpowers=frontier`, or `superpowers=off` directive.
 2. Otherwise, a natural-language request to skip the framework selects `off` for advisory components.
-3. Otherwise, an explicitly activated local `trial` configuration may select its default for eligible non-high-risk tasks. Trial activation is reversible dogfood, not capability approval.
-4. Otherwise, use a configured `frontier` default only when its complete capability profile is approved and current.
-5. Fall back to `full` when configuration or capability evidence is unknown.
+3. Otherwise, use a configured `frontier` default only when its complete capability profile is approved and current.
+4. Fall back to `full` when configuration or capability evidence is unknown.
 
 `off` disables inferred advisory workflow only. It cannot remove the mandatory floor. A specifically requested Skill remains selected unless the user explicitly retracts that request.
-
-During local dogfood, the trial configuration lives at `.superpowers/frontier-trial.config.json` in the working repository. Apply it only when `mode=trial` and `status=active`; ignore missing, malformed, inactive, or expired trial configuration. Explicit profile directives still win, and `high_risk` still forces `effective_profile=full`. If the active trial checkout provides `scripts/frontier-trial-log.mjs`, record one coarse completion event per real task without prompt, code, path, secret, or user-content fields.
 
 ## Classify the Task
 
@@ -62,7 +59,6 @@ When classification is materially uncertain, choose the higher class. `no_adviso
 
 - Load all `mandatory_components` before the action they constrain.
 - Load explicitly requested Skills.
-- Copy every `advisory_components` value verbatim from the discoverable Skill registry. Never substitute an internal component-contract ID such as `brainstorming.universal_design_gate` for the discoverable Skill identifier `brainstorming`.
 - Under `full`, use the fixed v6.1.1 compatibility rules in `references/frontier-routing.md`.
 - Under `frontier`, load only the selected advisory components; process Skills precede implementation Skills when both are selected.
 - Under `off`, do not infer advisory components.
