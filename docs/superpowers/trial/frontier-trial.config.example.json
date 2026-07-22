@@ -1,13 +1,23 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "trial_id": "frontier-dogfood-001",
   "mode": "trial",
   "status": "inactive_template",
   "expires_on": "2026-08-20",
   "default_profile": "frontier",
-  "model_binding": {
+  "model_eligibility": {
     "exact_model_id": "gpt-5.6-sol",
-    "reasoning_effort": "high"
+    "allowed_reasoning_efforts": [
+      "high",
+      "xhigh",
+      "max",
+      "ultra"
+    ]
+  },
+  "runtime_binding": {
+    "actual_model_id": "gpt-5.6-sol",
+    "actual_reasoning_effort": "high",
+    "source": "explicit_user_configuration"
   },
   "routing": {
     "frontier_eligible_task_classes": [

@@ -48,6 +48,9 @@ test('trial template is reversible, expires, preserves the high-risk floor, and 
   assert.equal(isTrialConfigActive(config, new Date('2026-08-21T00:00:00.000Z')), false);
   assert.equal(config.default_profile, 'frontier');
   assert.equal(config.routing.high_risk_effective_profile, 'full');
+  assert.equal(config.model_eligibility.exact_model_id, 'gpt-5.6-sol');
+  assert.deepEqual(config.model_eligibility.allowed_reasoning_efforts, ['high', 'xhigh', 'max', 'ultra']);
+  assert.equal(config.runtime_binding.actual_reasoning_effort, 'high');
   assert.equal(config.stop_rules.fallback_directive, 'superpowers=full');
   assert.equal(config.evidence_limits.formal_profile_promotion_allowed, false);
 });
@@ -74,6 +77,11 @@ test('trial logger persists ten content-free real-task records and returns a dir
   assert.equal(summary.target_reached, true);
   assert.equal(summary.stop_required, false);
   assert.equal(summary.next_action, 'review_trial_and_form_one_focused_hypothesis');
+  assert.deepEqual(summary.runtime_bindings, {
+    distinct_strata: 1,
+    mixed_conditions: false,
+    strata: [{ exact_model_id: 'gpt-5.6-sol', reasoning_effort: 'high', tasks: 10 }],
+  });
   assert.doesNotMatch(bytes, /must never be persisted/);
   for (const record of records) {
     assert.equal('prompt' in record, false);
@@ -85,6 +93,46 @@ test('trial logger persists ten content-free real-task records and returns a dir
   await assert.rejects(
     appendTrialRecord(config, logPath, createTrialRecord(config, taskInput(1), new Date('2026-07-21T00:00:00.000Z'))),
     /duplicate task_id/,
+  );
+});
+
+test('trial records higher reasoning efforts honestly and summarizes each effort separately', async () => {
+  const config = await activeConfig();
+  const high = createTrialRecord(config, taskInput(1), new Date('2026-07-21T00:00:00.000Z'));
+  const xhigh = createTrialRecord(config, taskInput(2, {
+    reasoning_effort: 'xhigh',
+  }), new Date('2026-07-22T00:00:00.000Z'));
+  const max = createTrialRecord(config, taskInput(3, {
+    reasoning_effort: 'max',
+  }), new Date('2026-07-23T00:00:00.000Z'));
+  const ultra = createTrialRecord(config, taskInput(4, {
+    reasoning_effort: 'ultra',
+  }), new Date('2026-07-24T00:00:00.000Z'));
+
+  assert.deepEqual(high.model_binding, {
+    exact_model_id: 'gpt-5.6-sol',
+    reasoning_effort: 'high',
+    source: 'explicit_user_configuration',
+  });
+  assert.deepEqual(xhigh.model_binding, {
+    exact_model_id: 'gpt-5.6-sol',
+    reasoning_effort: 'xhigh',
+    source: 'task_record_override',
+  });
+
+  const summary = summarizeTrialRecords(config, [high, xhigh, max, ultra]);
+  assert.equal(summary.runtime_bindings.distinct_strata, 4);
+  assert.equal(summary.runtime_bindings.mixed_conditions, true);
+  assert.deepEqual(summary.runtime_bindings.strata, [
+    { exact_model_id: 'gpt-5.6-sol', reasoning_effort: 'high', tasks: 1 },
+    { exact_model_id: 'gpt-5.6-sol', reasoning_effort: 'xhigh', tasks: 1 },
+    { exact_model_id: 'gpt-5.6-sol', reasoning_effort: 'max', tasks: 1 },
+    { exact_model_id: 'gpt-5.6-sol', reasoning_effort: 'ultra', tasks: 1 },
+  ]);
+
+  assert.throws(
+    () => createTrialRecord(config, taskInput(5, { reasoning_effort: 'medium' }), new Date('2026-07-25T00:00:00.000Z')),
+    /reasoning effort is not allowed/,
   );
 });
 

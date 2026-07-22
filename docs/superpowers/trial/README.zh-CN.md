@@ -9,7 +9,9 @@
 - 高风险任务：始终强制 `effective_profile=full`
 - 随时回退：在请求中写 `superpowers=full`
 - 首轮样本：10 个真实任务
-- 模型绑定：`gpt-5.6-sol`，reasoning effort `high`
+- 模型范围：`gpt-5.6-sol`
+- 允许的 reasoning effort：`high`、`xhigh`、`max`、`ultra`
+- 每个任务必须记录实际 reasoning effort；不同等级分别汇总
 
 仓库提交的是配置模板：
 
@@ -25,6 +27,8 @@ docs/superpowers/trial/frontier-trial.config.example.json
 
 只有 `mode=trial`、`status=active` 且未过期的本地配置才生效。缺失、格式错误、停用或过期时，路由器忽略它并回到已批准配置或保守的 `full`。
 
+`runtime_binding.actual_reasoning_effort` 表示本地默认的实际运行等级。任务使用其他允许等级时，应通过 `--reasoning-effort` 覆盖；日志不会把 `xhigh`、`max` 或 `ultra` 合并记为 `high`。如果无法确认实际等级，不应把该任务计入可比较样本。
+
 ## 每个真实任务记录什么
 
 只记录路由字段和粗粒度结果，不记录用户请求、代码、仓库路径、文件路径、秘密或其他正文。
@@ -39,6 +43,7 @@ node scripts/frontier-trial-log.mjs record `
   --task-class bounded `
   --outcome selected_advisory_workflow `
   --advisory systematic-debugging `
+  --reasoning-effort high `
   --verification passed `
   --result satisfied `
   --process fit `
@@ -59,6 +64,14 @@ node scripts/frontier-trial-log.mjs summary
 ```
 
 该路径已被 `.gitignore` 排除。
+
+摘要会按下面的组合分层统计：
+
+```text
+exact_model_id + reasoning_effort
+```
+
+不同推理等级可以共同参与真实试用，但不能被当作同一个运行条件直接比较。正式 R0 的 `gpt-5.6-sol/high` 冻结绑定不受本地 dogfood 配置影响。
 
 ## 停止规则
 

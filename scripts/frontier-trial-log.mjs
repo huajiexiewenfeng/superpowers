@@ -9,6 +9,9 @@ const OUTCOMES = new Set(['full_v6_1_1', 'selected_advisory_workflow', 'no_advis
 const VERIFICATION_RESULTS = new Set(['passed', 'failed', 'not_run']);
 const RESULT_VALUES = new Set(['satisfied', 'acceptable', 'unsatisfied']);
 const PROCESS_VALUES = new Set(['heavy', 'fit', 'light']);
+const REASONING_EFFORT_ORDER = ['high', 'xhigh', 'max', 'ultra'];
+const REASONING_EFFORTS = new Set(REASONING_EFFORT_ORDER);
+const RUNTIME_BINDING_SOURCES = new Set(['explicit_user_configuration', 'harness_reported']);
 const SKILL_IDENTIFIER = /^[a-z0-9][a-z0-9:_-]*$/;
 
 function requireCondition(condition, message) {
@@ -37,14 +40,26 @@ function expiryTimestamp(expiresOn) {
 
 export function validateTrialConfig(config) {
   requireCondition(config && typeof config === 'object' && !Array.isArray(config), 'trial config must be an object');
-  requireCondition(config.schema_version === '1.0.0', 'unsupported trial config schema_version');
+  requireCondition(config.schema_version === '1.1.0', 'unsupported trial config schema_version');
   requireCondition(typeof config.trial_id === 'string' && /^[a-z0-9][a-z0-9-]*$/.test(config.trial_id), 'invalid trial_id');
   requireCondition(config.mode === 'trial', 'mode must be trial');
   requireCondition(['active', 'inactive_template', 'inactive'].includes(config.status), 'invalid trial status');
   expiryTimestamp(config.expires_on);
   requireCondition(config.default_profile === 'frontier', 'trial default_profile must be frontier');
-  requireCondition(config.model_binding?.exact_model_id === 'gpt-5.6-sol', 'trial model must be gpt-5.6-sol');
-  requireCondition(config.model_binding?.reasoning_effort === 'high', 'trial reasoning effort must be high');
+  requireCondition(config.model_eligibility?.exact_model_id === 'gpt-5.6-sol', 'trial model must be gpt-5.6-sol');
+  const allowedEfforts = config.model_eligibility?.allowed_reasoning_efforts;
+  requireCondition(Array.isArray(allowedEfforts) && allowedEfforts.length > 0, 'allowed reasoning efforts are required');
+  requireCondition(new Set(allowedEfforts).size === allowedEfforts.length, 'allowed reasoning efforts must be unique');
+  requireCondition(allowedEfforts.every((effort) => REASONING_EFFORTS.has(effort)), 'unsupported allowed reasoning effort');
+  requireCondition(
+    config.runtime_binding?.actual_model_id === config.model_eligibility.exact_model_id,
+    'actual model must match the eligible model',
+  );
+  requireCondition(
+    allowedEfforts.includes(config.runtime_binding?.actual_reasoning_effort),
+    'actual reasoning effort must be allowed',
+  );
+  requireCondition(RUNTIME_BINDING_SOURCES.has(config.runtime_binding?.source), 'invalid runtime binding source');
   requireCondition(Array.isArray(config.routing?.frontier_eligible_task_classes), 'eligible task classes are required');
   requireCondition(
     config.routing.frontier_eligible_task_classes.every((value) => ['mechanical', 'bounded', 'complex'].includes(value)),
@@ -85,6 +100,11 @@ export function createTrialRecord(config, input, now = new Date()) {
   requireCondition(VERIFICATION_RESULTS.has(input.verification), 'invalid verification result');
   requireCondition(RESULT_VALUES.has(input.result), 'invalid result feedback');
   requireCondition(PROCESS_VALUES.has(input.process), 'invalid process feedback');
+  const actualReasoningEffort = input.reasoning_effort ?? config.runtime_binding.actual_reasoning_effort;
+  requireCondition(
+    config.model_eligibility.allowed_reasoning_efforts.includes(actualReasoningEffort),
+    `reasoning effort is not allowed for this trial: ${actualReasoningEffort}`,
+  );
 
   const highRiskUnderRoute = input.task_class === 'high_risk'
     && (input.effective_profile !== 'full' || input.outcome !== 'full_v6_1_1');
@@ -95,14 +115,17 @@ export function createTrialRecord(config, input, now = new Date()) {
       : 'selected_advisory_workflow';
 
   return {
-    schema_version: '1.0.0',
+    schema_version: '1.1.0',
     event_type: 'real_task_outcome',
     trial_id: config.trial_id,
     task_id: input.task_id,
     recorded_at: now.toISOString(),
     model_binding: {
-      exact_model_id: config.model_binding.exact_model_id,
-      reasoning_effort: config.model_binding.reasoning_effort,
+      exact_model_id: config.runtime_binding.actual_model_id,
+      reasoning_effort: actualReasoningEffort,
+      source: input.reasoning_effort === undefined
+        ? config.runtime_binding.source
+        : 'task_record_override',
     },
     route: {
       requested_profile: input.requested_profile,
@@ -167,11 +190,29 @@ function countValues(records, selector, allowed) {
   return Object.fromEntries([...allowed].map((value) => [value, records.filter((record) => selector(record) === value).length]));
 }
 
+function runtimeBindingStrata(records) {
+  const counts = new Map();
+  for (const record of records) {
+    const model = record.model_binding?.exact_model_id ?? 'unknown';
+    const effort = record.model_binding?.reasoning_effort ?? 'unknown';
+    const key = `${model}\u0000${effort}`;
+    const current = counts.get(key) ?? { exact_model_id: model, reasoning_effort: effort, tasks: 0 };
+    current.tasks += 1;
+    counts.set(key, current);
+  }
+  return [...counts.values()].sort((left, right) => (
+    left.exact_model_id.localeCompare(right.exact_model_id)
+    || REASONING_EFFORT_ORDER.indexOf(left.reasoning_effort)
+      - REASONING_EFFORT_ORDER.indexOf(right.reasoning_effort)
+  ));
+}
+
 export function summarizeTrialRecords(config, records) {
   validateTrialConfig(config);
   const highRiskUnderRoutes = records.filter((record) => record.route?.high_risk_under_route).length;
   const routeSchemaMismatches = records.filter((record) => record.route?.schema_consistent === false).length;
   const maxConsecutiveRegressions = maxConsecutiveQualityRegressions(records);
+  const runtimeStrata = runtimeBindingStrata(records);
   const stopReasons = [];
   if (highRiskUnderRoutes > config.stop_rules.high_risk_under_routes_max) stopReasons.push('high_risk_under_route');
   if (maxConsecutiveRegressions > config.stop_rules.consecutive_quality_regressions_max) {
@@ -179,7 +220,7 @@ export function summarizeTrialRecords(config, records) {
   }
 
   return {
-    schema_version: '1.0.0',
+    schema_version: '1.1.0',
     trial_id: config.trial_id,
     real_tasks_observed: records.length,
     target_real_tasks: config.sample.target_real_tasks,
@@ -197,6 +238,11 @@ export function summarizeTrialRecords(config, records) {
     feedback: {
       result: countValues(records, (record) => record.feedback?.result, RESULT_VALUES),
       process: countValues(records, (record) => record.feedback?.process, PROCESS_VALUES),
+    },
+    runtime_bindings: {
+      distinct_strata: runtimeStrata.length,
+      mixed_conditions: runtimeStrata.length > 1,
+      strata: runtimeStrata,
     },
     stop_required: stopReasons.length > 0,
     stop_reasons: stopReasons,
@@ -242,6 +288,7 @@ function parseArguments(argv) {
     'process',
     'rework',
     'quality_regression',
+    'reasoning_effort',
     'wall_clock_ms',
     'interaction_count',
     'total_tokens',
@@ -281,6 +328,7 @@ async function runCli(argv) {
     process: values.process,
     rework: values.rework,
     quality_regression: values.quality_regression,
+    reasoning_effort: values.reasoning_effort,
     wall_clock_ms: values.wall_clock_ms,
     interaction_count: values.interaction_count,
     total_tokens: values.total_tokens,
