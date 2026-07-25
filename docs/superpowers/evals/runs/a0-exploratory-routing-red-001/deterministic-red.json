@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0.0",
+  "run_id": "a0-exploratory-routing-red-001",
+  "case_id": "complex-exploratory-architecture-no-process",
+  "fixtures": {
+    "base_policy_path": "tests/frontier-routing/routing-cases.json",
+    "base_policy_sha256": "bc1a25b8bc3ae14045a21780f937bf1cb6180f8ab281467282df4dcb3adc08e6",
+    "a0_cases_path": "tests/frontier-routing/a0-exploratory-routing-cases.json",
+    "a0_cases_sha256": "075c5671821827e97b55e21921e570f0be2491010df42b9a55c16c078046b64d"
+  },
+  "prompt": "Could we add a protocol layer between the LLM and its skills, with a dynamic ratio for each skill?",
+  "expected": {
+    "advisory_components": [],
+    "outcome": "no_advisory_workflow"
+  },
+  "actual": {
+    "advisory_components": [
+      "brainstorming"
+    ],
+    "outcome": "selected_advisory_workflow"
+  },
+  "failure_reason": "The current deterministic frontier policy selects every applicable advisory Skill for a complex task and does not apply objective/artifact activation preconditions.",
+  "positive_controls": [
+    {
+      "case_id": "complex-explicit-formal-design-keeps-brainstorming",
+      "status": "pass",
+      "advisory_components": [
+        "brainstorming"
+      ]
+    },
+    {
+      "case_id": "bounded-react-todo-keeps-brainstorming",
+      "status": "pass",
+      "advisory_components": [
+        "brainstorming"
+      ]
+    }
+  ]
+}

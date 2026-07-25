@@ -1,0 +1,107 @@
+{
+  "schema_version": "1.0.0",
+  "fixture_id": "a0-exploratory-routing-red-001",
+  "base_policy_fixture": "tests/frontier-routing/routing-cases.json",
+  "cases": [
+    {
+      "id": "complex-exploratory-architecture-no-process",
+      "category": "exploration_process_regression",
+      "prompt": "Could we add a protocol layer between the LLM and its skills, with a dynamic ratio for each skill?",
+      "input": {
+        "explicit_profile": "frontier",
+        "natural_language_advisory_off_ramp": false,
+        "configured_default": "full",
+        "capability_profile_status": "not_evaluated",
+        "risk_flags": [],
+        "ambiguity": "material",
+        "scope": "single_module",
+        "behavioral_change": false,
+        "objective": "explore",
+        "mutation": "none",
+        "artifact": "analysis",
+        "artifact_sink": "chat",
+        "applicable_skills": [
+          "brainstorming"
+        ],
+        "explicit_skill_requests": [],
+        "operational_components": []
+      },
+      "expected": {
+        "requested_profile": "frontier",
+        "effective_profile": "frontier",
+        "task_class": "complex",
+        "mandatory_floor": "base",
+        "advisory_components": [],
+        "outcome": "no_advisory_workflow"
+      }
+    },
+    {
+      "id": "complex-explicit-formal-design-keeps-brainstorming",
+      "category": "exploration_process_control",
+      "prompt": "Could we add a protocol layer between the LLM and its skills, with a dynamic ratio for each skill? Please turn it into a formal, implementation-ready specification in the repository before development.",
+      "input": {
+        "explicit_profile": "frontier",
+        "natural_language_advisory_off_ramp": false,
+        "configured_default": "full",
+        "capability_profile_status": "not_evaluated",
+        "risk_flags": [],
+        "ambiguity": "material",
+        "scope": "single_module",
+        "behavioral_change": false,
+        "objective": "decide",
+        "mutation": "requested",
+        "artifact": "spec",
+        "artifact_sink": "workspace",
+        "applicable_skills": [
+          "brainstorming"
+        ],
+        "explicit_skill_requests": [],
+        "operational_components": []
+      },
+      "expected": {
+        "requested_profile": "frontier",
+        "effective_profile": "frontier",
+        "task_class": "complex",
+        "mandatory_floor": "base",
+        "advisory_components": [
+          "brainstorming"
+        ],
+        "outcome": "selected_advisory_workflow"
+      }
+    },
+    {
+      "id": "bounded-react-todo-keeps-brainstorming",
+      "category": "exploration_process_control",
+      "prompt": "Let's make a react todo list",
+      "input": {
+        "explicit_profile": "frontier",
+        "natural_language_advisory_off_ramp": false,
+        "configured_default": "full",
+        "capability_profile_status": "not_evaluated",
+        "risk_flags": [],
+        "ambiguity": "low",
+        "scope": "single_module",
+        "behavioral_change": true,
+        "objective": "deliver",
+        "mutation": "requested",
+        "artifact": "implementation",
+        "artifact_sink": "workspace",
+        "applicable_skills": [
+          "brainstorming"
+        ],
+        "explicit_skill_requests": [],
+        "operational_components": []
+      },
+      "expected": {
+        "requested_profile": "frontier",
+        "effective_profile": "frontier",
+        "task_class": "bounded",
+        "mandatory_floor": "base",
+        "advisory_components": [
+          "brainstorming"
+        ],
+        "outcome": "selected_advisory_workflow"
+      }
+    }
+  ]
+}

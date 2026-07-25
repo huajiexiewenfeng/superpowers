@@ -1,0 +1,143 @@
+{
+  "schema_version": "1.0.0",
+  "run_id": "a0-exploratory-routing-red-001",
+  "status": "partial_a0_local_prebaseline",
+  "created_at": "2026-07-22T21:59:52.0268598+08:00",
+  "updated_at": "2026-07-25T14:42:29.2714946+08:00",
+  "scope": {
+    "milestone": "A0",
+    "target_skill_behavior_files_modified": false,
+    "model_calls": 0,
+    "purpose": "Establish a no-gold-leak benchmark contract and preserve an observed deterministic RED before any target Skill behavior change."
+  },
+  "authorization": {
+    "local_evaluation_changes_approved_in_conversation": true,
+    "fresh_session_model_run_approved": false
+  },
+  "repositories": {
+    "superpowers": {
+      "path": "D:\\ai-discovery\\superpowers-frontier-model",
+      "head": "7d104ac84478819d367333ba478ea965ca5cf00b",
+      "observed_dirty_artifact_hashes_recorded": true,
+      "dirty_content_snapshot_archived": false
+    },
+    "thinking_skills": {
+      "path": "D:\\csdn\\D1-D3\\thinking-skills",
+      "head": "121a0c1fc6c27e27462f857eb606a6b1849f5be8",
+      "observed_dirty_artifact_hashes_recorded": true,
+      "dirty_content_snapshot_archived": false,
+      "pre_existing_excluded_dirty_paths": [
+        "docs/benchmark-dashboard.md",
+        "skills/content-creator/SKILL.md",
+        "skills/content-creator/references/publishing-styles.md",
+        "cases/framework/"
+      ]
+    }
+  },
+  "runtime": {
+    "node": "v22.17.1",
+    "host": "Codex Desktop",
+    "host_version": null,
+    "host_version_note": "codex --version could not execute in the local sandbox",
+    "candidate_model": null,
+    "candidate_reasoning": null,
+    "note": "Model and host bindings are not applicable to the deterministic test and remain mandatory for the fresh-session baseline."
+  },
+  "target_skill_bindings": {
+    "brainstorming": {
+      "repository_sha256": "e14914605f640e0841758e45d0ab2a53243b59b921f929e47921c99668f2e61d",
+      "installed_sha256": "e14914605f640e0841758e45d0ab2a53243b59b921f929e47921c99668f2e61d",
+      "byte_identical": true
+    },
+    "using_superpowers": {
+      "repository_sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
+      "installed_sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
+      "byte_identical": true
+    },
+    "thinking_router": {
+      "repository_and_active_path_sha256": "766acfb6db7196361300e1e436269396447aab2ced186ba21aaac341efdafdf8"
+    },
+    "technical_deep_dive": {
+      "repository_and_active_path_sha256": "5199b708ac1686a8e28a993e19fed2ce56d1e2ab0030f07819279a438d3deaed"
+    }
+  },
+  "observed_artifact_hashes": {
+    "superpowers_router_sha256": "df376f3b5b880493bac7a2fa8abb4fe1ef62c07e06806686533d604da71ab27b",
+    "superpowers_r0_cases_sha256": "bc1a25b8bc3ae14045a21780f937bf1cb6180f8ab281467282df4dcb3adc08e6",
+    "superpowers_a0_cases_sha256": "075c5671821827e97b55e21921e570f0be2491010df42b9a55c16c078046b64d",
+    "superpowers_test_sha256": "cb7f0ae3211a5a83619ee1ed85cfae03d09a7befa1d2e41251bbe2d8b6819ffb",
+    "unified_design_sha256": "b1715c99331e50b34a4218b59f43cce5f869f5ffaacae8cffbb0154487fa77df",
+    "deterministic_red_summary_sha256": "7555eddcd27ac1ce6e6e2777a273e7e26d52b32274c3784ba0da7ba4a76712e0",
+    "thinking_runner_sha256": "0dcddfb88b1d157d3b9c0a24d5f4e8f9d4f37ebc4881a623a4cf15ea18a45976",
+    "thinking_runner_test_sha256": "7075020d169f238efb6318ba07cc605903e848128d76c11cdc94fac74a80bb85",
+    "thinking_dashboard_script_sha256": "c9809e06d3b4bb45f0125547f69d3f3ae8a214dbae1e478f7c1d61df62f897c8",
+    "thinking_benchmark_doc_sha256": "8d823a59efb8f21eb3f608fccce0ea1b13368e1610da6b32aef94272a6674eca",
+    "thinking_exploration_route_case_sha256": "eb7132a2bc95ddc0b88f7a4aaeb99c31222dd0f13355b607d7449c887509d42e",
+    "thinking_formal_route_case_sha256": "0afb96983aecc5e03885e450b83f2734b75a4ec187a1657018add28a44ed1f69",
+    "thinking_exploration_response_case_sha256": "30e45efdc437c9670fac16d6099b4447d6baa0c5147caa05ef0bad18045dad3b"
+  },
+  "verification": {
+    "thinking_runner": {
+      "command": "node --test scripts/run-benchmark.test.js",
+      "exit_code": 0,
+      "tests": 24,
+      "pass": 24,
+      "fail": 0,
+      "loaded_cases": 19,
+      "contract_version": "2.0.0",
+      "case_set_sha256": "4d3ebdcb0cdfe5635ae6c8160a7d399ba291f7d0049288b111c6b160ae6abb87",
+      "prompt_set_sha256": "60d890ee563ffdc87e00b3d216d27c867d79cc7a966c32c5fe372faf77943652",
+      "protections": [
+        "raw-turn allowlist candidate prompts",
+        "exhaustive self-reported advisory_components for route cases",
+        "separate trusted --traces evaluator channel",
+        "discovered-selected-loaded event lifecycle with forbidden-selection checks",
+        "exact domain selected-loaded set and cross-role forbidden checks",
+        "case/run/prompt/response/adapter/version/event-hash trace binding",
+        "integration command/trace pairing prohibited",
+        "isolated temporary candidate working directory",
+        "human_rubric produces needs_review",
+        "partial coverage and pending review cannot produce dashboard deltas",
+        "legacy reports without complete experiment identity are never compared",
+        "dashboard deltas require matching contract, case-set, Prompt-set, and candidate-binding hashes"
+      ]
+    },
+    "superpowers_deterministic": {
+      "command": "node --test tests/frontier-routing/routing-policy.test.mjs",
+      "exit_code": 1,
+      "tests": 9,
+      "pass": 8,
+      "fail": 1,
+      "expected_failure_case": "complex-exploratory-architecture-no-process",
+      "positive_controls": [
+        "complex-explicit-formal-design-keeps-brainstorming",
+        "bounded-react-todo-keeps-brainstorming"
+      ],
+      "evidence": "deterministic-red.json"
+    }
+  },
+  "freeze_quality": {
+    "formal_freeze_complete": false,
+    "hashes_recorded": true,
+    "dirty_source_snapshot_or_patch_archived": false,
+    "raw_tap_stdout_stderr_archived": false,
+    "note": "A0 cases are isolated from the byte-frozen R0 fixture. Recorded hashes make later drift visible but do not yet preserve the external Thinking Skills working-tree bytes. A committed or archived clean experiment arm is still required."
+  },
+  "integration_baseline": {
+    "status": "not_run",
+    "reason": "The local repository has no callable superpowers-evals fresh-session harness. External setup and model invocations require separate owner authorization.",
+    "required_before_b0": [
+      "archive or commit the exact candidate implementation and evaluator bytes",
+      "freeze exact candidate prompt bytes and hashes plus case order",
+      "bind model, reasoning level, host version, plugin combination, and load order",
+      "freeze judge protocol even when deterministic assertions remain primary",
+      "preserve raw candidate outputs and host-adapter discovery, selection, and load events",
+      "reproduce the exploratory failure in at least two of three fresh sessions",
+      "pass the formal-design and React delivery controls in fresh sessions"
+    ]
+  },
+  "gate": {
+    "b0_unlocked": false,
+    "reason": "The local evaluator contract and deterministic policy RED are credible, but the experiment arm is not formally frozen and actual Skill invocation has not been observed in fresh host sessions."
+  }
+}

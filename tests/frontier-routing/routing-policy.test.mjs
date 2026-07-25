@@ -7,6 +7,7 @@ import test from 'node:test';
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const casesPath = resolve(repoRoot, 'tests/frontier-routing/routing-cases.json');
+const a0CasesPath = resolve(repoRoot, 'tests/frontier-routing/a0-exploratory-routing-cases.json');
 const routerPath = resolve(repoRoot, 'skills/using-superpowers/references/frontier-routing.md');
 const skillPath = resolve(repoRoot, 'skills/using-superpowers/SKILL.md');
 const judgePath = resolve(repoRoot, 'docs/superpowers/evals/judge-protocol.json');
@@ -115,6 +116,41 @@ test('deterministic policy table matches every frozen route case', async () => {
       advisory_components: routeCase.expected.advisory_components,
       outcome: routeCase.expected.outcome,
     }, routeCase.id);
+  }
+});
+
+test('A0 exploratory discussion exposes the current brainstorming over-route', async () => {
+  const [policy, a0Fixture] = await Promise.all([
+    readJson(casesPath),
+    readJson(a0CasesPath),
+  ]);
+  const routeCase = a0Fixture.cases.find(
+    ({ id }) => id === 'complex-exploratory-architecture-no-process',
+  );
+  assert.ok(routeCase, 'missing A0 exploratory regression case');
+
+  const actual = resolveRoute(policy, routeCase.input);
+  assert.deepEqual(actual.advisory_components, routeCase.expected.advisory_components);
+  assert.equal(actual.outcome, routeCase.expected.outcome);
+});
+
+test('A0 delivery controls still select brainstorming', async () => {
+  const [policy, a0Fixture] = await Promise.all([
+    readJson(casesPath),
+    readJson(a0CasesPath),
+  ]);
+  const controlIds = [
+    'complex-explicit-formal-design-keeps-brainstorming',
+    'bounded-react-todo-keeps-brainstorming',
+  ];
+
+  for (const id of controlIds) {
+    const routeCase = a0Fixture.cases.find((item) => item.id === id);
+    assert.ok(routeCase, `missing A0 control: ${id}`);
+
+    const actual = resolveRoute(policy, routeCase.input);
+    assert.deepEqual(actual.advisory_components, ['brainstorming'], id);
+    assert.equal(actual.outcome, 'selected_advisory_workflow', id);
   }
 });
 
