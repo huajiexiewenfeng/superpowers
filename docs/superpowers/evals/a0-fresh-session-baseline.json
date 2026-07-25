@@ -1,0 +1,121 @@
+{
+  "schema_version": "1.0.0",
+  "protocol_id": "a0-fresh-session-baseline-001",
+  "status": "draft_pending_explicit_thread_authorization",
+  "purpose": "Observe whether the current installed stack activates brainstorming for an exploratory discussion while preserving two delivery controls.",
+  "source_bindings": {
+    "superpowers_behavior_commit": "7d104ac84478819d367333ba478ea965ca5cf00b",
+    "a0_source_snapshot_commit": "5c5f9f92c2a019173a6fa35174205f5d4cbb43cf",
+    "a0_metadata_commit": "997bb48558b56308aafb7874a44ba682cf23dc61",
+    "installed_using_superpowers_sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
+    "installed_brainstorming_sha256": "e14914605f640e0841758e45d0ab2a53243b59b921f929e47921c99668f2e61d",
+    "installed_thinking_router_sha256": "766acfb6db7196361300e1e436269396447aab2ced186ba21aaac341efdafdf8",
+    "installed_technical_deep_dive_sha256": "5199b708ac1686a8e28a993e19fed2ce56d1e2ab0030f07819279a438d3deaed"
+  },
+  "runtime_binding": {
+    "provider": "OpenAI",
+    "exact_model_id": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "harness": "Codex Desktop",
+    "harness_version": null,
+    "fresh_context_per_session": true,
+    "plugin_combination": [
+      "Superpowers",
+      "Thinking Skills"
+    ],
+    "load_order": null
+  },
+  "authorization": {
+    "fresh_threads_approved": false,
+    "maximum_sessions": 5,
+    "coding_actions_allowed": false,
+    "workspace_mutations_allowed": false,
+    "external_actions_allowed": false,
+    "judge_model_calls_allowed": false
+  },
+  "schedule": [
+    {
+      "position": 1,
+      "trial_id": "a0-explore-01",
+      "case_id": "complex-exploratory-architecture-no-process",
+      "prompt": "Could we add a protocol layer between the LLM and its skills, with a dynamic ratio for each skill?",
+      "role": "exploration_regression"
+    },
+    {
+      "position": 2,
+      "trial_id": "a0-formal-design-control-01",
+      "case_id": "complex-explicit-formal-design-keeps-brainstorming",
+      "prompt": "Could we add a protocol layer between the LLM and its skills, with a dynamic ratio for each skill? Please turn it into a formal, implementation-ready specification in the repository before development.",
+      "role": "delivery_control"
+    },
+    {
+      "position": 3,
+      "trial_id": "a0-explore-02",
+      "case_id": "complex-exploratory-architecture-no-process",
+      "prompt": "Could we add a protocol layer between the LLM and its skills, with a dynamic ratio for each skill?",
+      "role": "exploration_regression"
+    },
+    {
+      "position": 4,
+      "trial_id": "a0-react-delivery-control-01",
+      "case_id": "bounded-react-todo-keeps-brainstorming",
+      "prompt": "Let's make a react todo list",
+      "role": "delivery_control"
+    },
+    {
+      "position": 5,
+      "trial_id": "a0-explore-03",
+      "case_id": "complex-exploratory-architecture-no-process",
+      "prompt": "Could we add a protocol layer between the LLM and its skills, with a dynamic ratio for each skill?",
+      "role": "exploration_regression"
+    }
+  ],
+  "observation_contract": {
+    "stop_after_first_assistant_turn": true,
+    "required_per_trial": [
+      "complete_user_message",
+      "complete_first_assistant_turn",
+      "model_and_reasoning_binding",
+      "harness_version_if_exposed",
+      "installed_skill_hashes",
+      "visible_skill_announcement",
+      "plan_or_spec_created",
+      "question_before_first_value",
+      "host_skill_discovery_events_if_exposed",
+      "host_skill_selection_events_if_exposed",
+      "host_skill_load_events_if_exposed"
+    ],
+    "evidence_priority": [
+      "host_skill_load_event",
+      "host_skill_selection_event",
+      "host_skill_discovery_event",
+      "visible_skill_announcement",
+      "observable_response_behavior",
+      "model_self_report"
+    ],
+    "content_policy": "Synthetic prompts and complete first-turn responses may be stored. Do not store secrets, unrelated workspace content, or hidden reasoning."
+  },
+  "decision_rules": {
+    "exploration_regression_reproduced_when": "At least two of three exploration trials show a host selection/load event for brainstorming. Visible announcement or response behavior without host events is observational only.",
+    "delivery_controls_pass_when": "Both delivery controls select or load brainstorming before implementation activity.",
+    "b0_unlock_requires": [
+      "exploration_regression_reproduced",
+      "delivery_controls_pass",
+      "host_selection_or_load_events_available",
+      "runtime_binding_complete",
+      "all_five_sessions_preserved"
+    ],
+    "observational_only_when": [
+      "host_selection_or_load_events_unavailable",
+      "harness_or_load_order_unbound",
+      "source_hash_drift",
+      "session_not_fresh"
+    ]
+  },
+  "stop_rules": [
+    "Stop before coding, file mutation, or external action.",
+    "Stop the batch if source or installed Skill hashes drift.",
+    "Stop and mark the batch observational if the harness cannot expose Skill selection or load events.",
+    "Do not add Judge calls or extra repetitions without a new authorization."
+  ]
+}
