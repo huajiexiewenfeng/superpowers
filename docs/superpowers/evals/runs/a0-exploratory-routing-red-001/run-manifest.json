@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0.0",
   "run_id": "a0-exploratory-routing-red-001",
-  "status": "partial_a0_local_prebaseline",
+  "status": "partial_a0_superpowers_frozen",
   "created_at": "2026-07-22T21:59:52.0268598+08:00",
-  "updated_at": "2026-07-25T14:42:29.2714946+08:00",
+  "updated_at": "2026-07-25T14:45:17.2020609+08:00",
   "scope": {
     "milestone": "A0",
     "target_skill_behavior_files_modified": false,
@@ -17,9 +17,10 @@
   "repositories": {
     "superpowers": {
       "path": "D:\\ai-discovery\\superpowers-frontier-model",
-      "head": "7d104ac84478819d367333ba478ea965ca5cf00b",
+      "baseline_head": "7d104ac84478819d367333ba478ea965ca5cf00b",
+      "a0_snapshot_commit": "5c5f9f92c2a019173a6fa35174205f5d4cbb43cf",
       "observed_dirty_artifact_hashes_recorded": true,
-      "dirty_content_snapshot_archived": false
+      "dirty_content_snapshot_archived": true
     },
     "thinking_skills": {
       "path": "D:\\csdn\\D1-D3\\thinking-skills",
@@ -118,10 +119,12 @@
   },
   "freeze_quality": {
     "formal_freeze_complete": false,
+    "superpowers_snapshot_complete": true,
+    "thinking_skills_snapshot_complete": false,
     "hashes_recorded": true,
     "dirty_source_snapshot_or_patch_archived": false,
     "raw_tap_stdout_stderr_archived": false,
-    "note": "A0 cases are isolated from the byte-frozen R0 fixture. Recorded hashes make later drift visible but do not yet preserve the external Thinking Skills working-tree bytes. A committed or archived clean experiment arm is still required."
+    "note": "Commit 5c5f9f92c2a019173a6fa35174205f5d4cbb43cf preserves the Superpowers A0 source and evidence bytes while keeping the R0 fixture isolated. The external Thinking Skills working-tree bytes and raw TAP streams are still not archived, so the cross-repository formal freeze remains incomplete."
   },
   "integration_baseline": {
     "status": "not_run",

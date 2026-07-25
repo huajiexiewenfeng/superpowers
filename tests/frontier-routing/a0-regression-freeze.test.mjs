@@ -39,11 +39,17 @@ test('A0 evidence remains an honest local prebaseline and cannot unlock B0', asy
   const manifest = await readJson(resolve(runRoot, 'run-manifest.json'));
   const hashes = manifest.observed_artifact_hashes;
 
-  assert.equal(manifest.status, 'partial_a0_local_prebaseline');
+  assert.equal(manifest.status, 'partial_a0_superpowers_frozen');
+  assert.equal(
+    manifest.repositories.superpowers.a0_snapshot_commit,
+    '5c5f9f92c2a019173a6fa35174205f5d4cbb43cf',
+  );
   assert.equal(manifest.scope.target_skill_behavior_files_modified, false);
   assert.equal(manifest.scope.model_calls, 0);
   assert.equal(manifest.authorization.fresh_session_model_run_approved, false);
   assert.equal(manifest.freeze_quality.formal_freeze_complete, false);
+  assert.equal(manifest.freeze_quality.superpowers_snapshot_complete, true);
+  assert.equal(manifest.freeze_quality.thinking_skills_snapshot_complete, false);
   assert.equal(manifest.gate.b0_unlocked, false);
   assert.equal(manifest.verification.superpowers_deterministic.expected_failure_case, 'complex-exploratory-architecture-no-process');
 
