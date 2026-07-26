@@ -3,7 +3,7 @@
   "captured_at": "2026-07-20T10:00:16.5113627+08:00",
   "baseline_commit": "e221c35624d9082c6984a92e6c5c7b9db259c5d0",
   "task2_parent_commit": "62a28b96406d2bf44d0bdc0cc4f896aaef91f09c",
-  "current_router_sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
+  "current_router_sha256": "ce7c41f01efffe3c42467f138b3e61013e54d6dc4dd593fc0c5ca14304c0ab69",
   "retirement_unit": "component",
   "phase1_target_component_ids": [
     "brainstorming.universal_design_gate",
@@ -46,7 +46,7 @@
       "whole_skill_deletion_candidate": false,
       "source": {
         "path": "skills/using-superpowers/SKILL.md",
-        "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
+        "sha256": "ce7c41f01efffe3c42467f138b3e61013e54d6dc4dd593fc0c5ca14304c0ab69",
         "selector": "<SUBAGENT-STOP>"
       }
     },
@@ -163,7 +163,7 @@
       "whole_skill_deletion_candidate": false,
       "source": {
         "path": "skills/using-superpowers/references/frontier-routing.md",
-        "sha256": "df376f3b5b880493bac7a2fa8abb4fe1ef62c07e06806686533d604da71ab27b",
+        "sha256": "88a3bbb0235fd800295182f322bd6602cbd3e5d46f11e59ed6cec08fa8ba2666",
         "selector": "process skills come first"
       }
     },
@@ -202,7 +202,7 @@
       "whole_skill_deletion_candidate": false,
       "source": {
         "path": "skills/using-superpowers/SKILL.md",
-        "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
+        "sha256": "ce7c41f01efffe3c42467f138b3e61013e54d6dc4dd593fc0c5ca14304c0ab69",
         "selector": "User instructions (CLAUDE.md, AGENTS.md, GEMINI.md, etc, and direct requests) take precedence over skills"
       }
     },
@@ -241,7 +241,7 @@
       "whole_skill_deletion_candidate": false,
       "source": {
         "path": "skills/using-superpowers/SKILL.md",
-        "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
+        "sha256": "ce7c41f01efffe3c42467f138b3e61013e54d6dc4dd593fc0c5ca14304c0ab69",
         "selector": "## Platform Adaptation"
       }
     },
@@ -285,7 +285,7 @@
       "whole_skill_deletion_candidate": false,
       "source": {
         "path": "skills/using-superpowers/SKILL.md",
-        "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
+        "sha256": "ce7c41f01efffe3c42467f138b3e61013e54d6dc4dd593fc0c5ca14304c0ab69",
         "selector": "For `high_risk`, or when high-risk classification cannot be ruled out"
       },
       "design_reference": "docs/superpowers/specs/2026-07-19-frontier-model-workflow-optimization-design.md#5-proposed-routing-controls"
@@ -325,7 +325,7 @@
       "whole_skill_deletion_candidate": false,
       "source": {
         "path": "skills/using-superpowers/SKILL.md",
-        "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
+        "sha256": "ce7c41f01efffe3c42467f138b3e61013e54d6dc4dd593fc0c5ca14304c0ab69",
         "selector": "Honor an explicit `superpowers=full`, `superpowers=frontier`, or `superpowers=off` directive."
       },
       "design_reference": "docs/superpowers/specs/2026-07-19-frontier-model-workflow-optimization-design.md#5-proposed-routing-controls"
@@ -365,7 +365,7 @@
       "whole_skill_deletion_candidate": false,
       "source": {
         "path": "skills/using-superpowers/SKILL.md",
-        "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
+        "sha256": "ce7c41f01efffe3c42467f138b3e61013e54d6dc4dd593fc0c5ca14304c0ab69",
         "selector": "`no_advisory_workflow` is a valid result"
       },
       "design_reference": "docs/superpowers/specs/2026-07-19-frontier-model-workflow-optimization-design.md#5-proposed-routing-controls"
@@ -405,7 +405,7 @@
       "whole_skill_deletion_candidate": false,
       "source": {
         "path": "skills/using-superpowers/SKILL.md",
-        "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
+        "sha256": "ce7c41f01efffe3c42467f138b3e61013e54d6dc4dd593fc0c5ca14304c0ab69",
         "selector": "load applicable operational Skills that contain required facts, procedures, tools, state, or policy gates;"
       }
     },
@@ -444,7 +444,7 @@
       "whole_skill_deletion_candidate": false,
       "source": {
         "path": "skills/using-superpowers/SKILL.md",
-        "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
+        "sha256": "ce7c41f01efffe3c42467f138b3e61013e54d6dc4dd593fc0c5ca14304c0ab69",
         "selector": "Fall back to `full` when configuration or capability evidence is unknown."
       }
     },
@@ -483,7 +483,7 @@
       "whole_skill_deletion_candidate": false,
       "source": {
         "path": "skills/using-superpowers/references/frontier-routing.md",
-        "sha256": "df376f3b5b880493bac7a2fa8abb4fe1ef62c07e06806686533d604da71ab27b",
+        "sha256": "88a3bbb0235fd800295182f322bd6602cbd3e5d46f11e59ed6cec08fa8ba2666",
         "selector": "`superpowers=full` preserves the pinned v6.1.1 `using-superpowers` behavior."
       }
     },

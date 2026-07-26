@@ -2,6 +2,10 @@ import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import {
+	discoverGlobalConfigSync,
+	formatGlobalConfigBootstrap,
+} from "../../skills/using-superpowers/scripts/resolve-config.mjs";
 
 const EXTREMELY_IMPORTANT_MARKER = "<EXTREMELY_IMPORTANT>";
 const BOOTSTRAP_MARKER = "superpowers:using-superpowers bootstrap for pi";
@@ -62,6 +66,7 @@ function getBootstrapContent(): string | null {
 	try {
 		const skillContent = readFileSync(bootstrapSkillPath, "utf8");
 		const body = stripFrontmatter(skillContent);
+		const globalConfigContext = formatGlobalConfigBootstrap(discoverGlobalConfigSync());
 		cachedBootstrap = `${EXTREMELY_IMPORTANT_MARKER}
 ${BOOTSTRAP_MARKER}
 
@@ -70,6 +75,8 @@ You have superpowers.
 The using-superpowers skill content is included below and is already loaded for this Pi session. Follow it now. Do not try to load using-superpowers again.
 
 ${body}
+
+${globalConfigContext}
 
 ${piToolMapping()}
 </EXTREMELY_IMPORTANT>`;

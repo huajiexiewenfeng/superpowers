@@ -2,7 +2,7 @@
 
 > 日期：2026-07-26
 >
-> 状态：分析与执行计划，尚未授权修改配置或 Skill
+> 状态：已实施并完成首个 Harness 冒烟；证据见 [Global Owner Default Results](../evals/global-owner-default-results-2026-07-26.md)
 >
 > 关联计划：[顶级模型工作流优化实施计划](../plans/2026-07-19-frontier-model-workflow-optimization.zh-CN.md)
 >
@@ -95,6 +95,8 @@ SUPERPOWERS_CONFIG
 若设置，它必须指向一个明确的配置文件，并优先于默认 XDG 路径。它只改变配置文件的发现位置，不改变 profile 决策优先级。
 
 首轮不把 `C:\Users\admin\.agents\config\superpowers.json` 作为 canonical，因为该目录属于特定 Agent 安装布局。Codex 适配器可以读取 canonical 文件，或由安装程序建立受控映射，但不应产生第二份可独立漂移的真源。
+
+实施验证发现，当前 Codex 沙箱会对 canonical `.config` 路径返回 `EPERM`，即使 Windows ACL 允许当前用户完全控制；硬链接也会按同一文件身份被拒绝。为保持 canonical 权威，安装器可以在已安装的 `using-superpowers/.runtime/owner-config.json` 生成只读快照，并用独立 provenance 记录 canonical 路径、生成时间和一致的 canonical/snapshot SHA-256。解析器仅在 canonical 因 `EACCES` 或 `EPERM` 不可读且快照校验通过时使用；canonical 缺失、内容无效或快照被修改时不得使用。修改 canonical 后必须重新生成快照。
 
 ### 4.3 最小 Schema
 
@@ -298,15 +300,14 @@ applyMandatoryRiskFloor({
 
 旧 R0 的其他分类证据可以继续作为历史证据，不需要因为新增一个配置来源而自动重跑完整 72 次矩阵。若实现过程同时改变了分类或 advisory 选择逻辑，则必须重新评估范围并申请额外预算。
 
-## 10. 后续授权边界
+## 10. 实施授权与剩余边界
 
-本计划文档不授权：
+用户随后已明确授权本方案的实现、测试、本机配置写入与本地 Skill 同步；这些动作的验证证据记录在
+[Global Owner Default Results](../evals/global-owner-default-results-2026-07-26.md)。
 
-- 创建 `C:\Users\admin\.config\superpowers\config.json`；
-- 修改 `using-superpowers` 或任何其他 Skill；
-- 修改 bootstrap、hook 或插件包；
-- 安装本地版本；
-- 运行真实 Agent 编码任务；
-- 将 Frontier 宣布为正式晋级默认。
+本次授权仍不包括：
 
-后续建议先批准“实现解析器与确定性测试”，验证通过后，再单独批准“写入本机全局配置并开始试用”。
+- 修改 PDC 仲裁、生命周期或 `bounded-delivery`；
+- 修改 `brainstorming`、`writing-plans`、TDD 等下游组件正文；
+- 执行真实 Agent 编码任务；
+- 仅凭这次配置接线验证就把 Frontier 宣布为正式能力晋级默认。

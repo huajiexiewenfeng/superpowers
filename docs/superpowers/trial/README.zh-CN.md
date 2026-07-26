@@ -25,7 +25,9 @@ docs/superpowers/trial/frontier-trial.config.example.json
 .superpowers/frontier-trial.config.json
 ```
 
-只有 `mode=trial`、`status=active` 且未过期的本地配置才生效。缺失、格式错误、停用或过期时，路由器忽略它并回到已批准配置或保守的 `full`。
+这是单项目、有期限的实验覆盖，不是普通项目使用 Frontier 的前提。跨普通项目的用户默认配置见 `docs/superpowers/config/README.zh-CN.md`。
+
+只有 `mode=trial`、`status=active` 且未过期的本地配置才生效。缺失、格式错误、停用、过期或不适用于当前任务类别时，路由器忽略它并继续使用用户级全局默认、已批准配置或保守的 `full`。
 
 `runtime_binding.actual_reasoning_effort` 表示本地默认的实际运行等级。任务使用其他允许等级时，应通过 `--reasoning-effort` 覆盖；日志不会把 `xhigh`、`max` 或 `ultra` 合并记为 `high`。如果无法确认实际等级，不应把该任务计入可比较样本。
 

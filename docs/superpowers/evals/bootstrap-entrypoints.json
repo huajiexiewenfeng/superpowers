@@ -1,11 +1,15 @@
 {
   "schema_version": "1.0.0",
-  "captured_at": "2026-07-21T19:09:39.8772772+08:00",
-  "captured_from_commit": "660df9af61aed795eb0ebfebe00d0a4ce07f926d",
-  "candidate_state": "local_trial_working_tree_against_captured_commit",
+  "captured_at": "2026-07-26T00:00:00+08:00",
+  "captured_from_commit": "341086576fc8f7aebf0e1baa80be40611bff5eae",
+  "candidate_state": "global_owner_default_working_tree_against_captured_commit",
   "canonical_bootstrap_source": {
     "path": "skills/using-superpowers/SKILL.md",
-    "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926"
+    "sha256": "ce7c41f01efffe3c42467f138b3e61013e54d6dc4dd593fc0c5ca14304c0ab69"
+  },
+  "global_config_resolver_source": {
+    "path": "skills/using-superpowers/scripts/resolve-config.mjs",
+    "sha256": "25674ab4163a10ab7be6173074976a5fcd8505b169da0622b0efcbfff83d3eb8"
   },
   "evidence_policy": {
     "promotion_requirement": "A supported harness must have live end-to-end evidence before its entrypoint is selected for component-aware routing promotion.",
@@ -32,6 +36,26 @@
     "antigravity_static_mapping": {
       "status": "baseline_failure",
       "detail": "The unchanged antigravity-tools reference does not document view_file as required by the existing static test."
+    }
+  },
+  "task2a_global_owner_default_verification": {
+    "deterministic_global_config": { "status": "passed", "passed": 12, "failed": 0 },
+    "targeted_frontier_suite": { "status": "passed", "passed": 29, "failed": 0 },
+    "codex_route_only_smoke": {
+      "status": "passed",
+      "passed": 4,
+      "failed": 0,
+      "cases": ["global_frontier", "explicit_full", "explicit_off", "high_risk_full"]
+    },
+    "pi_extension": {
+      "status": "target_behavior_passed_with_baseline_failure",
+      "target_checks_passed": 5,
+      "baseline_failures": 1,
+      "detail": "Global-config injection passed with Node 22 TypeScript stripping; the unchanged pi-tools lowercase write assertion still fails."
+    },
+    "shared_session_start": {
+      "status": "local_environment_blocked",
+      "detail": "No Bash distribution is installed on the current Windows host. Run tests/hooks/test-session-start.sh in CI or on a Bash-capable host."
     }
   },
   "distribution_manifests": [
@@ -73,53 +97,95 @@
   "router_source_bindings": {
     "claude-code-session-start": {
       "path": "skills/using-superpowers/SKILL.md",
-      "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
+      "sha256": "ce7c41f01efffe3c42467f138b3e61013e54d6dc4dd593fc0c5ca14304c0ab69",
       "loading_shape": "full_skill_with_frontmatter"
     },
     "cursor-session-start": {
       "path": "skills/using-superpowers/SKILL.md",
-      "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
+      "sha256": "ce7c41f01efffe3c42467f138b3e61013e54d6dc4dd593fc0c5ca14304c0ab69",
       "loading_shape": "full_skill_with_frontmatter"
     },
     "copilot-cli-session-start": {
       "path": "skills/using-superpowers/SKILL.md",
-      "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
+      "sha256": "ce7c41f01efffe3c42467f138b3e61013e54d6dc4dd593fc0c5ca14304c0ab69",
       "loading_shape": "full_skill_with_frontmatter"
     },
     "factory-droid-shared-hook": {
       "path": "skills/using-superpowers/SKILL.md",
-      "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
+      "sha256": "ce7c41f01efffe3c42467f138b3e61013e54d6dc4dd593fc0c5ca14304c0ab69",
       "loading_shape": "full_skill_with_frontmatter"
     },
     "antigravity-shared-hook": {
       "path": "skills/using-superpowers/SKILL.md",
-      "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
+      "sha256": "ce7c41f01efffe3c42467f138b3e61013e54d6dc4dd593fc0c5ca14304c0ab69",
       "loading_shape": "full_skill_with_frontmatter"
     },
     "opencode-first-user-message": {
       "path": "skills/using-superpowers/SKILL.md",
-      "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
+      "sha256": "ce7c41f01efffe3c42467f138b3e61013e54d6dc4dd593fc0c5ca14304c0ab69",
       "loading_shape": "body_without_frontmatter"
     },
     "pi-session-context": {
       "path": "skills/using-superpowers/SKILL.md",
-      "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
+      "sha256": "ce7c41f01efffe3c42467f138b3e61013e54d6dc4dd593fc0c5ca14304c0ab69",
       "loading_shape": "body_without_frontmatter"
     },
     "kimi-native-session-start": {
       "path": "skills/using-superpowers/SKILL.md",
-      "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
+      "sha256": "ce7c41f01efffe3c42467f138b3e61013e54d6dc4dd593fc0c5ca14304c0ab69",
       "loading_shape": "native_skill_loading"
     },
     "codex-native-discovery": {
       "path": "skills/using-superpowers/SKILL.md",
-      "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
+      "sha256": "ce7c41f01efffe3c42467f138b3e61013e54d6dc4dd593fc0c5ca14304c0ab69",
       "loading_shape": "native_skill_discovery_no_bootstrap"
     },
     "gemini-context-legacy": {
       "path": "skills/using-superpowers/SKILL.md",
-      "sha256": "a5c3f3b10cd6c54b9e749cda0ddbabed70915bd9765f7700854631a301fb0926",
+      "sha256": "ce7c41f01efffe3c42467f138b3e61013e54d6dc4dd593fc0c5ca14304c0ab69",
       "loading_shape": "legacy_context_include_with_missing_mapping"
+    }
+  },
+  "global_config_entrypoint_bindings": {
+    "claude-code-session-start": {
+      "mode": "direct_bootstrap_injection",
+      "resolver_path": "skills/using-superpowers/scripts/resolve-config.mjs"
+    },
+    "cursor-session-start": {
+      "mode": "direct_bootstrap_injection",
+      "resolver_path": "skills/using-superpowers/scripts/resolve-config.mjs"
+    },
+    "copilot-cli-session-start": {
+      "mode": "direct_bootstrap_injection",
+      "resolver_path": "skills/using-superpowers/scripts/resolve-config.mjs"
+    },
+    "factory-droid-shared-hook": {
+      "mode": "direct_bootstrap_injection",
+      "resolver_path": "skills/using-superpowers/scripts/resolve-config.mjs"
+    },
+    "antigravity-shared-hook": {
+      "mode": "direct_bootstrap_injection",
+      "resolver_path": "skills/using-superpowers/scripts/resolve-config.mjs"
+    },
+    "opencode-first-user-message": {
+      "mode": "direct_bootstrap_injection",
+      "resolver_path": "skills/using-superpowers/scripts/resolve-config.mjs"
+    },
+    "pi-session-context": {
+      "mode": "direct_bootstrap_injection",
+      "resolver_path": "skills/using-superpowers/scripts/resolve-config.mjs"
+    },
+    "kimi-native-session-start": {
+      "mode": "native_skill_resolution",
+      "resolver_path": "skills/using-superpowers/scripts/resolve-config.mjs"
+    },
+    "codex-native-discovery": {
+      "mode": "native_skill_resolution",
+      "resolver_path": "skills/using-superpowers/scripts/resolve-config.mjs"
+    },
+    "gemini-context-legacy": {
+      "mode": "legacy_skill_resolution_unverified",
+      "resolver_path": "skills/using-superpowers/scripts/resolve-config.mjs"
     }
   },
   "entrypoints": [
@@ -146,7 +212,7 @@
         ".claude-plugin/plugin.json": "475eecc40b42606656129d43d24c3ad9bedf43faeb3a85a8238988d59982f0da",
         "hooks/hooks.json": "01616c57b96cc234cc984e77d2fc241dfd0e0bfacda54fe54589cd669a0d998e",
         "hooks/run-hook.cmd": "d3d9c6199678dab2858e60509dde5e7414f13c2a2b5e48a38b1d368b6e1d6abb",
-        "hooks/session-start": "88a060272ca8047e0d1cd73a016e1cebba8396807a44be1e296d7c02dcbb9934"
+        "hooks/session-start": "6e06646ad76f095596794bc88117d394e79700991c6c862dbb50cf6a182c3af6"
       }
     },
     {
@@ -172,7 +238,7 @@
         ".cursor-plugin/plugin.json": "9fe248cc983544d6e265bca2d512bd07b908ce81f29c841ffcb86a76c29dbf79",
         "hooks/hooks-cursor.json": "53d8ceb3ff5d8bb1c4f283f238cc868b8c1af22e40a3ac30f6d6e4173effefbd",
         "hooks/run-hook.cmd": "d3d9c6199678dab2858e60509dde5e7414f13c2a2b5e48a38b1d368b6e1d6abb",
-        "hooks/session-start": "88a060272ca8047e0d1cd73a016e1cebba8396807a44be1e296d7c02dcbb9934"
+        "hooks/session-start": "6e06646ad76f095596794bc88117d394e79700991c6c862dbb50cf6a182c3af6"
       }
     },
     {
@@ -197,7 +263,7 @@
       "source_hashes": {
         ".claude-plugin/plugin.json": "475eecc40b42606656129d43d24c3ad9bedf43faeb3a85a8238988d59982f0da",
         "hooks/hooks.json": "01616c57b96cc234cc984e77d2fc241dfd0e0bfacda54fe54589cd669a0d998e",
-        "hooks/session-start": "88a060272ca8047e0d1cd73a016e1cebba8396807a44be1e296d7c02dcbb9934"
+        "hooks/session-start": "6e06646ad76f095596794bc88117d394e79700991c6c862dbb50cf6a182c3af6"
       }
     },
     {
@@ -223,7 +289,7 @@
         "README.md": "993584ac25724e9dcb1639b12850d922ca8c21a4456bc7edbb1c5cc24456540e",
         ".claude-plugin/plugin.json": "475eecc40b42606656129d43d24c3ad9bedf43faeb3a85a8238988d59982f0da",
         "hooks/hooks.json": "01616c57b96cc234cc984e77d2fc241dfd0e0bfacda54fe54589cd669a0d998e",
-        "hooks/session-start": "88a060272ca8047e0d1cd73a016e1cebba8396807a44be1e296d7c02dcbb9934"
+        "hooks/session-start": "6e06646ad76f095596794bc88117d394e79700991c6c862dbb50cf6a182c3af6"
       }
     },
     {
@@ -254,7 +320,7 @@
         "RELEASE-NOTES.md": "2f0f672dc2a1c58660c05e4356939d0ffc782c0421e149d48d1e2353b0489fe0",
         "docs/porting-to-a-new-harness.md": "066e05d05eac48e6e6dab5bcd19f46d62090d5c4209669769716c441af6bc9fc",
         "hooks/hooks.json": "01616c57b96cc234cc984e77d2fc241dfd0e0bfacda54fe54589cd669a0d998e",
-        "hooks/session-start": "88a060272ca8047e0d1cd73a016e1cebba8396807a44be1e296d7c02dcbb9934"
+        "hooks/session-start": "6e06646ad76f095596794bc88117d394e79700991c6c862dbb50cf6a182c3af6"
       }
     },
     {
@@ -281,7 +347,7 @@
       "evidence_owner": "OpenCode integration maintainers",
       "source_hashes": {
         "package.json": "c070d76630332e2c7d358047ba650ad88e0db76a6497f68ce79f87d51839af6f",
-        ".opencode/plugins/superpowers.js": "a5c5e1dbb0abfbd6ec3322b724b9a7b3318bbbb3d83f9a661c56ae0ed0a3adb8"
+        ".opencode/plugins/superpowers.js": "a452d14074937b05ef9f6ddea7a68bfdebd90fedcf73fb84b7a25cea8544c367"
       }
     },
     {
@@ -308,7 +374,7 @@
       "evidence_owner": "Pi integration maintainers",
       "source_hashes": {
         "package.json": "c070d76630332e2c7d358047ba650ad88e0db76a6497f68ce79f87d51839af6f",
-        ".pi/extensions/superpowers.ts": "39c27000c047f8a1399a76e032e4cd239d7bdb0be168a121f46a2ac719deaae0"
+        ".pi/extensions/superpowers.ts": "0bc26382f722249e812b6829f51ef0a4be3a9465ef3d6570c3c359bf07eda045"
       }
     },
     {

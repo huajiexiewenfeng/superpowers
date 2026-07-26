@@ -147,9 +147,25 @@ claude_home="$(make_home claude-code)"
 assert_command_output \
     "Claude Code emits nested SessionStart additionalContext" \
     "nested" \
-    "" \
+    "<superpowers_global_config>" \
     "" \
     "$claude_home" \
+    CLAUDE_PLUGIN_ROOT="$REPO_ROOT" \
+    bash "$HOOK_UNDER_TEST"
+
+configured_home="$(make_home global-frontier)"
+mkdir -p "$configured_home/.config/superpowers"
+printf '%s\n' \
+    '{"schema_version":1,"mode":"owner_default","default_profile":"frontier"}' \
+    >"$configured_home/.config/superpowers/config.json"
+assert_command_output \
+    "SessionStart injects the validated global Frontier owner default" \
+    "nested" \
+    "default_profile: frontier" \
+    "exact_model_id"$'\037'"reasoning_effort" \
+    "$configured_home" \
+    HOME="$configured_home" \
+    SUPERPOWERS_CONFIG="$configured_home/.config/superpowers/config.json" \
     CLAUDE_PLUGIN_ROOT="$REPO_ROOT" \
     bash "$HOOK_UNDER_TEST"
 

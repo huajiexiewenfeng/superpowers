@@ -10,6 +10,11 @@ echo "=== Test: Bootstrap Content Caching (#1202) ==="
 source "$SCRIPT_DIR/setup.sh"
 trap cleanup_test_env EXIT
 
+mkdir -p "$XDG_CONFIG_HOME/superpowers"
+printf '%s\n' \
+    '{"schema_version":1,"mode":"owner_default","default_profile":"frontier"}' \
+    >"$XDG_CONFIG_HOME/superpowers/config.json"
+
 run_present_file_check() {
     node "$SCRIPT_DIR/test-bootstrap-caching.mjs" "$SUPERPOWERS_PLUGIN_FILE" present
 }

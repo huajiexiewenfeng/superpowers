@@ -48,6 +48,8 @@ const result = {
   staleTaskMapping: bootstrapText(firstOutput).includes('`Task` tool with subagents'),
   mapsSubagentToTask: bootstrapText(firstOutput).includes('`task` with `subagent_type: "general"`'),
   mapsMutationToApplyPatch: bootstrapText(firstOutput).includes('`apply_patch`'),
+  hasGlobalConfigContext: bootstrapText(firstOutput).includes('<superpowers_global_config>'),
+  hasGlobalFrontierDefault: bootstrapText(firstOutput).includes('default_profile: frontier'),
   firstReadCount: afterFirst.readCount,
   secondReadCount: afterSecond.readCount,
   firstExistsCount: afterFirst.existsCount,
@@ -121,6 +123,12 @@ function assertPresentBootstrap(result) {
   }
   if (!result.mapsMutationToApplyPatch) {
     failures.push('expected OpenCode bootstrap to map file mutation to apply_patch');
+  }
+  if (!result.hasGlobalConfigContext) {
+    failures.push('expected OpenCode bootstrap to include the resolved global config context');
+  }
+  if (!result.hasGlobalFrontierDefault) {
+    failures.push('expected OpenCode bootstrap to include the validated Frontier owner default');
   }
   return failures;
 }

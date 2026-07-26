@@ -137,3 +137,24 @@ test('every inventoried entrypoint is bound to the exact Task 2 router bytes and
     assert.equal(await sha256(binding.path), binding.sha256, `${entry.id}: bound router bytes drifted`);
   }
 });
+
+test('every entrypoint declares how it consumes the shared global-config resolver', async () => {
+  const inventory = await readInventory();
+  const entryIds = inventory.entrypoints.map(({ id }) => id).sort();
+  const bindingIds = Object.keys(inventory.global_config_entrypoint_bindings).sort();
+
+  assert.deepEqual(bindingIds, entryIds);
+  assert.equal(
+    await sha256(inventory.global_config_resolver_source.path),
+    inventory.global_config_resolver_source.sha256,
+  );
+  for (const entry of inventory.entrypoints) {
+    const binding = inventory.global_config_entrypoint_bindings[entry.id];
+    assert.equal(binding.resolver_path, inventory.global_config_resolver_source.path);
+    assert.ok([
+      'direct_bootstrap_injection',
+      'native_skill_resolution',
+      'legacy_skill_resolution_unverified',
+    ].includes(binding.mode), `${entry.id}: invalid global config binding mode`);
+  }
+});

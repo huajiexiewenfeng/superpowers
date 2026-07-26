@@ -18,6 +18,7 @@ Resolve these fields before the first route-dependent action:
 ```text
 requested_profile: full | frontier | off
 effective_profile: full | frontier | off
+profile_source: explicit_directive | natural_language_off_ramp | project_trial | global_owner_default | approved_capability_default | conservative_fallback
 task_class: mechanical | bounded | complex | high_risk
 mandatory_components: component IDs and required operational Skills
 advisory_components: exact discoverable identifiers of selected optional workflow Skills
@@ -49,12 +50,15 @@ Use the first matching rule:
 1. exact `superpowers=full`, `superpowers=frontier`, or `superpowers=off`;
 2. a natural-language advisory off-ramp such as “skip the framework this time” selects `off`;
 3. an explicitly activated local trial default for an eligible non-high-risk task;
-4. an approved and non-invalidated configured default;
-5. conservative `full` fallback.
+4. a validated user-level `owner_default`;
+5. an approved and non-invalidated configured default;
+6. conservative `full` fallback.
 
-An explicit frontier directive is auditable user control; it does not make an unmeasured capability profile approved. Outside the local dogfood exception below, automatic frontier selection requires an approved profile. Never infer approval from a provider name, model family, or wildcard.
+An explicit frontier directive is auditable user control; it does not make an unmeasured capability profile approved. The project trial and user-level owner default are also explicit owner preferences, not capability approval. Only a capability-derived automatic default requires an approved profile. Never infer approval from a provider name, model family, or wildcard.
 
-The one exception is an owner-authorized local dogfood configuration at `.superpowers/frontier-trial.config.json`. It is active only when `mode=trial`, `status=active`, and its expiry has not passed. It may automatically select `frontier` for the task classes listed in `routing.frontier_eligible_task_classes`. It never changes the high-risk floor, never marks a capability profile approved, and never supplies formal promotion evidence. Missing, invalid, inactive, or expired trial configuration is ignored.
+An owner-authorized local dogfood configuration at `.superpowers/frontier-trial.config.json` is active only when `mode=trial`, `status=active`, and its expiry has not passed. It may automatically select `frontier` for the task classes listed in `routing.frontier_eligible_task_classes`. It never changes the high-risk floor, never marks a capability profile approved, and never supplies formal promotion evidence. Missing, invalid, inactive, expired, or ineligible trial configuration is ignored before continuing to the owner default.
+
+The user-level owner default is separate from project dogfood. Discover it from `SUPERPOWERS_CONFIG` when that variable names an absolute file, otherwise from `${XDG_CONFIG_HOME}/superpowers/config.json`, falling back to `~/.config/superpowers/config.json`. Validate the strict `owner_default` schema in `global-config.md`. It applies across ordinary projects and does not require a local trial file. It records user preference only and never marks a capability profile approved. An invalid or unreadable owner config is ignored with a diagnostic before continuing to the approved default or conservative `full`.
 
 ### 3. Classify the task
 

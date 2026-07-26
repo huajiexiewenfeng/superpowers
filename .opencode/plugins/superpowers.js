@@ -9,6 +9,10 @@ import path from 'path';
 import fs from 'fs';
 import os from 'os';
 import { fileURLToPath } from 'url';
+import {
+  discoverGlobalConfigSync,
+  formatGlobalConfigBootstrap,
+} from '../../skills/using-superpowers/scripts/resolve-config.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -72,6 +76,7 @@ export const SuperpowersPlugin = async ({ client, directory }) => {
 
     const fullContent = fs.readFileSync(skillPath, 'utf8');
     const { content } = extractAndStripFrontmatter(fullContent);
+    const globalConfigContext = formatGlobalConfigBootstrap(discoverGlobalConfigSync());
 
     const toolMapping = `**Tool Mapping for OpenCode:**
 When skills request actions, substitute OpenCode equivalents:
@@ -92,6 +97,8 @@ You have superpowers.
 **IMPORTANT: The using-superpowers skill content is included below. It is ALREADY LOADED - you are currently following it. Do NOT use the skill tool to load "using-superpowers" again - that would be redundant.**
 
 ${content}
+
+${globalConfigContext}
 
 ${toolMapping}
 </EXTREMELY_IMPORTANT>`;

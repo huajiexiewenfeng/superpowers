@@ -5,6 +5,8 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
+import { resolveRequestedProfile } from '../../skills/using-superpowers/scripts/resolve-config.mjs';
+
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const casesPath = resolve(repoRoot, 'tests/frontier-routing/routing-cases.json');
 const a0CasesPath = resolve(repoRoot, 'tests/frontier-routing/a0-exploratory-routing-cases.json');
@@ -30,15 +32,48 @@ function classifyTask(input) {
 }
 
 function selectRequestedProfile(input, taskClass = classifyTask(input)) {
-  if (input.explicit_profile) return input.explicit_profile;
-  if (input.natural_language_advisory_off_ramp) return 'off';
-  if (
-    input.trial_mode_status === 'active'
-    && input.configured_default === 'frontier'
-    && input.trial_frontier_eligible_task_classes?.includes(taskClass)
-  ) return 'frontier';
-  if (input.capability_profile_status === 'approved') return input.configured_default;
-  return 'full';
+  const projectTrial = input.trial_mode_status
+    ? {
+        status: input.trial_mode_status,
+        source: 'project_trial',
+        config: {
+          default_profile: input.configured_default,
+          routing: {
+            frontier_eligible_task_classes: input.trial_frontier_eligible_task_classes ?? [],
+          },
+        },
+        diagnostic: input.trial_mode_status === 'invalid'
+          ? { code: 'invalid_project_trial', message: 'invalid fixture' }
+          : null,
+      }
+    : null;
+  const globalOwnerDefault = input.global_owner_default_status
+    ? {
+        status: input.global_owner_default_status,
+        source: 'home_fallback',
+        config: input.global_owner_default_status === 'valid'
+          ? {
+              schema_version: 1,
+              mode: 'owner_default',
+              default_profile: input.global_owner_default_profile,
+            }
+          : null,
+        diagnostic: input.global_owner_default_status === 'invalid'
+          ? { code: 'invalid_global_config', message: 'invalid fixture' }
+          : null,
+      }
+    : null;
+
+  return resolveRequestedProfile({
+    explicitProfile: input.explicit_profile,
+    naturalLanguageOffRamp: input.natural_language_advisory_off_ramp,
+    taskClass,
+    projectTrial,
+    globalOwnerDefault,
+    approvedCapabilityDefault: input.capability_profile_status === 'approved'
+      ? { status: 'approved', default_profile: input.configured_default }
+      : null,
+  }).requested_profile;
 }
 
 function resolveRoute(policy, input) {
@@ -172,6 +207,7 @@ test('router documentation exposes the normative precedence, outputs, profiles, 
     'superpowers=full',
     'superpowers=frontier',
     'superpowers=off',
+    'global_owner_default',
     'fail closed',
   ]) {
     assert.ok(router.toLowerCase().includes(required.toLowerCase()), `router reference is missing: ${required}`);
@@ -183,6 +219,8 @@ test('router documentation exposes the normative precedence, outputs, profiles, 
   assert.match(skill, /User instructions .* take precedence over skills/);
   assert.match(router, /use `brainstorming`, not `brainstorming\.universal_design_gate`/);
   assert.match(skill, /\.superpowers\/frontier-trial\.config\.json/);
+  assert.match(skill, /~\/\.config\/superpowers\/config\.json/);
+  assert.match(skill, /SUPERPOWERS_CONFIG/);
 });
 
 test('active local trial selects frontier without claiming profile approval while explicit controls still win', async () => {

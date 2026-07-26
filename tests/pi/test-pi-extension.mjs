@@ -85,6 +85,7 @@ test('startup context injects the bootstrap as one user message until agent_end'
   assert.equal(result.messages.length, 2);
   assert.equal(result.messages[0].role, 'user');
   assert.match(textOf(result.messages[0]), /You have superpowers/);
+  assert.match(textOf(result.messages[0]), /<superpowers_global_config>/);
   assert.match(textOf(result.messages[0]), /Pi tool mapping/);
   assert.equal(result.messages[1], originalMessages[0]);
 

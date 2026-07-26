@@ -1,8 +1,10 @@
 import assert from 'node:assert/strict';
+import { execFile } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { promisify } from 'node:util';
 import test from 'node:test';
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -10,6 +12,7 @@ const runRoot = resolve(
   repoRoot,
   'docs/superpowers/evals/runs/a0-exploratory-routing-red-001',
 );
+const execFileAsync = promisify(execFile);
 
 async function readJson(path) {
   return JSON.parse(await readFile(path, 'utf8'));
@@ -17,6 +20,15 @@ async function readJson(path) {
 
 async function sha256(path) {
   return createHash('sha256').update(await readFile(path)).digest('hex');
+}
+
+async function sha256GitBlob(commit, path) {
+  const { stdout } = await execFileAsync(
+    'git',
+    ['show', `${commit}:${path}`],
+    { cwd: repoRoot, encoding: 'buffer', maxBuffer: 5 * 1024 * 1024 },
+  );
+  return createHash('sha256').update(stdout).digest('hex');
 }
 
 test('A0 prebaseline isolates its cases from the byte-frozen R0 fixture', async () => {
@@ -38,6 +50,7 @@ test('A0 prebaseline isolates its cases from the byte-frozen R0 fixture', async 
 test('A0 evidence remains an honest local prebaseline and cannot unlock B0', async () => {
   const manifest = await readJson(resolve(runRoot, 'run-manifest.json'));
   const hashes = manifest.observed_artifact_hashes;
+  const snapshotCommit = manifest.repositories.superpowers.a0_snapshot_commit;
 
   assert.equal(manifest.status, 'partial_a0_superpowers_frozen');
   assert.equal(
@@ -54,11 +67,11 @@ test('A0 evidence remains an honest local prebaseline and cannot unlock B0', asy
   assert.equal(manifest.verification.superpowers_deterministic.expected_failure_case, 'complex-exploratory-architecture-no-process');
 
   assert.equal(
-    await sha256(resolve(repoRoot, 'skills/using-superpowers/references/frontier-routing.md')),
+    await sha256GitBlob(snapshotCommit, 'skills/using-superpowers/references/frontier-routing.md'),
     hashes.superpowers_router_sha256,
   );
   assert.equal(
-    await sha256(resolve(repoRoot, 'tests/frontier-routing/routing-policy.test.mjs')),
+    await sha256GitBlob(snapshotCommit, 'tests/frontier-routing/routing-policy.test.mjs'),
     hashes.superpowers_test_sha256,
   );
   assert.equal(

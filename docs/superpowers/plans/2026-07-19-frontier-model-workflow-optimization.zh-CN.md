@@ -439,27 +439,30 @@ A/B/C 衡量框架行为。组件退役决策必须使用第 6.2 节的组件级
 - 修改：`skills/using-superpowers/SKILL.md`
 - 修改：`skills/using-superpowers/references/frontier-routing.md`
 - 创建：用户级配置 Schema、无副作用 discovery 和纯函数 profile resolver
-- 扩展：`tests/frontier-routing/routing-cases.json`
 - 创建：全局默认与项目覆盖的配置发现测试
+- 保持不变：已冻结的 `tests/frontier-routing/routing-cases.json`
 
 **接口：**
 
 - 输入：显式指令、强制风险下限、项目 trial、用户级全局默认和能力档案。
 - 输出：requested/effective profile、配置来源、诊断和既有建议/强制组件集合。
 
-- [ ] 把用户级稳定默认与项目级实验 trial 分开；缺少项目 trial 不得取消有效的全局默认。
-- [ ] 冻结 canonical 路径：`${XDG_CONFIG_HOME}/superpowers/config.json`，XDG 未设置时使用 `~/.config/superpowers/config.json`；当前 Windows 用户对应 `C:\Users\admin\.config\superpowers\config.json`。
-- [ ] 支持可选 `SUPERPOWERS_CONFIG` 显式路径覆盖；它只改变发现位置，不改变 profile 优先级。
-- [ ] 冻结优先级：显式请求/自然语言 off-ramp → 有效项目 trial → 用户级全局默认 → 已批准能力默认 → 保守 `full`；随后应用既有强制风险下限。
-- [ ] 首轮 Schema 只包含 `schema_version`、`mode=owner_default` 和 `default_profile`，不写死模型 ID 或推理等级。
-- [ ] 明确 `owner_default` 可以选择 Frontier，但不等同于能力档案已正式晋级。
-- [ ] 保持高风险、权限、破坏性操作确认和完成证据不可被全局 Frontier 降低。
-- [ ] 冻结本次静态 HTML 配置轨迹作为 RED：普通目录、无 `.llm-wiki`、无项目 trial、全局 `frontier`；目标只断言不得因缺 trial 回退 `full`。
-- [ ] 覆盖显式 `full|frontier|off`、有效/过期/损坏 trial、缺失/损坏全局配置、XDG fallback、环境变量路径覆盖和高风险升级。
-- [ ] 枚举并测试所有 bootstrap、hook、缓存和原生 Skill 发现入口，证明真实运行入口实际读取并应用全局配置，而不是只修改未生效的 Prompt 影子。
-- [ ] 在首个受支持 Harness 中运行 4 次隔离的 route-only 冒烟：普通全局 Frontier、显式 Full、显式 Off、高风险强制 Full；不执行编码或外部操作。
-- [ ] Task 2A 完成后重新冻结 Router SHA，只重跑受配置发现和优先级影响的最小 R0 子集；若未改变分类和 advisory 逻辑，不自动重跑完整 72 次矩阵。
-- [ ] 全局配置的实际写入、本地安装同步和真实跨项目试用分别重新申请授权，本 Task 不自动执行。
+- [x] 把用户级稳定默认与项目级实验 trial 分开；缺少项目 trial 不得取消有效的全局默认。
+- [x] 冻结 canonical 路径：`${XDG_CONFIG_HOME}/superpowers/config.json`，XDG 未设置时使用 `~/.config/superpowers/config.json`；当前 Windows 用户对应 `C:\Users\admin\.config\superpowers\config.json`。
+- [x] 支持可选 `SUPERPOWERS_CONFIG` 显式路径覆盖；它只改变发现位置，不改变 profile 优先级。
+- [x] 对无法直接读取 canonical `.config` 的沙箱化原生 Loader，允许安装器生成只读快照和 SHA-256 provenance；只在 `EACCES`/`EPERM` 且快照校验通过时使用，canonical 修改后必须重新同步。
+- [x] 冻结优先级：显式请求/自然语言 off-ramp → 有效项目 trial → 用户级全局默认 → 已批准能力默认 → 保守 `full`；随后应用既有强制风险下限。
+- [x] 首轮 Schema 只包含 `schema_version`、`mode=owner_default` 和 `default_profile`，不写死模型 ID 或推理等级。
+- [x] 明确 `owner_default` 可以选择 Frontier，但不等同于能力档案已正式晋级。
+- [x] 保持高风险、权限、破坏性操作确认和完成证据不可被全局 Frontier 降低。
+- [x] 冻结本次静态 HTML 配置轨迹作为独立回归：普通目录、无 `.llm-wiki`、无项目 trial、全局 `frontier`；只断言不得因缺 trial 回退 `full`，不修改历史 R0/A0 夹具。
+- [x] 覆盖显式 `full|frontier|off`、有效/过期/损坏 trial、缺失/损坏全局配置、XDG fallback、环境变量路径覆盖和高风险升级。
+- [x] 枚举全部 bootstrap、hook、缓存和原生 Skill 发现入口；Node/OpenCode/Pi 与 Codex native 已验证，当前 Windows 主机没有 Bash，Shell SessionStart 动态测试保留为 CI/手测项。
+- [x] 在 Codex 中运行 4 次隔离的 route-only 冒烟：普通全局 Frontier、显式 Full、显式 Off、高风险强制 Full；全部通过且未执行编码或外部操作。
+- [x] 重新冻结 Router/Resolver SHA，只重跑受配置发现和优先级影响的最小子集；保留历史 R0/A0 快照，不重跑完整 72 次矩阵。
+- [x] 经用户明确授权，完成 canonical 配置写入、本地 Skill 同步和首轮真实跨项目 route-only 试用。
+
+Task 2A 的实现和验证记录见 `docs/superpowers/evals/global-owner-default-results-2026-07-26.md`。
 
 ### Gate R0：仅路由器决策
 
