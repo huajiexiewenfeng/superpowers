@@ -286,7 +286,7 @@ A/B/C 衡量框架行为。组件退役决策必须使用第 6.2 节的组件级
 
 微试点只判断方向，不能作为退役证据。如果 B 未在安全和必要质量不下降的前提下，朝着 Token 中位数或耗时中位数至少降低 25% 的方向移动，就停止更大矩阵，诊断路由器或组件假设。薄切片失败也是有效结论，应结束本轮投入决策。
 
-关键路径：`G0 → Task 1 → 为路由变体重新申请 G1 → Task 2 → R0 → 为 Task 3 重新申请 G1 → Task 3 → R1（12 次会话）→ 为 Task 4/组件试点重新申请 G1 → Task 4 → Task 7 三组件试点 → R2 → 另行批准的框架试点 → 另行批准的留出集 → 可选第二档案`。
+关键路径：`G0 → Task 1 → 为路由变体重新申请 G1 → Task 2 → Task 2A（全局默认与 PDC 仲裁）→ R0 → 为 Task 3 重新申请 G1 → Task 3 → R1（12 次会话）→ 为 Task 4/组件试点重新申请 G1 → Task 4 → Task 7 三组件试点 → R2 → 另行批准的框架试点 → 另行批准的留出集 → 可选第二档案`。
 
 ### 6.5 任务组合与指标
 
@@ -424,9 +424,47 @@ A/B/C 衡量框架行为。组件退役决策必须使用第 6.2 节的组件级
 - [ ] 运行 `tests/hooks/test-session-start.sh`、OpenCode、Pi、Kimi、Codex 插件加载/打包测试，以及清单要求的 Gemini 遗留状态守卫；在各自声明的证据层不得出现 bootstrap、缓存、去重、原生发现控制或打包回归。明确记录 Kimi 原生加载、Codex 原生匹配、Claude Manifest 自动注册、Cursor Manifest 接线、Factory Droid、Antigravity 和其他弱测试路径缺少 live E2E。某个运行环境要进入配置晋级前，必须先补齐对应 live E2E 证据。
 - [ ] 使用提交信息 `feat: add component-aware frontier workflow routing` 提交。
 
+### Task 2A：全局 Frontier 默认与 PDC 路由仲裁
+
+**问题说明：**
+
+一次普通工作目录中的单文件静态 HTML 展示页任务证明，当前配置与路由设计仍有缺口：工作目录缺少 `.superpowers/frontier-trial.config.json` 时会回退 `full`，随后全局 `brainstorming` 和 `writing-plans` 在 PDC 生命周期 Router 之前生效。PDC 即使声明“不对每个功能强制完整规格与计划”，也无法撤销已经选择的旧硬门槛。
+
+完整分析和修复约束见：
+
+- `docs/superpowers/specs/2026-07-26-global-frontier-pdc-routing-gap.zh-CN.md`
+
+**候选文件：**
+
+- 修改：`skills/using-superpowers/SKILL.md`
+- 修改：`skills/using-superpowers/references/frontier-routing.md`
+- 创建：用户级配置 Schema、无副作用 discovery 和纯函数 profile resolver，具体路径在实现前冻结
+- 扩展：`tests/frontier-routing/routing-cases.json`
+- 创建：全局默认与项目覆盖的配置发现测试
+- 创建：PDC 生命周期 Router 与 Superpowers 流程 Router 的仲裁测试
+- 修改：PDC canonical source 中的根 Router、`project-develop` 和 Superpowers bridge；canonical source 定位前不得修改已安装副本
+
+**接口：**
+
+- 输入：显式指令、强制风险下限、仓库策略、项目 trial、用户级全局默认、能力档案，以及适用的项目生命周期 Router。
+- 输出：有效配置、Router 所有者、PDC 工作模式、建议流程组件和验证范围。
+
+- [ ] 把用户级稳定默认与项目级实验 trial 分开；缺少项目 trial 不得取消有效的全局默认。
+- [ ] 冻结优先级：显式请求 → 强制风险/权限下限 → 仓库强制策略 → 有效项目 trial → 用户级全局默认 → 已批准能力默认 → 保守 `full`。
+- [ ] 冻结跨平台逻辑 Schema 和配置解析接口，再由各 Harness 映射物理位置；核心 Skill 不写死本机绝对路径。
+- [ ] 明确 `owner_default`/`dogfood_global` 可以选择 Frontier，但不等同于能力档案已正式晋级。
+- [ ] 对项目工作先运行 PDC 生命周期/领域 Router，再由 Superpowers 在已恢复的项目范围内选择流程组件；PDC 不是受 process-first 规则压后的普通实现 Skill。
+- [ ] 为 PDC 增加或等价表达 `bounded-delivery`：低风险、单文件、边界清晰的持久产物允许内联验收和比例化验证，不强制独立规格、微步骤计划或无意义 TDD。
+- [ ] 保持高风险、仓库策略、权限、破坏性操作确认和完成证据不可被全局 Frontier 或 PDC 降低。
+- [ ] 冻结本次静态 HTML 路由轨迹作为 RED：当前 `missing project trial → full → brainstorming → writing-plans`；目标为 `global frontier → PDC bounded-delivery → proportional verification`。
+- [ ] 覆盖显式 `full`、项目强制 `full`、过期/损坏 trial、损坏全局配置、非项目任务、复杂项目和高风险升级。
+- [ ] 枚举并测试所有 bootstrap、hook、缓存和原生 Skill 发现入口，证明真实运行入口的加载顺序改变，而不是只修改未生效的 Prompt 影子。
+- [ ] Task 2A 完成后重新冻结 Router SHA，并重跑受配置发现与 PDC 仲裁影响的最小 R0 子集；旧 R0 结果只保留为历史基线。
+- [ ] 全局配置的实际写入、PDC 已安装版本同步和真实跨项目试用分别重新申请授权，本 Task 不自动执行。
+
 ### Gate R0：仅路由器决策
 
-不能仅因为 Task 2 已实现，就开始 Task 3–6。
+不能仅因为 Task 2 或 Task 2A 已实现，就开始 Task 3–6。
 
 - [ ] 冻结路由器提交、注册表、候选组件定义、能力档案和权限。
 - [ ] Node 夹具只能作为确定性策略表测试，不能代表随机模型的真实路由行为。
