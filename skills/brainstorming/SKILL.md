@@ -1,21 +1,35 @@
 ---
 name: brainstorming
-description: "You MUST use this before any creative work - creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation."
+description: "Use when using-superpowers selects pre-implementation design for a project or behavior change, or the user explicitly requests brainstorming. Naming-only questions, explanations, wording edits, and already-approved scoped changes do not independently trigger the design workflow."
 ---
 
 # Brainstorming Ideas Into Designs
 
 Help turn ideas into fully formed designs and specs through natural collaborative dialogue.
 
-Start by understanding the current project context, then ask questions one at a time to refine the idea. Once you understand what you're building, present the design and get user approval.
+## Entry Conditions and Routing
+
+Resolve selection through `using-superpowers` before entering this workflow. Its profile, task classification, mandatory floor, and user-instruction precedence determine whether design is needed; this skill does not independently expand that selection.
+
+- For naming-only advice, explanations, or wording suggestions, answer the requested question directly. If the user explicitly requests brainstorming for such advice, provide ideas within that scope. These requests do not enter the implementation design workflow below.
+- Under `frontier`, mechanical tasks need no inferred advisory workflow; bounded tasks use this design workflow only when the router selects it for directly useful design work. An exact, already-authorized edit does not require a new design approval merely because it changes a file.
+- Under `full`, retain the router's applicable design requirements. High-risk work retains its mandatory design, review, testing, and verification requirements regardless of apparent simplicity.
+- If this skill is read for inspection, editing, or version comparison, treat its contents as the subject of that task; reading it does not activate its workflow.
+- Reuse design decisions and approvals already provided in the conversation. Ask again only when a material change requires a new decision or an applicable mandatory boundary requires action-specific approval.
+
+The rest of this document (including the checklist, specification, commit, review, and writing-plans steps) applies only to implementation design selected by the route or explicitly requested by the user. It does not expand a consultation into implementation work.
+
+## Design Approval for Selected Implementation Work
+
+Start by understanding the current project context and the decisions still unresolved. Refine those decisions, then present the design and obtain any approval that is still required.
 
 <HARD-GATE>
-Do NOT invoke any implementation skill, write any code, scaffold any project, or take any implementation action until you have presented a design and the user has approved it. This applies to EVERY project regardless of perceived simplicity.
+When implementation design is required by the selected route, obtain approval for that design before invoking implementation skills, writing code, or scaffolding the affected project. Existing approval for the same scope satisfies this design gate; preserve any separate mandatory approval boundaries.
 </HARD-GATE>
 
-## Anti-Pattern: "This Is Too Simple To Need A Design"
+## Scale the Selected Design to the Task
 
-Every project goes through this process. A todo list, a single-function utility, a config change — all of them. "Simple" projects are where unexamined assumptions cause the most wasted work. The design can be short (a few sentences for truly simple projects), but you MUST present it and get approval.
+Once design is required, apparent simplicity does not remove that requirement. Keep a small design brief and proportional to the unresolved decisions. Task size alone does not select this workflow; the entry conditions above do.
 
 ## Checklist
 
@@ -28,7 +42,7 @@ You MUST create a task for each of these items and complete them in order:
 5. **Present design** — in sections scaled to their complexity, get user approval after each section
 6. **Write design doc** — save to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` and commit
 7. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope (see below)
-8. **User reviews written spec** — ask user to review the spec file before proceeding
+8. **User reviews written spec when needed** — reuse approval for the same scope when the spec faithfully records the approved design; request review only for material new decisions or a separately required approval
 9. **Transition to implementation** — invoke writing-plans skill to create implementation plan
 
 ## Process Flow
@@ -42,7 +56,7 @@ digraph brainstorming {
     "User approves design?" [shape=diamond];
     "Write design doc" [shape=box];
     "Spec self-review\n(fix inline)" [shape=box];
-    "User reviews spec?" [shape=diamond];
+    "Required spec approval satisfied?" [shape=diamond];
     "Invoke writing-plans skill" [shape=doublecircle];
 
     "Explore project context" -> "Ask clarifying questions";
@@ -52,9 +66,9 @@ digraph brainstorming {
     "User approves design?" -> "Present design sections" [label="no, revise"];
     "User approves design?" -> "Write design doc" [label="yes"];
     "Write design doc" -> "Spec self-review\n(fix inline)";
-    "Spec self-review\n(fix inline)" -> "User reviews spec?";
-    "User reviews spec?" -> "Write design doc" [label="changes requested"];
-    "User reviews spec?" -> "Invoke writing-plans skill" [label="approved"];
+    "Spec self-review\n(fix inline)" -> "Required spec approval satisfied?";
+    "Required spec approval satisfied?" -> "Write design doc" [label="changes requested"];
+    "Required spec approval satisfied?" -> "Invoke writing-plans skill" [label="existing or new approval"];
 }
 ```
 
@@ -119,11 +133,11 @@ After writing the spec document, look at it with fresh eyes:
 Fix any issues inline. No need to re-review — just fix and move on.
 
 **User Review Gate:**
-After the spec review loop passes, ask the user to review the written spec before proceeding:
+After the spec review loop passes, reuse approval for the same scope when the written spec faithfully records the approved design. Request review only for material new decisions or a separately required approval; otherwise continue without another approval round. When review is required:
 
 > "Spec written and committed to `<path>`. Please review it and let me know if you want to make any changes before we start writing out the implementation plan."
 
-Wait for the user's response. If they request changes, make them and re-run the spec review loop. Only proceed once the user approves.
+When a new review is required, wait for the user's response. If they request changes, make them and re-run the spec review loop. Proceed when the required approval is present, including an existing approval for the same scope.
 
 **Implementation:**
 
